@@ -85,8 +85,10 @@ DSA.MonacoEditor = class MonacoEditor {
       lineHeight: 22,
       minimap: { enabled: false },
       scrollBeyondLastLine: false,
-      tabSize: 2,
+      tabSize: 4,
+      indentSize: 4,
       insertSpaces: true,
+      detectIndentation: false,
       renderLineHighlight: "line",
       smoothScrolling: false,
       cursorBlinking: "blink",
@@ -125,8 +127,8 @@ DSA.MonacoEditor = class MonacoEditor {
       if (e.key === "Tab") {
         e.preventDefault();
         const s = ta.selectionStart, en = ta.selectionEnd;
-        ta.value = ta.value.slice(0, s) + "  " + ta.value.slice(en);
-        ta.selectionStart = ta.selectionEnd = s + 2;
+        ta.value = ta.value.slice(0, s) + "    " + ta.value.slice(en);
+        ta.selectionStart = ta.selectionEnd = s + 4;
       }
     });
     ta.addEventListener("input", () => { if (this.onChange) this.onChange(ta.value); });
