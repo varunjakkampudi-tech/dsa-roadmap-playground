@@ -61,6 +61,7 @@ window.DSA = window.DSA || {};
         center: document.querySelector(".center"),
         toastContainer: $("toastContainer"),
         exportBtn: $("exportBtn"), importBtn: $("importBtn"), importInput: $("importInput"),
+        summaryBtn: $("summaryBtn"),
         logoutBtn: $("logoutBtn"), userName: $("userName"),
       };
     }
@@ -98,6 +99,7 @@ window.DSA = window.DSA || {};
       if (this.el.userName) this.el.userName.textContent = this.user || "guest";
       if (this.el.logoutBtn) this.el.logoutBtn.addEventListener("click", () => this._logout());
       if (this.el.exportBtn) this.el.exportBtn.addEventListener("click", () => this._exportProgress());
+      if (this.el.summaryBtn) this.el.summaryBtn.addEventListener("click", () => this._downloadSummary());
       if (this.el.importBtn) this.el.importBtn.addEventListener("click", () => this.el.importInput.click());
       if (this.el.importInput) this.el.importInput.addEventListener("change", (e) => this._importProgress(e));
       this._initResize();
@@ -108,6 +110,18 @@ window.DSA = window.DSA || {};
       this._persistCode();
       if (this.auth) this.auth.logout();
       location.reload();
+    }
+
+    _downloadSummary() {
+      const md = DSA.ReportService.buildMarkdown(this.storage, this.levels, this.user);
+      const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "dsa-progress-report-" + (this.user || "guest") + ".md";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      this.toast.show({ icon: "📄", title: "Summary downloaded", msg: a.download });
     }
 
     _exportProgress() {
