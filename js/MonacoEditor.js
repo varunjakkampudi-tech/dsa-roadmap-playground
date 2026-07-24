@@ -1,0 +1,168 @@
+/**
+ * MonacoEditor — rich code editor wrapper (the VS Code engine, via CDN).
+ * Provides syntax highlighting, IntelliSense/function suggestions, and formatting.
+ * Exposes the same small interface the controller expects (setFile/getValue/
+ * setValue/setEnabled/focus/format) and buffers calls made before Monaco finishes
+ * loading. Falls back to a plain textarea if the CDN is unreachable (offline).
+ */
+window.DSA = window.DSA || {};
+
+DSA.MonacoEditor = class MonacoEditor {
+  constructor(host, titleEl, { onRun, onChange } = {}) {
+    this.host = host;
+    this.titleEl = titleEl;
+    this.onRun = onRun;
+    this.onChange = onChange;
+
+    this.editor = null;
+    this.ready = false;
+    this.isFallback = false;
+    this._buffer = "";
+    this._enabled = false;
+
+    this._load();
+  }
+
+  _load() {
+    const BASE = "https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min";
+    const VS = BASE + "/vs";
+    if (!window.require || typeof window.require.config !== "function") {
+      return this._fallback();
+    }
+
+    // Cross-origin worker setup that works over file:// — a blob proxy that
+    // importScripts the CDN worker bundle. baseUrl must point to the folder
+    // CONTAINING `vs` so language workers resolve to <BASE>/vs/language/...
+    window.MonacoEnvironment = {
+      getWorkerUrl: function () {
+        return URL.createObjectURL(new Blob(
+          ["self.MonacoEnvironment={baseUrl:'" + BASE + "/'};importScripts('" + VS + "/base/worker/workerMain.js');"],
+          { type: "text/javascript" }
+        ));
+      },
+    };
+
+    const guard = setTimeout(() => { if (!this.ready) this._fallback(); }, 9000);
+    try {
+      window.require.config({ paths: { vs: VS } });
+      window.require(
+        ["vs/editor/editor.main"],
+        () => { clearTimeout(guard); this._create(); },
+        () => { clearTimeout(guard); this._fallback(); }
+      );
+    } catch (e) {
+      clearTimeout(guard);
+      this._fallback();
+    }
+  }
+
+  _create() {
+    // Playground-friendly: keep syntax errors, drop noisy "undefined var" squiggles.
+    try {
+      monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: false,
+      });
+    } catch (_) { /* ignore */ }
+
+    monaco.editor.defineTheme("dsa-dark", {
+      base: "vs-dark", inherit: true, rules: [],
+      colors: {
+        "editor.background": "#0a1f26",
+        "editorGutter.background": "#0c252d",
+        "editorLineNumber.foreground": "#4d6f79",
+        "editor.lineHighlightBackground": "#0e2830",
+      },
+    });
+
+    this.editor = monaco.editor.create(this.host, {
+      value: this._buffer,
+      language: "javascript",
+      theme: "dsa-dark",
+      automaticLayout: true,
+      fontFamily: "'JetBrains Mono', 'Cascadia Code', Consolas, monospace",
+      fontSize: 13.5,
+      lineHeight: 22,
+      minimap: { enabled: false },
+      scrollBeyondLastLine: false,
+      tabSize: 2,
+      insertSpaces: true,
+      renderLineHighlight: "line",
+      smoothScrolling: false,
+      cursorBlinking: "blink",
+      cursorSmoothCaretAnimation: "off",
+      suggestOnTriggerCharacters: true,
+      quickSuggestions: true,
+      formatOnPaste: true,
+      padding: { top: 10, bottom: 10 },
+      readOnly: !this._enabled,
+      scrollbar: { verticalScrollbarSize: 11, horizontalScrollbarSize: 11 },
+    });
+
+    this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+      if (this.onRun) this.onRun();
+    });
+    this.editor.onDidChangeModelContent(() => {
+      if (this.onChange) this.onChange(this.getValue());
+    });
+
+    this.ready = true;
+  }
+
+  _fallback() {
+    if (this.ready) return;
+    this.isFallback = true;
+    this.ready = true;
+    this.host.innerHTML = "";
+    const ta = document.createElement("textarea");
+    ta.className = "code-editor fallback";
+    ta.spellcheck = false;
+    ta.setAttribute("wrap", "off");
+    ta.value = this._buffer;
+    ta.disabled = !this._enabled;
+    ta.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); if (this.onRun) this.onRun(); }
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const s = ta.selectionStart, en = ta.selectionEnd;
+        ta.value = ta.value.slice(0, s) + "  " + ta.value.slice(en);
+        ta.selectionStart = ta.selectionEnd = s + 2;
+      }
+    });
+    ta.addEventListener("input", () => { if (this.onChange) this.onChange(ta.value); });
+    this.host.appendChild(ta);
+    this._ta = ta;
+  }
+
+  // ---- public interface (matches the controller's expectations) ----
+  setFile(name) { this.titleEl.textContent = name; }
+
+  getValue() {
+    if (this.isFallback) return this._ta.value;
+    return this.editor ? this.editor.getValue() : this._buffer;
+  }
+
+  setValue(v) {
+    this._buffer = v || "";
+    if (this.isFallback) this._ta.value = this._buffer;
+    else if (this.editor) this.editor.setValue(this._buffer);
+  }
+
+  setEnabled(on) {
+    this._enabled = on;
+    if (this.isFallback) this._ta.disabled = !on;
+    else if (this.editor) this.editor.updateOptions({ readOnly: !on });
+  }
+
+  focus() {
+    if (this.isFallback) { this._ta && this._ta.focus(); }
+    else if (this.editor) this.editor.focus();
+  }
+
+  format() {
+    if (this.editor) {
+      const a = this.editor.getAction("editor.action.formatDocument");
+      if (a) a.run();
+    }
+  }
+};

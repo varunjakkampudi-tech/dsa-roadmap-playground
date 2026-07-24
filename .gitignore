@@ -1,0 +1,10 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log
+
+# Node (not used for the static site, but just in case)
+node_modules/
+
+# Local backups exported from the app
+dsa-progress-*.json

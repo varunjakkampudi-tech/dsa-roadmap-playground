@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSA Roadmap Playground</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <!-- Login gate -->
+    <div class="login-overlay" id="loginOverlay">
+        <form class="login-card" id="loginForm" autocomplete="off">
+            <div class="login-logo">🎯</div>
+            <h1>DSA Roadmap Playground</h1>
+            <p class="login-sub">Sign in to load your progress</p>
+            <label class="login-field">
+                <span>Username</span>
+                <input type="text" id="loginUser" placeholder="admin or varun" autocomplete="username" />
+            </label>
+            <label class="login-field">
+                <span>Password</span>
+                <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" />
+            </label>
+            <div class="login-error hidden" id="loginError">Invalid username or password</div>
+            <button type="submit" class="btn btn-primary login-btn">Sign In</button>
+            <p class="login-hint">Users: <code>admin</code> / <code>varun</code></p>
+        </form>
+    </div>
+
+    <header class="app-header">
+        <div class="header-left">
+            <span class="logo">🎯</span>
+            <div>
+                <h1>DSA Roadmap Playground</h1>
+                <p class="subtitle">Beginner → Top-Tier · Levels 1–30 · Write, run &amp; track</p>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="stat-chip" title="Experience points">
+                <span class="stat-ic">⚡</span><span id="xpText">0 XP</span>
+            </div>
+            <div class="stat-chip" title="Daily solving streak">
+                <span class="stat-ic">🔥</span><span id="streakText">0</span>
+            </div>
+            <div class="overall-progress">
+                <div class="progress-label">
+                    <span>Overall Progress</span>
+                    <span id="overallText">0 / 94</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="overallFill"></div>
+                </div>
+            </div>
+            <button id="exportBtn" class="btn btn-ghost" title="Download your progress as a backup file">⬇ Export</button>
+            <button id="importBtn" class="btn btn-ghost" title="Restore progress from a backup file">⬆ Import</button>
+            <input type="file" id="importInput" accept="application/json,.json" hidden />
+            <div class="user-chip" id="userChip" title="Signed in"><span class="stat-ic">👤</span><span id="userName">—</span></div>
+            <button id="logoutBtn" class="btn btn-ghost" title="Sign out">Logout</button>
+            <button id="resetAllBtn" class="btn btn-ghost" title="Clear all saved progress">Reset</button>
+        </div>
+    </header>
+
+    <main class="layout">
+        <!-- Left: files / levels -->
+        <aside class="sidebar" id="sidebar" aria-label="Levels"></aside>
+
+        <!-- Center: code editor + output (stacked) -->
+        <section class="center" id="center">
+            <div class="editor-panel">
+                <div class="editor-toolbar">
+                    <span class="editor-title" id="editorTitle">index.js</span>
+                    <div class="toolbar-actions">
+                        <button id="maximizeBtn" class="btn btn-ghost" title="Maximize editor" disabled>⇱ Focus</button>
+                        <button id="formatBtn" class="btn btn-ghost" title="Format code (Shift+Alt+F)" disabled>✨ Format</button>
+                        <button id="resetCodeBtn" class="btn btn-ghost" disabled>Reset Code</button>
+                        <button id="completeBtn" class="btn btn-outline" disabled>Mark Complete</button>
+                        <button id="checkBtn" class="btn btn-check" disabled>✓ Check</button>
+                        <span class="kbd-hint" title="Run shortcut"><kbd>Ctrl</kbd><kbd>↵</kbd></span>
+                        <button id="runBtn" class="btn btn-primary" disabled>▶ Run</button>
+                    </div>
+                </div>
+                <div class="solution-tabs" id="solutionTabs"></div>
+                <div class="editor-wrap">
+                    <div id="monacoHost" class="monaco-host"></div>
+                </div>
+            </div>
+
+            <div class="resize-handle" id="resizeHandle" title="Drag to resize output"></div>
+
+            <div class="output-panel" id="outputPanel">
+                <div class="output-toolbar">
+                    <span class="output-title">Output</span>
+                    <button id="clearOutputBtn" class="btn btn-ghost">Clear</button>
+                </div>
+                <pre id="output" class="output" aria-live="polite"></pre>
+            </div>
+        </section>
+
+        <!-- Right: the problem / question rail -->
+        <aside class="problem-rail" id="problemRail" aria-label="Problem">
+            <div class="problem-panel" id="problemPanel">
+                <div class="empty-state" id="emptyState">
+                    <span class="empty-icon">⌨️</span>
+                    <h2>Pick a challenge</h2>
+                    <p>Choose a level on the left, then write ES6 JavaScript in the center. Your <code>console.log</code> output shows below.</p>
+                </div>
+
+                <article class="problem-detail hidden" id="problemDetail">
+                    <div class="problem-head">
+                        <span class="badge" id="problemBadge">Level 1</span>
+                        <span class="difficulty" id="problemDifficulty">Beginner</span>
+                    </div>
+                    <h2 id="problemTitle">Title</h2>
+                    <div class="signature hidden" id="problemSignature">
+                        <span class="sig-key">Define</span>
+                        <code id="signatureCode"></code>
+                    </div>
+                    <p class="prompt" id="problemPrompt">Prompt</p>
+                    <div class="example">
+                        <div class="example-row">
+                            <span class="example-key">Example Input</span>
+                            <code id="exampleInput"></code>
+                        </div>
+                        <div class="example-row">
+                            <span class="example-key">Example Output</span>
+                            <code id="exampleOutput"></code>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <div class="perf-panel hidden" id="perfPanel"></div>
+        </aside>
+    </main>
+
+    <footer class="app-footer">
+        Consistency + Patience + Practice = Top 1% Developer 🚀
+    </footer>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <script src="data.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/tests.js"></script>
+    <script src="js/confetti.js"></script>
+    <script src="js/AuthService.js"></script>
+    <script src="js/StorageService.js"></script>
+    <script src="js/RankService.js"></script>
+    <script src="js/AchievementService.js"></script>
+    <script src="js/CodeRunner.js"></script>
+    <script src="js/views.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
+    <script src="js/MonacoEditor.js"></script>
+    <script src="js/AppController.js"></script>
+</body>
+</html>
