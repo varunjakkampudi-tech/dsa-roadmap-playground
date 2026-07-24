@@ -12,27 +12,27 @@
 window.DSA = window.DSA || {};
 DSA.TESTS = {
   // Level 1 — Math Basics
-  "1-1": [{ call: "isPrime(7)", expected: true }, { call: "isPrime(1)", expected: false }, { call: "isPrime(12)", expected: false }, { call: "isPrime(29)", expected: true }],
-  "1-2": [{ call: "isArmstrong(153)", expected: true }, { call: "isArmstrong(123)", expected: false }, { call: "isArmstrong(9474)", expected: true }],
-  "1-3": [{ call: "factorial(5)", expected: 120 }, { call: "factorial(0)", expected: 1 }, { call: "factorial(6)", expected: 720 }],
+  "1-1": [{ call: "isPrime(7)", expected: true }, { call: "isPrime(1)", expected: false }, { call: "isPrime(12)", expected: false }, { call: "isPrime(29)", expected: true }, { call: "isPrime(2)", expected: true }, { call: "isPrime(0)", expected: false }, { call: "isPrime(97)", expected: true }],
+  "1-2": [{ call: "isArmstrong(153)", expected: true }, { call: "isArmstrong(123)", expected: false }, { call: "isArmstrong(9474)", expected: true }, { call: "isArmstrong(370)", expected: true }, { call: "isArmstrong(100)", expected: false }, { call: "isArmstrong(1634)", expected: true }],
+  "1-3": [{ call: "factorial(5)", expected: 120 }, { call: "factorial(0)", expected: 1 }, { call: "factorial(6)", expected: 720 }, { call: "factorial(1)", expected: 1 }, { call: "factorial(7)", expected: 5040 }],
 
   // Level 2 — Arrays
-  "2-1": [{ call: "twoSum([2,7,11,15], 9)", expected: [0, 1] }, { call: "twoSum([3,2,4], 6)", expected: [1, 2] }],
-  "2-2": [{ call: "maxProfit([7,1,5,3,6,4])", expected: 5 }, { call: "maxProfit([7,6,4,3,1])", expected: 0 }],
-  "2-3": [{ call: "removeDuplicates([1,1,2])", expected: 2 }, { call: "removeDuplicates([0,0,1,1,1,2,2,3,3,4])", expected: 5 }],
+  "2-1": [{ call: "twoSum([2,7,11,15], 9)", expected: [0, 1] }, { call: "twoSum([3,2,4], 6)", expected: [1, 2] }, { call: "twoSum([3,3], 6)", expected: [0, 1] }],
+  "2-2": [{ call: "maxProfit([7,1,5,3,6,4])", expected: 5 }, { call: "maxProfit([7,6,4,3,1])", expected: 0 }, { call: "maxProfit([1,2,3,4,5])", expected: 4 }, { call: "maxProfit([2,4,1])", expected: 2 }],
+  "2-3": [{ call: "removeDuplicates([1,1,2])", expected: 2 }, { call: "removeDuplicates([0,0,1,1,1,2,2,3,3,4])", expected: 5 }, { call: "removeDuplicates([1,2,3])", expected: 3 }, { call: "removeDuplicates([5])", expected: 1 }],
 
   // Level 3 — Strings
-  "3-1": [{ call: 'isAnagram("anagram","nagaram")', expected: true }, { call: 'isAnagram("rat","car")', expected: false }],
-  "3-2": [{ call: 'isPalindrome("A man, a plan, a canal: Panama")', expected: true }, { call: 'isPalindrome("race a car")', expected: false }],
-  "3-3": [{ call: 'longestCommonPrefix(["flower","flow","flight"])', expected: "fl" }, { call: 'longestCommonPrefix(["dog","racecar","car"])', expected: "" }],
+  "3-1": [{ call: 'isAnagram("anagram","nagaram")', expected: true }, { call: 'isAnagram("rat","car")', expected: false }, { call: 'isAnagram("listen","silent")', expected: true }, { call: 'isAnagram("ab","a")', expected: false }],
+  "3-2": [{ call: 'isPalindrome("A man, a plan, a canal: Panama")', expected: true }, { call: 'isPalindrome("race a car")', expected: false }, { call: 'isPalindrome("")', expected: true }, { call: 'isPalindrome("0P")', expected: false }],
+  "3-3": [{ call: 'longestCommonPrefix(["flower","flow","flight"])', expected: "fl" }, { call: 'longestCommonPrefix(["dog","racecar","car"])', expected: "" }, { call: 'longestCommonPrefix(["throne","throne"])', expected: "throne" }, { call: 'longestCommonPrefix(["a"])', expected: "a" }],
 
   // Level 4 — Hashing
-  "4-1": [{ call: "containsDuplicate([1,2,3,1])", expected: true }, { call: "containsDuplicate([1,2,3,4])", expected: false }],
+  "4-1": [{ call: "containsDuplicate([1,2,3,1])", expected: true }, { call: "containsDuplicate([1,2,3,4])", expected: false }, { call: "containsDuplicate([1,1,1,3,3,4,3,2,4,2])", expected: true }, { call: "containsDuplicate([5])", expected: false }],
   "4-2": [{ call: 'groupAnagrams(["eat","tea","tan","ate","nat","bat"])', expected: [["ate", "eat", "tea"], ["bat"], ["nat", "tan"]], unordered: true }],
   "4-3": [{ call: "topKFrequent([1,1,1,2,2,3], 2)", expected: [1, 2], unordered: true }],
 
   // Level 5 — Stack & Queue
-  "5-1": [{ call: 'isValid("{[]}")', expected: true }, { call: 'isValid("(]")', expected: false }, { call: 'isValid("()[]{}")', expected: true }],
+  "5-1": [{ call: 'isValid("{[]}")', expected: true }, { call: 'isValid("(]")', expected: false }, { call: 'isValid("()[]{}")', expected: true }, { call: 'isValid("(")', expected: false }, { call: 'isValid("([)]")', expected: false }, { call: 'isValid("")', expected: true }],
   "5-2": [{ call: "(()=>{const s=new MinStack();s.push(-2);s.push(0);s.push(-3);return s.getMin();})()", expected: -3 }],
   "5-3": [{ call: "(()=>{const q=new MyQueue();q.push(1);q.push(2);return [q.peek(),q.pop(),q.empty()];})()", expected: [1, 1, false] }],
   "5-4": [{ call: "(()=>{const s=new Stack();s.push(1);s.push(2);s.push(3);return [s.pop(),s.peek(),s.size(),s.isEmpty()];})()", expected: [3, 2, 2, false] }, { call: "(()=>{const s=new Stack();return [s.pop(),s.isEmpty()];})()", expected: [undefined, true] }],
@@ -46,18 +46,18 @@ DSA.TESTS = {
   "6-4": [{ call: "(()=>{const l=new LinkedList();l.append(1);l.append(2);l.prepend(0);return [l.toArray(),l.size()];})()", expected: [[0, 1, 2], 3] }],
 
   // Level 7 — Recursion
-  "7-1": [{ call: "fib(6)", expected: 8 }, { call: "fib(10)", expected: 55 }],
+  "7-1": [{ call: "fib(6)", expected: 8 }, { call: "fib(10)", expected: 55 }, { call: "fib(0)", expected: 0 }, { call: "fib(1)", expected: 1 }, { call: "fib(9)", expected: 34 }],
   "7-2": [{ call: "generateParenthesis(3)", expected: ["((()))", "(()())", "(())()", "()(())", "()()()"], unordered: true }],
   "7-3": [{ call: 'letterCombinations("23")', expected: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"], unordered: true }],
 
   // Level 8 — Binary Search
-  "8-1": [{ call: "search([-1,0,3,5,9,12], 9)", expected: 4 }, { call: "search([-1,0,3,5,9,12], 2)", expected: -1 }],
+  "8-1": [{ call: "search([-1,0,3,5,9,12], 9)", expected: 4 }, { call: "search([-1,0,3,5,9,12], 2)", expected: -1 }, { call: "search([5], 5)", expected: 0 }, { call: "search([2,5], 5)", expected: 1 }],
   "8-2": [{ call: "search([4,5,6,7,0,1,2], 0)", expected: 4 }, { call: "search([4,5,6,7,0,1,2], 3)", expected: -1 }],
   "8-3": [{ call: "findPeakElement([1,2,3,1])", expected: 2 }],
 
   // Level 9 — Sorting
   "9-1": [{ call: "(()=>{const n=[2,0,2,1,1,0];sortColors(n);return n;})()", expected: [0, 0, 1, 1, 2, 2] }],
-  "9-2": [{ call: "merge([[1,3],[2,6],[8,10],[15,18]])", expected: [[1, 6], [8, 10], [15, 18]] }],
+  "9-2": [{ call: "merge([[1,3],[2,6],[8,10],[15,18]])", expected: [[1, 6], [8, 10], [15, 18]] }, { call: "merge([[1,4],[4,5]])", expected: [[1, 5]] }, { call: "merge([[1,4],[2,3]])", expected: [[1, 4]] }],
   "9-3": [{ call: "findKthLargest([3,2,1,5,6,4], 2)", expected: 5 }],
 
   // Level 10 — Two Pointers
@@ -66,7 +66,7 @@ DSA.TESTS = {
   "10-3": [{ call: "maxArea([1,8,6,2,5,4,8,3,7])", expected: 49 }],
 
   // Level 11 — Sliding Window
-  "11-1": [{ call: 'lengthOfLongestSubstring("abcabcbb")', expected: 3 }, { call: 'lengthOfLongestSubstring("bbbbb")', expected: 1 }],
+  "11-1": [{ call: 'lengthOfLongestSubstring("abcabcbb")', expected: 3 }, { call: 'lengthOfLongestSubstring("bbbbb")', expected: 1 }, { call: 'lengthOfLongestSubstring("pwwkew")', expected: 3 }, { call: 'lengthOfLongestSubstring("")', expected: 0 }, { call: 'lengthOfLongestSubstring("au")', expected: 2 }],
   "11-2": [{ call: "findMaxAverage([1,12,-5,-6,50,3], 4)", expected: 12.75 }],
   "11-3": [{ call: "minSubArrayLen(7, [2,3,1,2,4,3])", expected: 2 }],
 
@@ -126,12 +126,12 @@ DSA.TESTS = {
   "23-3": [{ call: 'leastInterval(["A","A","A","B","B","B"], 2)', expected: 8 }],
 
   // Level 24 — DP I
-  "24-1": [{ call: "climbStairs(5)", expected: 8 }, { call: "climbStairs(2)", expected: 2 }],
-  "24-2": [{ call: "rob([2,7,9,3,1])", expected: 12 }, { call: "rob([1,2,3,1])", expected: 4 }],
-  "24-3": [{ call: "coinChange([1,2,5], 11)", expected: 3 }, { call: "coinChange([2], 3)", expected: -1 }],
+  "24-1": [{ call: "climbStairs(5)", expected: 8 }, { call: "climbStairs(2)", expected: 2 }, { call: "climbStairs(1)", expected: 1 }, { call: "climbStairs(3)", expected: 3 }],
+  "24-2": [{ call: "rob([2,7,9,3,1])", expected: 12 }, { call: "rob([1,2,3,1])", expected: 4 }, { call: "rob([2,1,1,2])", expected: 4 }, { call: "rob([5])", expected: 5 }],
+  "24-3": [{ call: "coinChange([1,2,5], 11)", expected: 3 }, { call: "coinChange([2], 3)", expected: -1 }, { call: "coinChange([1], 0)", expected: 0 }, { call: "coinChange([1,2,5], 100)", expected: 20 }],
 
   // Level 25 — DP II
-  "25-1": [{ call: "lengthOfLIS([10,9,2,5,3,7,101,18])", expected: 4 }],
+  "25-1": [{ call: "lengthOfLIS([10,9,2,5,3,7,101,18])", expected: 4 }, { call: "lengthOfLIS([0,1,0,3,2,3])", expected: 4 }, { call: "lengthOfLIS([7,7,7,7])", expected: 1 }],
   "25-2": [{ call: 'longestCommonSubsequence("abcde","ace")', expected: 3 }],
   "25-3": [{ call: "knapsack([1,3,4,5], [1,4,5,7], 7)", expected: 9 }],
 
@@ -140,8 +140,8 @@ DSA.TESTS = {
   "26-2": [{ call: "solveNQueens(4).length", expected: 2 }],
 
   // Level 27 — Bit Manipulation
-  "27-1": [{ call: "singleNumber([4,1,2,1,2])", expected: 4 }],
-  "27-2": [{ call: "hammingWeight(11)", expected: 3 }, { call: "hammingWeight(128)", expected: 1 }],
+  "27-1": [{ call: "singleNumber([4,1,2,1,2])", expected: 4 }, { call: "singleNumber([1])", expected: 1 }, { call: "singleNumber([2,2,1])", expected: 1 }],
+  "27-2": [{ call: "hammingWeight(11)", expected: 3 }, { call: "hammingWeight(128)", expected: 1 }, { call: "hammingWeight(0)", expected: 0 }, { call: "hammingWeight(7)", expected: 3 }],
   "27-3": [{ call: "swap(5,9)", expected: [9, 5] }],
 
   // Level 28 — Advanced Data Structures

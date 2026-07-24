@@ -341,12 +341,12 @@ window.DSA = window.DSA || {};
       if (!this.current) return;
       this._persistCode();
       this.el.runBtn.disabled = true;
-      this.el.runBtn.textContent = "running…";
+      this._setLabel(this.el.runBtn, "running…");
       this.outputView.meta("Running " + this.current.title + "…");
 
       this.runner.run(this.editorView.getValue(), (result) => {
         this.el.runBtn.disabled = false;
-        this.el.runBtn.textContent = "▶ Run";
+        this._setLabel(this.el.runBtn, "Run");
         this.outputView.clear();
         if (!result.logs.length) this.outputView.line("(no output — did you console.log anything?)", "meta");
         result.logs.forEach((l) => this.outputView.line(l.text, l.type));
@@ -366,11 +366,11 @@ window.DSA = window.DSA || {};
         return;
       }
       this.el.checkBtn.disabled = true;
-      this.el.checkBtn.textContent = "checking…";
+      this._setLabel(this.el.checkBtn, "checking…");
 
       this.runner.check(this.editorView.getValue(), tests, (result) => {
         this.el.checkBtn.disabled = false;
-        this.el.checkBtn.textContent = "✓ Check";
+        this._setLabel(this.el.checkBtn, "Check");
         this.outputView.clear();
         result.logs.forEach((l) => this.outputView.line(l.text, l.type));
         if (result.results) {
@@ -419,9 +419,16 @@ window.DSA = window.DSA || {};
     _updateCompleteBtn() {
       if (!this.current) return;
       const done = this.storage.isComplete(this.current.id);
-      this.el.completeBtn.textContent = done ? "✓ Completed" : "Mark Complete";
+      this._setLabel(this.el.completeBtn, done ? "Completed" : "Mark Complete");
       this.el.completeBtn.classList.toggle("btn-primary", done);
       this.el.completeBtn.classList.toggle("btn-outline", !done);
+    }
+
+    // set a button's text label without clobbering its leading SVG icon
+    _setLabel(btn, text) {
+      const label = btn.querySelector(".btn-label");
+      if (label) label.textContent = text;
+      else btn.textContent = text;
     }
 
     init() {

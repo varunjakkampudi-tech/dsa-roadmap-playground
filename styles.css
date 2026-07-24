@@ -93,7 +93,8 @@ body {
     border-radius: 14px; box-shadow: var(--sh-glow);
 }
 .app-header h1 {
-    font-size: 19px; font-weight: 800; letter-spacing: -.2px;
+    font-family: var(--display);
+    font-size: 20px; font-weight: 700; letter-spacing: -.4px;
     color: var(--blue-dark);
     background: linear-gradient(90deg, var(--blue-dark), var(--primary));
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
@@ -306,7 +307,7 @@ body {
     background: linear-gradient(140deg, #ffffff, var(--elev));
     border: 1px solid var(--border); box-shadow: var(--sh);
 }
-.empty-state h2 { font-size: 17px; font-weight: 800; margin-bottom: 7px; color: var(--text); }
+.empty-state h2 { font-family: var(--display); font-size: 17px; font-weight: 700; margin-bottom: 7px; color: var(--text); }
 .empty-state p { margin: 0 auto; color: var(--text-dim); font-size: 13px; }
 
 .problem-detail.enter { animation: fadeInUp .34s var(--ease-out) both; }
@@ -323,7 +324,7 @@ body {
     border: 1.5px solid currentColor; padding: 3px 10px; border-radius: 20px;
     background: color-mix(in srgb, currentColor 8%, #fff);
 }
-.problem-detail h2 { font-size: 22px; font-weight: 800; letter-spacing: -.3px; margin-bottom: 9px; color: var(--text); }
+.problem-detail h2 { font-family: var(--display); font-size: 22px; font-weight: 700; letter-spacing: -.4px; margin-bottom: 9px; color: var(--text); }
 .signature {
     display: flex; align-items: center; gap: 8px;
     margin: 0 0 12px; padding: 8px 11px;
@@ -495,11 +496,12 @@ body {
 
 /* ---------------- Buttons ---------------- */
 .btn {
-    font-family: var(--sans); font-size: 12.5px; font-weight: 700;
+    font-family: var(--display); font-size: 12.5px; font-weight: 600;
     padding: 8px 15px; border-radius: 9px; border: 1px solid transparent;
     cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
     transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast), background var(--t-fast), color var(--t-fast);
 }
+.btn svg { width: 15px; height: 15px; flex-shrink: 0; }
 .btn:active { transform: translateY(1px) scale(.98); }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
 .btn-primary {
@@ -549,7 +551,7 @@ body {
     background: linear-gradient(140deg, var(--primary), var(--sky));
     box-shadow: var(--sh-glow);
 }
-.login-card h1 { font-size: 19px; font-weight: 800; color: var(--blue-dark); }
+.login-card h1 { font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: -.3px; color: var(--blue-dark); }
 .login-sub { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; }
 .login-field { display: flex; flex-direction: column; gap: 5px; text-align: left; }
 .login-field span { font-size: 11px; font-weight: 700; color: var(--text-mute); text-transform: uppercase; letter-spacing: .06em; }
@@ -573,6 +575,7 @@ body {
     font-weight: 700; font-size: 13px; color: var(--blue-dark);
     text-transform: capitalize;
 }
+.user-chip svg { width: 15px; height: 15px; }
 
 /* ---------------- Toasts ---------------- */
 .toast-container {
