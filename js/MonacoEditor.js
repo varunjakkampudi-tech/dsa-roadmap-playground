@@ -68,17 +68,33 @@ DSA.MonacoEditor = class MonacoEditor {
     monaco.editor.defineTheme("dsa-dark", {
       base: "vs-dark", inherit: true, rules: [],
       colors: {
-        "editor.background": "#0a1f26",
-        "editorGutter.background": "#0c252d",
-        "editorLineNumber.foreground": "#4d6f79",
-        "editor.lineHighlightBackground": "#0e2830",
+        "editor.background": "#0c1120",
+        "editorGutter.background": "#0a0e1a",
+        "editorLineNumber.foreground": "#4d5578",
+        "editor.lineHighlightBackground": "#131829",
       },
+    });
+    monaco.editor.defineTheme("dsa-light", {
+      base: "vs", inherit: true, rules: [],
+      colors: {
+        "editor.background": "#fbfcff",
+        "editorGutter.background": "#f3f4fb",
+        "editorLineNumber.foreground": "#a8adcc",
+        "editor.lineHighlightBackground": "#f2f3fb",
+      },
+    });
+
+    // Follow the app's light/dark theme and react to the toggle.
+    const themeFor = () =>
+      document.documentElement.getAttribute("data-theme") === "dark" ? "dsa-dark" : "dsa-light";
+    window.addEventListener("themechange", () => {
+      try { monaco.editor.setTheme(themeFor()); } catch (_) { /* ignore */ }
     });
 
     this.editor = monaco.editor.create(this.host, {
       value: this._buffer,
       language: "javascript",
-      theme: "dsa-dark",
+      theme: themeFor(),
       automaticLayout: true,
       fontFamily: "'JetBrains Mono', 'Cascadia Code', Consolas, monospace",
       fontSize: 13.5,
