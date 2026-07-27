@@ -97,6 +97,8 @@ window.DSA = window.DSA || {};
       this.el.maximizeBtn.addEventListener("click", () => this.toggleMaximize());
       this.el.formatBtn.addEventListener("click", () => this.editorView.format());
       if (this.el.userName) this.el.userName.textContent = this.user || "guest";
+      const avatar = document.getElementById("userAvatar");
+      if (avatar) avatar.textContent = (this.user || "g").charAt(0).toUpperCase();
       if (this.el.logoutBtn) this.el.logoutBtn.addEventListener("click", () => this._logout());
       if (this.el.exportBtn) this.el.exportBtn.addEventListener("click", () => this._exportProgress());
       if (this.el.summaryBtn) this.el.summaryBtn.addEventListener("click", () => this._downloadSummary());
@@ -198,7 +200,8 @@ window.DSA = window.DSA || {};
 
     refreshStats() {
       this.el.xpText.textContent = this.storage.getXp() + " XP";
-      this.el.streakText.textContent = this.storage.getStreak();
+      const s = this.storage.getStreak();
+      this.el.streakText.textContent = s + (s === 1 ? " Day Streak" : " Day Streak");
     }
 
     // ---- interactions ----
