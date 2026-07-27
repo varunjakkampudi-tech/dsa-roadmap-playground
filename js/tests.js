@@ -44,6 +44,13 @@ DSA.TESTS = {
   "6-2": [{ call: "(()=>{const h=new ListNode(1,new ListNode(2,new ListNode(3,new ListNode(4,new ListNode(5)))));return middleNode(h).val;})()", expected: 3 }],
   "6-3": [{ call: "(()=>{const a=new ListNode(3),b=new ListNode(2),c=new ListNode(0),d=new ListNode(-4);a.next=b;b.next=c;c.next=d;d.next=b;return hasCycle(a);})()", expected: true }, { call: "(()=>{const a=new ListNode(1,new ListNode(2));return hasCycle(a);})()", expected: false }],
   "6-4": [{ call: "(()=>{const l=new LinkedList();l.append(1);l.append(2);l.prepend(0);return [l.toArray(),l.size()];})()", expected: [[0, 1, 2], 3] }],
+  "6-5": [
+    { call: "(()=>{const d=new DoublyLinkedList();d.addLast(1);d.addLast(2);d.addFirst(0);return [d.toArray(),d.toArrayReverse()];})()", expected: [[0, 1, 2], [2, 1, 0]] },
+    { call: "(()=>{const d=new DoublyLinkedList();return [d.toArray(),d.toArrayReverse()];})()", expected: [[], []] },
+    { call: "(()=>{const d=new DoublyLinkedList();d.addFirst(1);return d.toArray();})()", expected: [1] },
+    { call: "(()=>{const d=new DoublyLinkedList();d.addLast(1);d.addLast(2);d.addLast(3);return d.toArrayReverse();})()", expected: [3, 2, 1] },
+    { call: "(()=>{const d=new DoublyLinkedList();d.addFirst(2);d.addFirst(1);d.addLast(3);return d.toArray();})()", expected: [1, 2, 3] }
+  ],
 
   // Level 7 — Recursion
   "7-1": [{ call: "fib(6)", expected: 8 }, { call: "fib(10)", expected: 55 }, { call: "fib(0)", expected: 0 }, { call: "fib(1)", expected: 1 }, { call: "fib(9)", expected: 34 }],
@@ -59,6 +66,12 @@ DSA.TESTS = {
   "9-1": [{ call: "(()=>{const n=[2,0,2,1,1,0];sortColors(n);return n;})()", expected: [0, 0, 1, 1, 2, 2] }],
   "9-2": [{ call: "merge([[1,3],[2,6],[8,10],[15,18]])", expected: [[1, 6], [8, 10], [15, 18]] }, { call: "merge([[1,4],[4,5]])", expected: [[1, 5]] }, { call: "merge([[1,4],[2,3]])", expected: [[1, 4]] }],
   "9-3": [{ call: "findKthLargest([3,2,1,5,6,4], 2)", expected: 5 }],
+  "9-4": [{ call: "bubbleSort([5,2,9,1,5,6])", expected: [1, 2, 5, 5, 6, 9] }, { call: "bubbleSort([])", expected: [] }, { call: "bubbleSort([1])", expected: [1] }, { call: "bubbleSort([3,2,1])", expected: [1, 2, 3] }, { call: "bubbleSort([-2,5,-1,0,3])", expected: [-2, -1, 0, 3, 5] }],
+  "9-5": [{ call: "insertionSort([5,2,9,1])", expected: [1, 2, 5, 9] }, { call: "insertionSort([])", expected: [] }, { call: "insertionSort([2,1])", expected: [1, 2] }, { call: "insertionSort([4,4,4])", expected: [4, 4, 4] }, { call: "insertionSort([-3,10,-7,2])", expected: [-7, -3, 2, 10] }],
+  "9-6": [{ call: "selectionSort([64,25,12,22,11])", expected: [11, 12, 22, 25, 64] }, { call: "selectionSort([])", expected: [] }, { call: "selectionSort([1])", expected: [1] }, { call: "selectionSort([5,1,4,2,8])", expected: [1, 2, 4, 5, 8] }, { call: "selectionSort([-1,-5,3,0])", expected: [-5, -1, 0, 3] }],
+  "9-7": [{ call: "mergeSort([38,27,43,3,9,82,10])", expected: [3, 9, 10, 27, 38, 43, 82] }, { call: "mergeSort([])", expected: [] }, { call: "mergeSort([2,1])", expected: [1, 2] }, { call: "mergeSort([5,5,3,3,1])", expected: [1, 3, 3, 5, 5] }, { call: "mergeSort([-4,1,-9,2,0])", expected: [-9, -4, 0, 1, 2] }],
+  "9-8": [{ call: "quickSort([10,7,8,9,1,5])", expected: [1, 5, 7, 8, 9, 10] }, { call: "quickSort([])", expected: [] }, { call: "quickSort([3])", expected: [3] }, { call: "quickSort([2,2,1,1,3,3])", expected: [1, 1, 2, 2, 3, 3] }, { call: "quickSort([-2,-8,4,-1,7])", expected: [-8, -2, -1, 4, 7] }],
+  "9-9": [{ call: "radixSort([170,45,75,90,802,24,2,66])", expected: [2, 24, 45, 66, 75, 90, 170, 802] }, { call: "radixSort([])", expected: [] }, { call: "radixSort([5,3,1,2,4])", expected: [1, 2, 3, 4, 5] }, { call: "radixSort([100,10,1,1000])", expected: [1, 10, 100, 1000] }, { call: "radixSort([9,9,8,8,0])", expected: [0, 8, 8, 9, 9] }],
 
   // Level 10 — Two Pointers
   "10-1": [{ call: "twoSum([2,7,11,15], 9)", expected: [1, 2] }],
@@ -88,6 +101,13 @@ DSA.TESTS = {
   "15-1": [{ call: "(()=>{const r=new TreeNode(2,new TreeNode(1),new TreeNode(3));return isValidBST(r);})()", expected: true }, { call: "(()=>{const r=new TreeNode(5,new TreeNode(1),new TreeNode(4,new TreeNode(3),new TreeNode(6)));return isValidBST(r);})()", expected: false }],
   "15-2": [{ call: "(()=>{const r=new TreeNode(6,new TreeNode(2),new TreeNode(8));return lowestCommonAncestor(r,r.left,r.right).val;})()", expected: 6 }],
   "15-3": [{ call: "(()=>{const r=new TreeNode(3,new TreeNode(1,null,new TreeNode(2)),new TreeNode(4));return kthSmallest(r,1);})()", expected: 1 }],
+  "15-4": [
+    { call: "(()=>{const t=new BST();[5,3,7,2,4].forEach(v=>t.insert(v));return t.inorder();})()", expected: [2, 3, 4, 5, 7] },
+    { call: "(()=>{const t=new BST();[5,3,7,2,4].forEach(v=>t.insert(v));return [t.search(4),t.search(6)];})()", expected: [true, false] },
+    { call: "(()=>{const t=new BST();[8,4,12,2,6,10,14].forEach(v=>t.insert(v));return t.inorder();})()", expected: [2, 4, 6, 8, 10, 12, 14] },
+    { call: "(()=>{const t=new BST();t.insert(1);return [t.inorder(),t.search(1)];})()", expected: [[1], true] },
+    { call: "(()=>{const t=new BST();[5,3,8,3,5].forEach(v=>t.insert(v));return t.inorder();})()", expected: [3, 5, 8] }
+  ],
 
   // Level 16 — Heap
   "16-1": [{ call: "kClosest([[1,3],[-2,2]], 1)", expected: [[-2, 2]], unordered: true }],
@@ -106,6 +126,13 @@ DSA.TESTS = {
   // Level 19 — Graph Traversal
   "19-1": [{ call: 'numIslands([["1","1","0"],["0","1","0"],["0","0","1"]])', expected: 2 }],
   "19-3": [{ call: "floodFill([[1,1,1],[1,1,0],[1,0,1]], 1, 1, 2)", expected: [[2, 2, 2], [2, 2, 0], [2, 0, 1]] }],
+  "19-4": [
+    { call: "(()=>{const g=new Graph();g.addEdge(1,2);g.addEdge(1,3);g.addEdge(2,4);g.addEdge(3,4);return g.bfs(1);})()", expected: [1, 2, 3, 4] },
+    { call: "(()=>{const g=new Graph();g.addEdge(1,2);g.addEdge(1,3);g.addEdge(2,4);g.addEdge(3,4);return g.dfs(1);})()", expected: [1, 2, 4, 3] },
+    { call: "(()=>{const g=new Graph();g.addEdge(0,1);g.addEdge(0,2);g.addEdge(1,3);return g.bfs(0);})()", expected: [0, 1, 2, 3] },
+    { call: "(()=>{const g=new Graph();g.addEdge(0,1);g.addEdge(0,2);g.addEdge(1,3);return g.dfs(0);})()", expected: [0, 1, 3, 2] },
+    { call: "(()=>{const g=new Graph();g.addEdge(5,6);return [g.bfs(5),g.dfs(5)];})()", expected: [[5, 6], [5, 6]] }
+  ],
 
   // Level 20 — Topological Sort
   "20-1": [{ call: "canFinish(2, [[1,0]])", expected: true }, { call: "canFinish(2, [[1,0],[0,1]])", expected: false }],
