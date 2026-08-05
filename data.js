@@ -1,11 +1,158 @@
 /**
- * DSA dataset — curated interview problems across 14 pattern categories.
+ * DSA dataset — curated interview problems across pattern categories.
  * Each problem carries the full walkthrough plus a JavaScript reference solution.
- * Exposed as a global so the app works over file:// too.
  */
 window.LEVELS = [
  {
   "id": 1,
+  "name": "Math & Recursion",
+  "tier": "Foundations",
+  "difficulty": "Medium",
+  "icon": "🔢",
+  "desc": "Number theory, factorials, and the recursive thinking that underpins DFS, backtracking, and DP.",
+  "problems": [
+   {
+    "id": "primeCheck",
+    "num": 1,
+    "title": "Prime Number Check",
+    "difficulty": "Easy",
+    "pattern": "Math (trial division)",
+    "prompt": "Given an integer n, return true if n is prime (has no divisors other than 1 and itself), otherwise false.",
+    "input": "n = 7",
+    "output": "true",
+    "constraints": "0 ≤ n ≤ 10^9",
+    "why": "The gateway to number theory — teaches the √n divisor trick that turns an O(n) scan into O(√n).",
+    "brute": "Test every number from 2 to n-1 as a divisor → O(n).",
+    "optimal": "Only test divisors up to √n: if n = a·b then one factor is ≤ √n, so a divisor above √n would already have been found. O(√n).",
+    "intuition": "Divisors come in pairs that straddle √n, so you never need to look past the square root.",
+    "dryRun": "n=7: check 2 (7%2≠0). 3·3=9>7 so stop → prime. n=12: 2 divides 12 → not prime.",
+    "time": "O(√n).",
+    "space": "O(1).",
+    "mistakes": "Looping to n instead of √n; forgetting n<2 is not prime; using i*i<=n vs i<=Math.sqrt(n) (both fine, i*i avoids float error).",
+    "followups": "• How would you list all primes up to N? (Sieve of Eratosthenes)\n• How do you test primality of very large numbers? (Miller–Rabin)",
+    "solution": "function isPrime(n){if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true;}",
+    "takeaway": "For divisibility/factor problems, stop at √n — factors pair up around it.",
+    "starter": "// Prime Number Check  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction isPrime(n) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "armstrong",
+    "num": 2,
+    "title": "Armstrong Number",
+    "difficulty": "Easy",
+    "pattern": "Math (digit manipulation)",
+    "prompt": "An Armstrong number equals the sum of each of its digits raised to the power of the number of digits. Return true if n is Armstrong.",
+    "input": "n = 153",
+    "output": "true  (1³ + 5³ + 3³ = 153)",
+    "constraints": "0 ≤ n ≤ 10^9",
+    "why": "Cements digit extraction and the map-reduce pattern over the digits of a number.",
+    "brute": "Same as optimal — you must inspect every digit once.",
+    "optimal": "Count the digits d, then sum each digit^d and compare to n. O(number of digits).",
+    "intuition": "Turn the number into its digits, raise each to the digit-count power, and add them up.",
+    "dryRun": "n=153, d=3 → 1³+5³+3³ = 1+125+27 = 153 = n → true.",
+    "time": "O(d) where d = digit count.",
+    "space": "O(1).",
+    "mistakes": "Using the wrong exponent (number of digits, not a fixed 3); integer overflow for huge inputs; off-by-one on the digit count.",
+    "followups": "• Generate all Armstrong numbers below N.\n• How would this change in another base?",
+    "solution": "function isArmstrong(n){const s=String(n),d=s.length;let sum=0;for(const ch of s)sum+=Math.pow(+ch,d);return sum===n;}",
+    "takeaway": "Convert to a string (or repeatedly mod 10) to process digits, then map-and-sum.",
+    "starter": "// Armstrong Number  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction isArmstrong(n) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "factorial",
+    "num": 3,
+    "title": "Factorial of a Number",
+    "difficulty": "Easy",
+    "pattern": "Recursion / iteration",
+    "prompt": "Return the factorial of a non-negative integer n (n! = 1·2·…·n, with 0! = 1).",
+    "input": "n = 5",
+    "output": "120",
+    "constraints": "0 ≤ n ≤ 20 (fits in a JS safe integer)",
+    "why": "The canonical first recursion — the base case (0! = 1) and one multiply per level teach how recursion unwinds.",
+    "brute": "n/a — the definition is already linear.",
+    "optimal": "Multiply 1·2·…·n iteratively, or recurse n·(n-1)!. O(n).",
+    "intuition": "Each factorial is n times the factorial of one less, bottoming out at 0! = 1.",
+    "dryRun": "5! = 5·4·3·2·1 = 120. Iteratively: r=1→2→6→24→120.",
+    "time": "O(n).",
+    "space": "O(1) iterative (O(n) call stack if recursive).",
+    "mistakes": "Forgetting 0! = 1; integer overflow for large n; missing the recursion base case (infinite recursion).",
+    "followups": "• Convert the recursive version to iterative to avoid stack overflow.\n• Compute n! mod p for large n.",
+    "solution": "function factorial(n){let r=1;for(let i=2;i<=n;i++)r*=i;return r;}",
+    "takeaway": "Every recursion needs a base case and progress toward it — factorial is the clearest example.",
+    "starter": "// Factorial of a Number  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction factorial(n) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "fibonacci",
+    "num": 4,
+    "title": "Fibonacci Number",
+    "difficulty": "Easy",
+    "pattern": "DP / recursion (memoization)",
+    "prompt": "Return the n-th Fibonacci number, where F(0)=0, F(1)=1, and F(n)=F(n-1)+F(n-2).",
+    "input": "n = 6",
+    "output": "8",
+    "constraints": "0 ≤ n ≤ 78 (fits in a JS safe integer)",
+    "why": "Shows why naive recursion is exponential and how memoization / two variables make it linear — the intro to DP.",
+    "brute": "Recurse F(n-1)+F(n-2) with no memo → O(2ⁿ), recomputing the same values endlessly.",
+    "optimal": "Keep the last two values and roll forward, or memoize. O(n) time, O(1) space.",
+    "intuition": "You only ever need the previous two numbers, so carry them in two variables instead of recomputing.",
+    "dryRun": "n=6: 0,1,1,2,3,5,8 → F(6)=8.",
+    "time": "O(n).",
+    "space": "O(1) iterative.",
+    "mistakes": "Naive recursion (exponential); off-by-one on the base cases; not handling n=0.",
+    "followups": "• Compute F(n) in O(log n) with matrix exponentiation.\n• How does memoization turn the O(2ⁿ) tree into O(n)?",
+    "solution": "function fib(n){let a=0,b=1;for(let i=0;i<n;i++){const t=a+b;a=b;b=t;}return a;}",
+    "takeaway": "Overlapping subproblems + storing results = the essence of dynamic programming.",
+    "starter": "// Fibonacci Number  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction fib(n) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "generateParentheses",
+    "num": 5,
+    "title": "Generate Parentheses",
+    "difficulty": "Medium",
+    "pattern": "Backtracking",
+    "prompt": "Given n pairs of parentheses, return all combinations of well-formed parentheses.",
+    "input": "n = 3",
+    "output": "[\"((()))\",\"(()())\",\"(())()\",\"()(())\",\"()()()\"]",
+    "constraints": "1 ≤ n ≤ 8",
+    "why": "The template backtracking problem — build a string, prune invalid branches early, and collect complete ones.",
+    "brute": "Generate all 2^(2n) strings of ( and ), then filter valid ones — wasteful.",
+    "optimal": "Backtrack: add '(' while open < n, add ')' while close < open. Only valid prefixes are ever built. O(4ⁿ/√n) (Catalan).",
+    "intuition": "A prefix is valid only if you never close more than you've opened, so prune the moment that rule would break.",
+    "dryRun": "n=1 → '()'. n=2 → open '(' then choose: '(())' and '()()'.",
+    "time": "O(4ⁿ/√n) — the n-th Catalan number of results.",
+    "space": "O(n) recursion depth.",
+    "mistakes": "Allowing close > open; forgetting the base case (length 2n); mutating shared state without undoing it.",
+    "followups": "• Count the number of valid strings without generating them (Catalan number).\n• Generalize to k bracket types.",
+    "solution": "function generateParenthesis(n){const res=[];(function bt(cur,open,close){if(cur.length===2*n){res.push(cur);return;}if(open<n)bt(cur+'(',open+1,close);if(close<open)bt(cur+')',open,close+1);})('',0,0);return res;}",
+    "takeaway": "Backtracking = build incrementally + prune invalid states + record complete solutions.",
+    "starter": "// Generate Parentheses  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction generateParenthesis(n) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "letterCombinations",
+    "num": 6,
+    "title": "Letter Combinations of a Phone Number",
+    "difficulty": "Medium",
+    "pattern": "Backtracking",
+    "prompt": "Given a string of digits 2–9, return all letter combinations the number could spell (like on a phone keypad). Return an empty array for an empty input.",
+    "input": "digits = \"23\"",
+    "output": "[\"ad\",\"ae\",\"af\",\"bd\",\"be\",\"bf\",\"cd\",\"ce\",\"cf\"]",
+    "constraints": "0 ≤ digits.length ≤ 4 · digits are 2–9",
+    "why": "Cartesian-product backtracking — one choice per position, branching over each digit's letters.",
+    "brute": "Nested loops work but don't generalize to a variable number of digits.",
+    "optimal": "Backtrack position by position, appending each candidate letter of the current digit. O(4ⁿ) in the worst case.",
+    "intuition": "Each digit multiplies the number of combinations by its letter count — a product you build one digit at a time.",
+    "dryRun": "'23': 2→[a,b,c], 3→[d,e,f]. a+{d,e,f}, b+{d,e,f}, c+{d,e,f} → 9 strings.",
+    "time": "O(4ⁿ·n).",
+    "space": "O(n) recursion depth.",
+    "mistakes": "Returning [''] instead of [] for empty input; hardcoding two digits; wrong keypad mapping (7=pqrs, 9=wxyz).",
+    "followups": "• Do it iteratively by repeatedly expanding the running list.\n• Handle 0 and 1 (no letters).",
+    "solution": "function letterCombinations(digits){if(!digits.length)return [];const map={'2':'abc','3':'def','4':'ghi','5':'jkl','6':'mno','7':'pqrs','8':'tuv','9':'wxyz'};const res=[];(function bt(i,cur){if(i===digits.length){res.push(cur);return;}for(const ch of map[digits[i]])bt(i+1,cur+ch);})(0,'');return res;}",
+    "takeaway": "For 'all combinations across positions', backtrack one position at a time over that position's choices.",
+    "starter": "// Letter Combinations of a Phone Number  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction letterCombinations(digits) {\n  // your code here\n}\n"
+   }
+  ]
+ },
+ {
+  "id": 2,
   "name": "Arrays & Hashing",
   "tier": "Foundations",
   "difficulty": "Medium",
@@ -14,7 +161,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q1",
-    "num": 1,
+    "num": 7,
     "title": "Two Sum",
     "difficulty": "Easy",
     "pattern": "Hashing (index lookup)",
@@ -37,7 +184,7 @@ window.LEVELS = [
    },
    {
     "id": "q2",
-    "num": 2,
+    "num": 8,
     "title": "Contains Duplicate",
     "difficulty": "Easy",
     "pattern": "Hashing (set membership)",
@@ -60,7 +207,7 @@ window.LEVELS = [
    },
    {
     "id": "q3",
-    "num": 3,
+    "num": 9,
     "title": "Valid Anagram",
     "difficulty": "Easy",
     "pattern": "Hashing (frequency count)",
@@ -83,7 +230,7 @@ window.LEVELS = [
    },
    {
     "id": "q4",
-    "num": 4,
+    "num": 10,
     "title": "Group Anagrams",
     "difficulty": "Medium",
     "pattern": "Hashing (canonical key)",
@@ -106,7 +253,7 @@ window.LEVELS = [
    },
    {
     "id": "q5",
-    "num": 5,
+    "num": 11,
     "title": "Top K Frequent Elements",
     "difficulty": "Medium",
     "pattern": "Hashing + Bucket Sort",
@@ -129,7 +276,7 @@ window.LEVELS = [
    },
    {
     "id": "prefixProduct",
-    "num": 6,
+    "num": 12,
     "title": "Prefix Product Array",
     "difficulty": "Easy",
     "pattern": "Prefix Product (running product)",
@@ -152,7 +299,7 @@ window.LEVELS = [
    },
    {
     "id": "suffixProduct",
-    "num": 7,
+    "num": 13,
     "title": "Suffix Product Array",
     "difficulty": "Easy",
     "pattern": "Suffix Product (running product from the right)",
@@ -175,7 +322,7 @@ window.LEVELS = [
    },
    {
     "id": "q6",
-    "num": 8,
+    "num": 14,
     "title": "Product of Array Except Self",
     "difficulty": "Medium",
     "pattern": "Prefix / Suffix Products",
@@ -198,7 +345,7 @@ window.LEVELS = [
    },
    {
     "id": "q7",
-    "num": 9,
+    "num": 15,
     "title": "Subarray Sum Equals K",
     "difficulty": "Medium",
     "pattern": "Prefix Sum + Hashing",
@@ -218,11 +365,34 @@ window.LEVELS = [
     "takeaway": "Whenever you see 'contiguous subarray sums to X', think prefix sum + hash map, not nested loops.",
     "starter": "// Subarray Sum Equals K  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction subarraySumEqualsK(nums, k) {\n  // your code here\n}\n",
     "solution": "function subarraySumEqualsK(nums,k){const m=new Map([[0,1]]);let sum=0,c=0;for(const n of nums){sum+=n;c+=m.get(sum-k)||0;m.set(sum,(m.get(sum)||0)+1);}return c;}"
+   },
+   {
+    "id": "removeDuplicates",
+    "num": 16,
+    "title": "Remove Duplicates from Sorted Array",
+    "difficulty": "Easy",
+    "pattern": "Two Pointers (in-place)",
+    "prompt": "Given a sorted array nums, remove duplicates in-place so each element appears once, and return the new length k. The first k elements must hold the unique values in order.",
+    "input": "nums = [1,1,2]",
+    "output": "2  (nums becomes [1,2,...])",
+    "constraints": "1 ≤ nums.length ≤ 3·10^4 · nums is sorted",
+    "why": "The classic slow/fast in-place rewrite — modify an array without extra space.",
+    "brute": "Copy uniques into a new array → O(n) extra space (not in-place).",
+    "optimal": "A write pointer k advances only when a new value differs from the last written one. Single pass, O(1) extra space.",
+    "intuition": "Because it's sorted, duplicates are adjacent — keep a slot for the next unique value and overwrite in place.",
+    "dryRun": "[1,1,2]: k=1. i=1 nums[1]=1==nums[0] skip. i=2 nums[2]=2≠nums[0] → nums[1]=2, k=2. → [1,2], length 2.",
+    "time": "O(n).",
+    "space": "O(1).",
+    "mistakes": "Using a set (not in-place / O(n) space); comparing to nums[i-1] instead of the last written nums[k-1]; returning the array instead of the length.",
+    "followups": "• Allow each element at most twice.\n• What changes if the array isn't sorted?",
+    "solution": "function removeDuplicates(nums){if(!nums.length)return 0;let k=1;for(let i=1;i<nums.length;i++)if(nums[i]!==nums[k-1])nums[k++]=nums[i];return k;}",
+    "takeaway": "A write pointer lets you compact an array in place in one pass.",
+    "starter": "// Remove Duplicates from Sorted Array  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction removeDuplicates(nums) {\n  // your code here\n}\n"
    }
   ]
  },
  {
-  "id": 2,
+  "id": 3,
   "name": "Two Pointers",
   "tier": "Foundations",
   "difficulty": "Hard",
@@ -231,7 +401,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q8",
-    "num": 10,
+    "num": 17,
     "title": "Valid Palindrome",
     "difficulty": "Easy",
     "pattern": "Two Pointers (converging)",
@@ -254,7 +424,7 @@ window.LEVELS = [
    },
    {
     "id": "q9",
-    "num": 11,
+    "num": 18,
     "title": "Two Sum II — Sorted Array",
     "difficulty": "Medium",
     "pattern": "Two Pointers (converging)",
@@ -277,7 +447,7 @@ window.LEVELS = [
    },
    {
     "id": "q10",
-    "num": 12,
+    "num": 19,
     "title": "3Sum",
     "difficulty": "Medium",
     "pattern": "Two Pointers (fix + converge)",
@@ -300,7 +470,7 @@ window.LEVELS = [
    },
    {
     "id": "q11",
-    "num": 13,
+    "num": 20,
     "title": "Container With Most Water",
     "difficulty": "Medium",
     "pattern": "Two Pointers (greedy converge)",
@@ -323,7 +493,7 @@ window.LEVELS = [
    },
    {
     "id": "q12",
-    "num": 14,
+    "num": 21,
     "title": "Trapping Rain Water",
     "difficulty": "Hard",
     "pattern": "Two Pointers (running max)",
@@ -347,7 +517,7 @@ window.LEVELS = [
   ]
  },
  {
-  "id": 3,
+  "id": 4,
   "name": "Sliding Window",
   "tier": "Foundations",
   "difficulty": "Hard",
@@ -356,7 +526,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q13",
-    "num": 15,
+    "num": 22,
     "title": "Best Time to Buy and Sell Stock",
     "difficulty": "Easy",
     "pattern": "Sliding Window (single pass min-track)",
@@ -379,7 +549,7 @@ window.LEVELS = [
    },
    {
     "id": "q14",
-    "num": 16,
+    "num": 23,
     "title": "Longest Substring Without Repeating Characters",
     "difficulty": "Medium",
     "pattern": "Sliding Window (variable size)",
@@ -402,7 +572,7 @@ window.LEVELS = [
    },
    {
     "id": "q15",
-    "num": 17,
+    "num": 24,
     "title": "Longest Repeating Character Replacement",
     "difficulty": "Medium",
     "pattern": "Sliding Window (count-based)",
@@ -425,7 +595,7 @@ window.LEVELS = [
    },
    {
     "id": "q16",
-    "num": 18,
+    "num": 25,
     "title": "Minimum Window Substring",
     "difficulty": "Hard",
     "pattern": "Sliding Window (need/have counters)",
@@ -448,7 +618,7 @@ window.LEVELS = [
    },
    {
     "id": "q17",
-    "num": 19,
+    "num": 26,
     "title": "Sliding Window Maximum",
     "difficulty": "Hard",
     "pattern": "Monotonic Deque",
@@ -468,11 +638,57 @@ window.LEVELS = [
     "takeaway": "A monotonic deque of indices gives O(1) amortized access to a sliding window's max (or min).",
     "starter": "// Sliding Window Maximum  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction slidingWindowMaximum(nums, k) {\n  // your code here\n}\n",
     "solution": "function slidingWindowMaximum(nums,k){const dq=[],res=[];for(let i=0;i<nums.length;i++){while(dq.length&&dq[0]<=i-k)dq.shift();while(dq.length&&nums[dq[dq.length-1]]<=nums[i])dq.pop();dq.push(i);if(i>=k-1)res.push(nums[dq[0]]);}return res;}"
+   },
+   {
+    "id": "maxAverageSubarray",
+    "num": 27,
+    "title": "Maximum Average Subarray I",
+    "difficulty": "Easy",
+    "pattern": "Fixed-size sliding window",
+    "prompt": "Given an integer array nums and integer k, return the maximum average of any contiguous subarray of length k.",
+    "input": "nums = [1,12,-5,-6,50,3], k = 4",
+    "output": "12.75",
+    "constraints": "1 ≤ k ≤ nums.length ≤ 10^5",
+    "why": "The simplest fixed-window template — slide a window of size k while maintaining its sum in O(1) per step.",
+    "brute": "Sum every length-k window from scratch → O(n·k).",
+    "optimal": "Compute the first window's sum, then for each new index add the entering element and subtract the leaving one. O(n).",
+    "intuition": "Neighbouring windows overlap in k-1 elements, so update the sum instead of recomputing it.",
+    "dryRun": "k=4 on [1,12,-5,-6,50,3]: first sum=2. slide: +50-1=51 → best 51; +3-12=42. best 51 → 51/4 = 12.75.",
+    "time": "O(n).",
+    "space": "O(1).",
+    "mistakes": "Recomputing the window sum each step; integer vs float division; off-by-one on which element leaves.",
+    "followups": "• Return the subarray itself, not just the average.\n• Handle a variable window with a max-average constraint.",
+    "solution": "function findMaxAverage(nums,k){let s=0;for(let i=0;i<k;i++)s+=nums[i];let best=s;for(let i=k;i<nums.length;i++){s+=nums[i]-nums[i-k];best=Math.max(best,s);}return best/k;}",
+    "takeaway": "For fixed-size windows, add the entering and subtract the leaving element to keep the sum in O(1).",
+    "starter": "// Maximum Average Subarray I  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction findMaxAverage(nums, k) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "minSizeSubarraySum",
+    "num": 28,
+    "title": "Minimum Size Subarray Sum",
+    "difficulty": "Medium",
+    "pattern": "Variable-size sliding window",
+    "prompt": "Given positive integers array nums and a target, return the minimal length of a contiguous subarray whose sum ≥ target, or 0 if none exists.",
+    "input": "target = 7, nums = [2,3,1,2,4,3]",
+    "output": "2  ([4,3])",
+    "constraints": "1 ≤ nums.length ≤ 10^5 · nums[i] > 0",
+    "why": "The grow/shrink window pattern — expand to satisfy a condition, then contract to minimize.",
+    "brute": "Check every subarray's sum → O(n²).",
+    "optimal": "Grow the right edge adding to the sum; whenever sum ≥ target, shrink from the left while recording the smallest length. O(n).",
+    "intuition": "Since all numbers are positive, growing only increases the sum and shrinking only decreases it — so a two-pointer window suffices.",
+    "dryRun": "target=7: window grows to [2,3,1,2] sum 8 ≥7 → shrink to [3,1,2]→[1,2,4]... smallest valid is [4,3] length 2.",
+    "time": "O(n) — each index enters and leaves once.",
+    "space": "O(1).",
+    "mistakes": "Returning Infinity instead of 0 when no window qualifies; forgetting this needs positive numbers; shrinking with < instead of ≥.",
+    "followups": "• What if negatives are allowed? (prefix sums + monotonic deque)\n• Return the subarray, not just its length.",
+    "solution": "function minSubArrayLen(target,nums){let l=0,s=0,best=Infinity;for(let r=0;r<nums.length;r++){s+=nums[r];while(s>=target){best=Math.min(best,r-l+1);s-=nums[l++];}}return best===Infinity?0:best;}",
+    "takeaway": "Expand to meet a constraint, contract to optimize — the variable-window two-pointer core.",
+    "starter": "// Minimum Size Subarray Sum  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction minSubArrayLen(target, nums) {\n  // your code here\n}\n"
    }
   ]
  },
  {
-  "id": 4,
+  "id": 5,
   "name": "Binary Search",
   "tier": "Foundations",
   "difficulty": "Hard",
@@ -481,7 +697,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q18",
-    "num": 20,
+    "num": 29,
     "title": "Binary Search",
     "difficulty": "Easy",
     "pattern": "Binary Search (classic)",
@@ -504,7 +720,7 @@ window.LEVELS = [
    },
    {
     "id": "q19",
-    "num": 21,
+    "num": 30,
     "title": "Search in Rotated Sorted Array",
     "difficulty": "Medium",
     "pattern": "Binary Search (rotated)",
@@ -527,7 +743,7 @@ window.LEVELS = [
    },
    {
     "id": "q20",
-    "num": 22,
+    "num": 31,
     "title": "Find Minimum in Rotated Sorted Array",
     "difficulty": "Medium",
     "pattern": "Binary Search (rotated)",
@@ -550,7 +766,7 @@ window.LEVELS = [
    },
    {
     "id": "q21",
-    "num": 23,
+    "num": 32,
     "title": "Koko Eating Bananas",
     "difficulty": "Medium",
     "pattern": "Binary Search on Answer",
@@ -573,7 +789,7 @@ window.LEVELS = [
    },
    {
     "id": "q22",
-    "num": 24,
+    "num": 33,
     "title": "Find First and Last Positionof Element in Sorted Array",
     "difficulty": "Medium",
     "pattern": "Binary Search (leftmost/rightmost bound)",
@@ -596,7 +812,7 @@ window.LEVELS = [
    },
    {
     "id": "q23",
-    "num": 25,
+    "num": 34,
     "title": "Median of Two Sorted Arrays",
     "difficulty": "Hard",
     "pattern": "Binary Search (partition)",
@@ -616,11 +832,34 @@ window.LEVELS = [
     "takeaway": "Binary search doesn't need to search 'in' a single array — it can search over a space of valid partitions or configurations.",
     "starter": "// Median of Two Sorted Arrays  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction medianOfTwoSortedArrays(nums1, nums2) {\n  // your code here\n}\n",
     "solution": "function medianOfTwoSortedArrays(nums1,nums2){const m=[...nums1,...nums2].sort((a,b)=>a-b);const n=m.length,mid=n>>1;return n%2?m[mid]:(m[mid-1]+m[mid])/2;}"
+   },
+   {
+    "id": "findPeakElement",
+    "num": 35,
+    "title": "Find Peak Element",
+    "difficulty": "Medium",
+    "pattern": "Binary Search on slope",
+    "prompt": "A peak is an element strictly greater than its neighbors (edges compare against -∞). Given nums, return the index of any peak in O(log n).",
+    "input": "nums = [1,2,3,1]",
+    "output": "2  (nums[2]=3 is a peak)",
+    "constraints": "1 ≤ nums.length ≤ 10^5 · adjacent values differ",
+    "why": "Shows binary search works even without a sorted array — you can binary search on a trend/slope.",
+    "brute": "Scan for any element bigger than both neighbors → O(n).",
+    "optimal": "If nums[m] < nums[m+1] a peak lies to the right, else to the left (or at m). Halve each step → O(log n).",
+    "intuition": "Always walk uphill: moving toward the larger neighbor must eventually hit a peak.",
+    "dryRun": "[1,2,3,1]: l=0,r=3,m=1 nums[1]<nums[2]→l=2. l=2,r=3,m=2 nums[2]>nums[3]→r=2. l==r=2 → peak index 2.",
+    "time": "O(log n).",
+    "space": "O(1).",
+    "mistakes": "Assuming the array is sorted; comparing m to m-1 instead of m+1; infinite loop from wrong l/r updates.",
+    "followups": "• Return the peak with the largest value.\n• Find a peak in a 2D grid.",
+    "solution": "function findPeakElement(nums){let l=0,r=nums.length-1;while(l<r){const m=(l+r)>>1;if(nums[m]<nums[m+1])l=m+1;else r=m;}return l;}",
+    "takeaway": "Binary search needs a monotonic decision, not a sorted array — here the slope gives it.",
+    "starter": "// Find Peak Element  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction findPeakElement(nums) {\n  // your code here\n}\n"
    }
   ]
  },
  {
-  "id": 5,
+  "id": 6,
   "name": "Strings",
   "tier": "Foundations",
   "difficulty": "Medium",
@@ -629,7 +868,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q24",
-    "num": 26,
+    "num": 36,
     "title": "Longest Common Prefix",
     "difficulty": "Easy",
     "pattern": "String Scanning",
@@ -652,7 +891,7 @@ window.LEVELS = [
    },
    {
     "id": "q25",
-    "num": 27,
+    "num": 37,
     "title": "Longest Palindromic Substring",
     "difficulty": "Medium",
     "pattern": "Expand Around Center",
@@ -675,7 +914,7 @@ window.LEVELS = [
    },
    {
     "id": "q26",
-    "num": 28,
+    "num": 38,
     "title": "Palindromic Substrings",
     "difficulty": "Medium",
     "pattern": "Expand Around Center",
@@ -698,7 +937,7 @@ window.LEVELS = [
    },
    {
     "id": "q27",
-    "num": 29,
+    "num": 39,
     "title": "String to Integer (atoi)",
     "difficulty": "Medium",
     "pattern": "Careful Parsing / Edge-Case Enumeration",
@@ -721,7 +960,7 @@ window.LEVELS = [
    },
    {
     "id": "q28",
-    "num": 30,
+    "num": 40,
     "title": "Encode and Decode Strings",
     "difficulty": "Medium",
     "pattern": "Delimiter Design",
@@ -745,7 +984,7 @@ window.LEVELS = [
   ]
  },
  {
-  "id": 6,
+  "id": 7,
   "name": "Linked Lists",
   "tier": "Core Structures",
   "difficulty": "Medium",
@@ -754,7 +993,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q29",
-    "num": 31,
+    "num": 41,
     "title": "Reverse Linked List",
     "difficulty": "Easy",
     "pattern": "Iterative Pointer Reversal",
@@ -777,7 +1016,7 @@ window.LEVELS = [
    },
    {
     "id": "q30",
-    "num": 32,
+    "num": 42,
     "title": "Linked List Cycle",
     "difficulty": "Easy",
     "pattern": "Fast & Slow Pointers",
@@ -800,7 +1039,7 @@ window.LEVELS = [
    },
    {
     "id": "q31",
-    "num": 33,
+    "num": 43,
     "title": "Middle of the Linked List",
     "difficulty": "Easy",
     "pattern": "Fast & Slow Pointers",
@@ -823,7 +1062,7 @@ window.LEVELS = [
    },
    {
     "id": "q32",
-    "num": 34,
+    "num": 44,
     "title": "Merge Two Sorted Lists",
     "difficulty": "Easy",
     "pattern": "Two-Pointer List Merge",
@@ -846,7 +1085,7 @@ window.LEVELS = [
    },
    {
     "id": "q33",
-    "num": 35,
+    "num": 45,
     "title": "Remove Nth Node From End of List",
     "difficulty": "Medium",
     "pattern": "Two Pointers (fixed gap)",
@@ -869,7 +1108,7 @@ window.LEVELS = [
    },
    {
     "id": "q34",
-    "num": 36,
+    "num": 46,
     "title": "Reorder List",
     "difficulty": "Medium",
     "pattern": "Fast/Slow + Reverse + Merge",
@@ -893,7 +1132,7 @@ window.LEVELS = [
   ]
  },
  {
-  "id": 7,
+  "id": 8,
   "name": "Stack & Queue",
   "tier": "Core Structures",
   "difficulty": "Hard",
@@ -902,7 +1141,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q35",
-    "num": 37,
+    "num": 47,
     "title": "Valid Parentheses",
     "difficulty": "Easy",
     "pattern": "Stack (matching pairs)",
@@ -925,7 +1164,7 @@ window.LEVELS = [
    },
    {
     "id": "q36",
-    "num": 38,
+    "num": 48,
     "title": "Min Stack",
     "difficulty": "Medium",
     "pattern": "Stack (auxiliary tracking)",
@@ -948,7 +1187,7 @@ window.LEVELS = [
    },
    {
     "id": "q37",
-    "num": 39,
+    "num": 49,
     "title": "Evaluate Reverse Polish Notation",
     "difficulty": "Medium",
     "pattern": "Stack (expression evaluation)",
@@ -971,7 +1210,7 @@ window.LEVELS = [
    },
    {
     "id": "q38",
-    "num": 40,
+    "num": 50,
     "title": "Daily Temperatures",
     "difficulty": "Medium",
     "pattern": "Monotonic Stack",
@@ -994,7 +1233,7 @@ window.LEVELS = [
    },
    {
     "id": "q39",
-    "num": 41,
+    "num": 51,
     "title": "Largest Rectangle in Histogram",
     "difficulty": "Hard",
     "pattern": "Monotonic Stack",
@@ -1018,7 +1257,7 @@ window.LEVELS = [
   ]
  },
  {
-  "id": 8,
+  "id": 9,
   "name": "Trees & BST",
   "tier": "Core Structures",
   "difficulty": "Medium",
@@ -1027,7 +1266,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q40",
-    "num": 42,
+    "num": 52,
     "title": "Invert Binary Tree",
     "difficulty": "Easy",
     "pattern": "DFS (recursive)",
@@ -1050,7 +1289,7 @@ window.LEVELS = [
    },
    {
     "id": "q41",
-    "num": 43,
+    "num": 53,
     "title": "Maximum Depth of Binary Tree",
     "difficulty": "Easy",
     "pattern": "DFS (recursive)",
@@ -1073,7 +1312,7 @@ window.LEVELS = [
    },
    {
     "id": "q42",
-    "num": 44,
+    "num": 54,
     "title": "Diameter of Binary Tree",
     "difficulty": "Medium",
     "pattern": "DFS (post-order accumulate global)",
@@ -1096,7 +1335,7 @@ window.LEVELS = [
    },
    {
     "id": "q43",
-    "num": 45,
+    "num": 55,
     "title": "Binary Tree Level Order Traversal",
     "difficulty": "Medium",
     "pattern": "BFS",
@@ -1119,7 +1358,7 @@ window.LEVELS = [
    },
    {
     "id": "q44",
-    "num": 46,
+    "num": 56,
     "title": "Validate Binary Search Tree",
     "difficulty": "Medium",
     "pattern": "DFS (range bounds)",
@@ -1142,7 +1381,7 @@ window.LEVELS = [
    },
    {
     "id": "q45",
-    "num": 47,
+    "num": 57,
     "title": "Lowest Common Ancestor of a BST",
     "difficulty": "Medium",
     "pattern": "BST Property Traversal",
@@ -1165,7 +1404,7 @@ window.LEVELS = [
    },
    {
     "id": "q46",
-    "num": 48,
+    "num": 58,
     "title": "Kth Smallest Element in a BST",
     "difficulty": "Medium",
     "pattern": "In-order Traversal",
@@ -1189,7 +1428,7 @@ window.LEVELS = [
   ]
  },
  {
-  "id": 9,
+  "id": 10,
   "name": "Heap / Priority Queue",
   "tier": "Core Structures",
   "difficulty": "Hard",
@@ -1198,7 +1437,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q47",
-    "num": 49,
+    "num": 59,
     "title": "Kth Largest Element in an Array",
     "difficulty": "Medium",
     "pattern": "Heap (fixed-size min-heap)",
@@ -1221,7 +1460,7 @@ window.LEVELS = [
    },
    {
     "id": "q48",
-    "num": 50,
+    "num": 60,
     "title": "K Closest Points to Origin",
     "difficulty": "Medium",
     "pattern": "Heap (fixed-size max-heap by distance)",
@@ -1244,7 +1483,7 @@ window.LEVELS = [
    },
    {
     "id": "q49",
-    "num": 51,
+    "num": 61,
     "title": "Merge K Sorted Lists",
     "difficulty": "Hard",
     "pattern": "Heap (k-way merge)",
@@ -1267,7 +1506,7 @@ window.LEVELS = [
    },
    {
     "id": "q50",
-    "num": 52,
+    "num": 62,
     "title": "Find Median from Data Stream",
     "difficulty": "Hard",
     "pattern": "Two Heaps",
@@ -1287,11 +1526,182 @@ window.LEVELS = [
     "takeaway": "Splitting a stream into a max-heap (lower half) and min-heap (upper half) answers running-median queries in O(log n).",
     "starter": "// Find Median from Data Stream  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nclass MedianFinder {\n  constructor() {\n    // your code here\n  }\n  addNum(num) {}\n  findMedian() {}\n}\n",
     "solution": "class MedianFinder{constructor(){this.a=[];}addNum(n){let lo=0,hi=this.a.length;while(lo<hi){const m=(lo+hi)>>1;if(this.a[m]<n)lo=m+1;else hi=m;}this.a.splice(lo,0,n);}findMedian(){const n=this.a.length,mid=n>>1;return n%2?this.a[mid]:(this.a[mid-1]+this.a[mid])/2;}}"
+   },
+   {
+    "id": "lastStoneWeight",
+    "num": 63,
+    "title": "Last Stone Weight",
+    "difficulty": "Easy",
+    "pattern": "Max-Heap (greedy simulation)",
+    "prompt": "Repeatedly smash the two heaviest stones together (they cancel by the smaller weight). Return the weight of the last remaining stone, or 0 if none remain.",
+    "input": "stones = [2,7,4,1,8,1]",
+    "output": "1",
+    "constraints": "1 ≤ stones.length ≤ 30",
+    "why": "A gentle heap problem — you always need the current two largest, which is exactly what a max-heap gives.",
+    "brute": "Sort the array on every smash → O(n² log n) but fine for small n.",
+    "optimal": "A max-heap pops the two largest in O(log n); push back the difference if nonzero. O(n log n).",
+    "intuition": "Only the two heaviest ever matter each round, so keep the collection ordered by weight.",
+    "dryRun": "[8,7,4,2,1,1]: 8,7→1; [4,2,1,1,1]: 4,2→2; [2,1,1,1]:2,1→1; [1,1,1]:1,1→0; [1] → 1.",
+    "time": "O(n log n).",
+    "space": "O(n).",
+    "mistakes": "Not pushing back the difference; forgetting the empty-heap result is 0; using a min-heap by mistake.",
+    "followups": "• Return which stones remain, not just the weight.\n• Last Stone Weight II (partition into two near-equal piles — DP).",
+    "solution": "function lastStoneWeight(stones){stones=[...stones];while(stones.length>1){stones.sort((a,b)=>a-b);const y=stones.pop(),x=stones.pop();if(y>x)stones.push(y-x);}return stones[0]||0;}",
+    "takeaway": "Whenever you repeatedly need the current max (or min), reach for a heap.",
+    "starter": "// Last Stone Weight  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction lastStoneWeight(stones) {\n  // your code here\n}\n"
    }
   ]
  },
  {
-  "id": 10,
+  "id": 11,
+  "name": "Sorting",
+  "tier": "Core Structures",
+  "difficulty": "Medium",
+  "icon": "🔀",
+  "desc": "The classic comparison and non-comparison sorts — the mental model behind divide-and-conquer and O(n log n).",
+  "problems": [
+   {
+    "id": "bubbleSort",
+    "num": 64,
+    "title": "Bubble Sort",
+    "difficulty": "Easy",
+    "pattern": "Comparison sort",
+    "prompt": "Sort an array of numbers in ascending order using bubble sort and return it.",
+    "input": "arr = [5,2,9,1,5,6]",
+    "output": "[1,2,5,5,6,9]",
+    "constraints": "0 ≤ arr.length ≤ 10^3",
+    "why": "The first sort everyone learns — repeated adjacent swaps make the 'bubbling' of large values visible.",
+    "brute": "Bubble sort is itself the naive O(n²) baseline.",
+    "optimal": "Repeatedly pass through, swapping out-of-order neighbors; the largest 'bubbles' to the end each pass. O(n²).",
+    "intuition": "Each pass floats the next-largest element to its final position at the end.",
+    "dryRun": "[5,2,9,1]: pass1 → [2,5,1,9]; pass2 → [2,1,5,9]; pass3 → [1,2,5,9].",
+    "time": "O(n²) (O(n) best case with an early-exit flag).",
+    "space": "O(1).",
+    "mistakes": "Looping the inner pass too far (into the already-sorted tail); forgetting it's O(n²) — don't use it on large inputs.",
+    "followups": "• Add an early-exit flag when a pass makes no swaps.\n• Why is it stable?",
+    "solution": "function bubbleSort(arr){arr=[...arr];for(let i=0;i<arr.length;i++)for(let j=0;j<arr.length-1-i;j++)if(arr[j]>arr[j+1]){const t=arr[j];arr[j]=arr[j+1];arr[j+1]=t;}return arr;}",
+    "takeaway": "Bubble sort is the O(n²) baseline — simple, stable, and only for tiny inputs.",
+    "starter": "// Bubble Sort  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction bubbleSort(arr) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "insertionSort",
+    "num": 65,
+    "title": "Insertion Sort",
+    "difficulty": "Easy",
+    "pattern": "Comparison sort",
+    "prompt": "Sort an array of numbers in ascending order using insertion sort and return it.",
+    "input": "arr = [5,2,9,1]",
+    "output": "[1,2,5,9]",
+    "constraints": "0 ≤ arr.length ≤ 10^3",
+    "why": "The go-to for small or nearly-sorted arrays — builds a sorted prefix one element at a time (how you sort playing cards).",
+    "brute": "n/a — insertion sort is the elementary method.",
+    "optimal": "Grow a sorted prefix; shift larger elements right and drop each new value into place. O(n²) worst, O(n) nearly-sorted.",
+    "intuition": "Take the next element and slide it left past everything larger until it lands in order.",
+    "dryRun": "[5,2,9,1]: 2 before 5 → [2,5,9,1]; 9 stays; 1 slides to front → [1,2,5,9].",
+    "time": "O(n²) worst, O(n) best.",
+    "space": "O(1).",
+    "mistakes": "Overwriting values before shifting; wrong loop bounds while shifting; assuming it's fast on large random data.",
+    "followups": "• Use binary search to find the insertion point (binary insertion sort).\n• Why is it preferred for tiny subarrays inside quicksort?",
+    "solution": "function insertionSort(arr){arr=[...arr];for(let i=1;i<arr.length;i++){const key=arr[i];let j=i-1;while(j>=0&&arr[j]>key){arr[j+1]=arr[j];j--;}arr[j+1]=key;}return arr;}",
+    "takeaway": "Insertion sort shines on small or almost-sorted data — near-linear when little moving is needed.",
+    "starter": "// Insertion Sort  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction insertionSort(arr) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "selectionSort",
+    "num": 66,
+    "title": "Selection Sort",
+    "difficulty": "Easy",
+    "pattern": "Comparison sort",
+    "prompt": "Sort an array of numbers in ascending order using selection sort and return it.",
+    "input": "arr = [64,25,12,22,11]",
+    "output": "[11,12,22,25,64]",
+    "constraints": "0 ≤ arr.length ≤ 10^3",
+    "why": "Illustrates 'find the minimum and place it' — minimal swaps (O(n)) at the cost of always-O(n²) comparisons.",
+    "brute": "n/a — selection sort is elementary.",
+    "optimal": "For each position, scan the remaining elements for the minimum and swap it into place. O(n²) comparisons, O(n) swaps.",
+    "intuition": "Repeatedly pick the smallest remaining value and put it at the front of the unsorted part.",
+    "dryRun": "[64,25,12,22,11]: min 11 → front; then 12; then 22; then 25 → [11,12,22,25,64].",
+    "time": "O(n²).",
+    "space": "O(1).",
+    "mistakes": "Swapping on every comparison instead of once per pass; wrong minimum index tracking.",
+    "followups": "• Why does it make the fewest swaps of the elementary sorts?\n• Is it stable? (Not by default.)",
+    "solution": "function selectionSort(arr){arr=[...arr];for(let i=0;i<arr.length;i++){let min=i;for(let j=i+1;j<arr.length;j++)if(arr[j]<arr[min])min=j;if(min!==i){const t=arr[i];arr[i]=arr[min];arr[min]=t;}}return arr;}",
+    "takeaway": "Selection sort minimizes writes — useful when swaps are the expensive operation.",
+    "starter": "// Selection Sort  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction selectionSort(arr) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "mergeSort",
+    "num": 67,
+    "title": "Merge Sort",
+    "difficulty": "Medium",
+    "pattern": "Divide & Conquer",
+    "prompt": "Sort an array of numbers in ascending order using merge sort and return it.",
+    "input": "arr = [38,27,43,3,9,82,10]",
+    "output": "[3,9,10,27,38,43,82]",
+    "constraints": "0 ≤ arr.length ≤ 10^5",
+    "why": "The canonical divide-and-conquer sort — split, sort halves, merge — and a stable guaranteed O(n log n).",
+    "brute": "Elementary O(n²) sorts are the baseline this beats.",
+    "optimal": "Recursively split to single elements, then merge sorted halves in linear time. O(n log n) always.",
+    "intuition": "Two already-sorted lists merge in one pass by always taking the smaller front element.",
+    "dryRun": "[38,27,43,3] → [27,38] & [3,43] → merge [3,27,38,43]. Combine with the other half similarly.",
+    "time": "O(n log n) guaranteed.",
+    "space": "O(n).",
+    "mistakes": "Off-by-one in the merge indices; not handling odd lengths; forgetting to copy leftovers from one half.",
+    "followups": "• Do an in-place / bottom-up merge sort.\n• Why is merge sort preferred for linked lists and external sorting?",
+    "solution": "function mergeSort(arr){if(arr.length<=1)return [...arr];const mid=arr.length>>1;const L=mergeSort(arr.slice(0,mid)),R=mergeSort(arr.slice(mid));const res=[];let i=0,j=0;while(i<L.length&&j<R.length)res.push(L[i]<=R[j]?L[i++]:R[j++]);while(i<L.length)res.push(L[i++]);while(j<R.length)res.push(R[j++]);return res;}",
+    "takeaway": "Divide, conquer, merge — merge sort trades O(n) space for stable, guaranteed O(n log n).",
+    "starter": "// Merge Sort  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction mergeSort(arr) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "quickSort",
+    "num": 68,
+    "title": "Quick Sort",
+    "difficulty": "Medium",
+    "pattern": "Divide & Conquer (partition)",
+    "prompt": "Sort an array of numbers in ascending order using quick sort and return it.",
+    "input": "arr = [10,7,8,9,1,5]",
+    "output": "[1,5,7,8,9,10]",
+    "constraints": "0 ≤ arr.length ≤ 10^5",
+    "why": "The most-used in-practice sort — partition around a pivot and recurse; average O(n log n) with small constants.",
+    "brute": "Elementary O(n²) sorts are the baseline.",
+    "optimal": "Pick a pivot, partition into < and ≥ groups, recurse on each. Average O(n log n), worst O(n²) on bad pivots.",
+    "intuition": "Each partition puts the pivot in its final spot and shrinks the problem to two independent halves.",
+    "dryRun": "[10,7,8,9,1,5] pivot 5 → [1] 5 [10,7,8,9]; recurse the right on pivot 9 → ... → sorted.",
+    "time": "O(n log n) average, O(n²) worst.",
+    "space": "O(log n) average recursion.",
+    "mistakes": "Poor pivot choice on sorted input (O(n²)); not handling duplicates (use 3-way partition); unstable ordering.",
+    "followups": "• Randomize or use median-of-three pivots to avoid worst case.\n• Implement in-place Lomuto/Hoare partitioning.",
+    "solution": "function quickSort(arr){if(arr.length<=1)return [...arr];const pivot=arr[arr.length>>1];const less=[],eq=[],gt=[];for(const x of arr){if(x<pivot)less.push(x);else if(x>pivot)gt.push(x);else eq.push(x);}return [...quickSort(less),...eq,...quickSort(gt)];}",
+    "takeaway": "Quicksort is fast in practice; guard the pivot choice to dodge the O(n²) worst case.",
+    "starter": "// Quick Sort  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction quickSort(arr) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "radixSort",
+    "num": 69,
+    "title": "Radix Sort",
+    "difficulty": "Medium",
+    "pattern": "Non-comparison sort",
+    "prompt": "Sort an array of non-negative integers in ascending order using LSD radix sort and return it.",
+    "input": "arr = [170,45,75,90,2,802,24,66]",
+    "output": "[2,24,45,66,75,90,170,802]",
+    "constraints": "0 ≤ arr.length ≤ 10^5 · arr[i] ≥ 0",
+    "why": "Breaks the O(n log n) comparison barrier — sorts by digits in linear time when key width is bounded.",
+    "brute": "Any comparison sort is O(n log n); radix does better for fixed-width integer keys.",
+    "optimal": "Stably bucket by each digit from least to most significant. O(d·(n+b)) for d digits and base b.",
+    "intuition": "Sorting by successive digits, least-significant first and stably, leaves the array fully ordered.",
+    "dryRun": "By ones digit, then tens, then hundreds — each stable pass refines the order until fully sorted.",
+    "time": "O(d·(n+b)).",
+    "space": "O(n+b).",
+    "mistakes": "Using an unstable per-digit sort (breaks it); not handling negatives (needs offset/splitting); wrong max-digit count.",
+    "followups": "• Extend to negative numbers.\n• MSD radix sort for strings.",
+    "solution": "function radixSort(arr){arr=[...arr];if(arr.length===0)return arr;const max=Math.max(...arr);for(let exp=1;Math.floor(max/exp)>0;exp*=10){const out=new Array(arr.length),cnt=new Array(10).fill(0);for(const x of arr)cnt[Math.floor(x/exp)%10]++;for(let i=1;i<10;i++)cnt[i]+=cnt[i-1];for(let i=arr.length-1;i>=0;i--){const d=Math.floor(arr[i]/exp)%10;out[--cnt[d]]=arr[i];}for(let i=0;i<arr.length;i++)arr[i]=out[i];}return arr;}",
+    "takeaway": "When keys are fixed-width integers, radix sort beats comparison sorts by avoiding comparisons entirely.",
+    "starter": "// Radix Sort  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction radixSort(arr) {\n  // your code here\n}\n"
+   }
+  ]
+ },
+ {
+  "id": 12,
   "name": "Backtracking",
   "tier": "Advanced",
   "difficulty": "Hard",
@@ -1300,7 +1710,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q51",
-    "num": 53,
+    "num": 70,
     "title": "Subsets",
     "difficulty": "Medium",
     "pattern": "Backtracking (include/exclude)",
@@ -1323,7 +1733,7 @@ window.LEVELS = [
    },
    {
     "id": "q52",
-    "num": 54,
+    "num": 71,
     "title": "Permutations",
     "difficulty": "Medium",
     "pattern": "Backtracking (choose/unchoose with used-set)",
@@ -1346,7 +1756,7 @@ window.LEVELS = [
    },
    {
     "id": "q53",
-    "num": 55,
+    "num": 72,
     "title": "Combination Sum",
     "difficulty": "Medium",
     "pattern": "Backtracking (unbounded choice + pruning)",
@@ -1369,7 +1779,7 @@ window.LEVELS = [
    },
    {
     "id": "q54",
-    "num": 56,
+    "num": 73,
     "title": "Word Search",
     "difficulty": "Medium",
     "pattern": "Backtracking / DFS on Grid",
@@ -1392,7 +1802,7 @@ window.LEVELS = [
    },
    {
     "id": "q55",
-    "num": 57,
+    "num": 74,
     "title": "N-Queens",
     "difficulty": "Hard",
     "pattern": "Backtracking (constraint propagation)",
@@ -1416,7 +1826,7 @@ window.LEVELS = [
   ]
  },
  {
-  "id": 11,
+  "id": 13,
   "name": "Graphs",
   "tier": "Advanced",
   "difficulty": "Medium",
@@ -1425,7 +1835,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q56",
-    "num": 58,
+    "num": 75,
     "title": "Number of Islands",
     "difficulty": "Medium",
     "pattern": "DFS/BFS on Grid",
@@ -1448,7 +1858,7 @@ window.LEVELS = [
    },
    {
     "id": "q57",
-    "num": 59,
+    "num": 76,
     "title": "Clone Graph",
     "difficulty": "Medium",
     "pattern": "DFS/BFS + Hash Map (visited copies)",
@@ -1471,7 +1881,7 @@ window.LEVELS = [
    },
    {
     "id": "q58",
-    "num": 60,
+    "num": 77,
     "title": "Course Schedule",
     "difficulty": "Medium",
     "pattern": "Topological Sort (cycle detection)",
@@ -1494,7 +1904,7 @@ window.LEVELS = [
    },
    {
     "id": "q59",
-    "num": 61,
+    "num": 78,
     "title": "Course Schedule II",
     "difficulty": "Medium",
     "pattern": "Topological Sort (ordering)",
@@ -1517,7 +1927,7 @@ window.LEVELS = [
    },
    {
     "id": "q60",
-    "num": 62,
+    "num": 79,
     "title": "Pacific Atlantic Water Flow",
     "difficulty": "Medium",
     "pattern": "Multi-source DFS/BFS",
@@ -1540,7 +1950,7 @@ window.LEVELS = [
    },
    {
     "id": "q61",
-    "num": 63,
+    "num": 80,
     "title": "Graph Valid Tree",
     "difficulty": "Medium",
     "pattern": "Union-Find / DFS Cycle Check",
@@ -1563,7 +1973,7 @@ window.LEVELS = [
    },
    {
     "id": "q62",
-    "num": 64,
+    "num": 81,
     "title": "Network Delay Time",
     "difficulty": "Medium",
     "pattern": "Dijkstra's Algorithm",
@@ -1583,11 +1993,34 @@ window.LEVELS = [
     "takeaway": "Dijkstra's greedily finalizes the shortest distance to the closest unvisited node first — correct only when all edge weights are non-negative.",
     "starter": "// Network Delay Time  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction networkDelayTime(times, n, k) {\n  // your code here\n}\n",
     "solution": "function networkDelayTime(times,n,k){const adj=Array.from({length:n+1},()=>[]);for(const [u,v,w] of times)adj[u].push([v,w]);const dist=new Array(n+1).fill(Infinity);dist[k]=0;const pq=[[0,k]];while(pq.length){pq.sort((a,b)=>a[0]-b[0]);const [d,u]=pq.shift();if(d>dist[u])continue;for(const [v,w] of adj[u])if(d+w<dist[v]){dist[v]=d+w;pq.push([dist[v],v]);}}let max=0;for(let i=1;i<=n;i++){if(dist[i]===Infinity)return -1;max=Math.max(max,dist[i]);}return max;}"
+   },
+   {
+    "id": "floodFill",
+    "num": 82,
+    "title": "Flood Fill",
+    "difficulty": "Easy",
+    "pattern": "DFS / BFS on a grid",
+    "prompt": "Given an image (2D grid of colors), a starting pixel (sr, sc), and a new color, flood-fill the connected region of same-colored pixels (4-directionally) with the new color. Return the image.",
+    "input": "image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, color = 2",
+    "output": "[[2,2,2],[2,2,0],[2,0,1]]",
+    "constraints": "1 ≤ rows, cols ≤ 50",
+    "why": "The simplest grid-DFS — the same connected-component fill behind paint buckets and Number of Islands.",
+    "brute": "n/a — you must visit each pixel in the region once.",
+    "optimal": "DFS/BFS from the start, recoloring every reachable same-colored pixel. O(rows·cols).",
+    "intuition": "Spread outward from the seed to every neighbor sharing the original color, painting as you go.",
+    "dryRun": "Start (1,1)=1, color 2: recolor the connected block of 1's around it to 2, leaving the 0's untouched.",
+    "time": "O(rows·cols).",
+    "space": "O(rows·cols) recursion/stack.",
+    "mistakes": "Infinite recursion when the new color equals the original (guard against it); going out of bounds; comparing to the wrong original color.",
+    "followups": "• Do it iteratively with an explicit stack/queue.\n• 8-directional fill.",
+    "solution": "function floodFill(image,sr,sc,color){const start=image[sr][sc];if(start===color)return image;const R=image.length,C=image[0].length;(function dfs(r,c){if(r<0||c<0||r>=R||c>=C||image[r][c]!==start)return;image[r][c]=color;dfs(r+1,c);dfs(r-1,c);dfs(r,c+1);dfs(r,c-1);})(sr,sc);return image;}",
+    "takeaway": "Grid DFS = recurse to the four neighbors that match a condition, marking as you visit.",
+    "starter": "// Flood Fill  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction floodFill(image, sr, sc, color) {\n  // your code here\n}\n"
    }
   ]
  },
  {
-  "id": 12,
+  "id": 14,
   "name": "Dynamic Programming",
   "tier": "Advanced",
   "difficulty": "Medium",
@@ -1596,7 +2029,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q63",
-    "num": 65,
+    "num": 83,
     "title": "Climbing Stairs",
     "difficulty": "Easy",
     "pattern": "1D DP (Fibonacci-shaped)",
@@ -1619,7 +2052,7 @@ window.LEVELS = [
    },
    {
     "id": "q64",
-    "num": 66,
+    "num": 84,
     "title": "House Robber",
     "difficulty": "Medium",
     "pattern": "1D DP (take/skip decision)",
@@ -1642,7 +2075,7 @@ window.LEVELS = [
    },
    {
     "id": "q65",
-    "num": 67,
+    "num": 85,
     "title": "Longest Increasing Subsequence",
     "difficulty": "Medium",
     "pattern": "1D DP (with O(n log n) optimization)",
@@ -1665,7 +2098,7 @@ window.LEVELS = [
    },
    {
     "id": "q66",
-    "num": 68,
+    "num": 86,
     "title": "Coin Change",
     "difficulty": "Medium",
     "pattern": "1D DP (unbounded knapsack)",
@@ -1688,7 +2121,7 @@ window.LEVELS = [
    },
    {
     "id": "q67",
-    "num": 69,
+    "num": 87,
     "title": "Unique Paths",
     "difficulty": "Medium",
     "pattern": "2D DP (grid path counting)",
@@ -1711,7 +2144,7 @@ window.LEVELS = [
    },
    {
     "id": "q68",
-    "num": 70,
+    "num": 88,
     "title": "Longest Common Subsequence",
     "difficulty": "Medium",
     "pattern": "2D DP (string alignment)",
@@ -1734,7 +2167,7 @@ window.LEVELS = [
    },
    {
     "id": "q69",
-    "num": 71,
+    "num": 89,
     "title": "Word Break",
     "difficulty": "Medium",
     "pattern": "1D DP + Hashing (segmentation)",
@@ -1754,11 +2187,34 @@ window.LEVELS = [
     "takeaway": "Segmentation DP marks which PREFIXES are achievable, extending from each achievable prefix by testing valid next chunks.",
     "starter": "// Word Break  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction wordBreak(s, wordDict) {\n  // your code here\n}\n",
     "solution": "function wordBreak(s,wordDict){const set=new Set(wordDict),dp=new Array(s.length+1).fill(false);dp[0]=true;for(let i=1;i<=s.length;i++)for(let j=0;j<i;j++)if(dp[j]&&set.has(s.slice(j,i))){dp[i]=true;break;}return dp[s.length];}"
+   },
+   {
+    "id": "knapsack01",
+    "num": 90,
+    "title": "0/1 Knapsack",
+    "difficulty": "Medium",
+    "pattern": "1D Dynamic Programming",
+    "prompt": "Given item weights and values and a knapsack capacity, return the maximum total value you can carry, taking each item at most once.",
+    "input": "weights = [1,3,4,5], values = [1,4,5,7], capacity = 7",
+    "output": "9  (items with weight 3 and 4)",
+    "constraints": "1 ≤ n ≤ 100 · 0 ≤ capacity ≤ 10^4",
+    "why": "The archetypal 0/1 DP — the 'take it or leave it' recurrence and the reverse-iteration trick that shrinks 2D to 1D.",
+    "brute": "Try every subset of items → O(2ⁿ).",
+    "optimal": "dp[c] = best value for capacity c. For each item, update capacities from high to low so each item is used once. O(n·capacity).",
+    "intuition": "For each item you either skip it (dp[c]) or take it (dp[c-w]+v); iterating capacity downward prevents reusing the same item.",
+    "dryRun": "cap 7 with (3,4) and (4,5): dp[7]=max(0, dp[4]+4=... ) resolves to 4+5=9.",
+    "time": "O(n·capacity).",
+    "space": "O(capacity).",
+    "mistakes": "Iterating capacity ascending (turns it into unbounded knapsack); off-by-one on capacity bounds; forgetting the c ≥ weight guard.",
+    "followups": "• Unbounded knapsack (items reusable) — iterate capacity ascending.\n• Reconstruct which items were chosen.",
+    "solution": "function knapsack(weights,values,capacity){const dp=new Array(capacity+1).fill(0);for(let i=0;i<weights.length;i++)for(let c=capacity;c>=weights[i];c--)dp[c]=Math.max(dp[c],dp[c-weights[i]]+values[i]);return dp[capacity];}",
+    "takeaway": "0/1 knapsack = for each item, take-or-skip, with capacity iterated downward to enforce 'at most once'.",
+    "starter": "// 0/1 Knapsack  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction knapsack(weights, values, capacity) {\n  // your code here\n}\n"
    }
   ]
  },
  {
-  "id": 13,
+  "id": 15,
   "name": "Greedy",
   "tier": "Mastery",
   "difficulty": "Medium",
@@ -1767,7 +2223,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q70",
-    "num": 72,
+    "num": 91,
     "title": "Jump Game",
     "difficulty": "Medium",
     "pattern": "Greedy (reachability frontier)",
@@ -1790,7 +2246,7 @@ window.LEVELS = [
    },
    {
     "id": "q71",
-    "num": 73,
+    "num": 92,
     "title": "Gas Station",
     "difficulty": "Medium",
     "pattern": "Greedy (running total reset)",
@@ -1813,7 +2269,7 @@ window.LEVELS = [
    },
    {
     "id": "q72",
-    "num": 74,
+    "num": 93,
     "title": "Non-overlapping Intervals",
     "difficulty": "Medium",
     "pattern": "Greedy (interval scheduling by end time)",
@@ -1836,7 +2292,7 @@ window.LEVELS = [
    },
    {
     "id": "q73",
-    "num": 75,
+    "num": 94,
     "title": "Merge Intervals",
     "difficulty": "Medium",
     "pattern": "Greedy + Sorting (interval merge)",
@@ -1856,11 +2312,80 @@ window.LEVELS = [
     "takeaway": "Sorting by START time turns interval merging into a single linear scan — overlaps can only occur with the immediately preceding interval.",
     "starter": "// Merge Intervals  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction mergeIntervals(intervals) {\n  // your code here\n}\n",
     "solution": "function mergeIntervals(intervals){intervals=[...intervals].sort((a,b)=>a[0]-b[0]);const res=[];for(const iv of intervals){if(!res.length||res[res.length-1][1]<iv[0])res.push([...iv]);else res[res.length-1][1]=Math.max(res[res.length-1][1],iv[1]);}return res;}"
+   },
+   {
+    "id": "insertInterval",
+    "num": 95,
+    "title": "Insert Interval",
+    "difficulty": "Medium",
+    "pattern": "Intervals (merge on the fly)",
+    "prompt": "Given a list of non-overlapping intervals sorted by start and a new interval, insert it and merge if necessary. Return the resulting sorted list.",
+    "input": "intervals = [[1,3],[6,9]], newInterval = [2,5]",
+    "output": "[[1,5],[6,9]]",
+    "constraints": "0 ≤ intervals.length ≤ 10^4 · sorted, non-overlapping",
+    "why": "Interval merging without a full re-sort — walk once and merge only the overlapping run.",
+    "brute": "Append the new interval, sort everything, then merge → O(n log n).",
+    "optimal": "Copy intervals ending before newInterval, merge all that overlap it, then copy the rest. Single pass, O(n).",
+    "intuition": "The sorted input lets you split the list into 'before', 'overlapping', and 'after' the new interval.",
+    "dryRun": "[[1,3],[6,9]] + [2,5]: [1,3] overlaps [2,5] → merge to [1,5]; [6,9] starts after 5 → keep. → [[1,5],[6,9]].",
+    "time": "O(n).",
+    "space": "O(n) output.",
+    "mistakes": "Re-sorting unnecessarily; wrong overlap test (use start ≤ end); forgetting to push the merged interval before the tail.",
+    "followups": "• Remove an interval instead of inserting.\n• Handle unsorted input.",
+    "solution": "function insertInterval(intervals,newInterval){const res=[];let i=0,n=intervals.length;while(i<n&&intervals[i][1]<newInterval[0])res.push(intervals[i++]);while(i<n&&intervals[i][0]<=newInterval[1]){newInterval=[Math.min(newInterval[0],intervals[i][0]),Math.max(newInterval[1],intervals[i][1])];i++;}res.push(newInterval);while(i<n)res.push(intervals[i++]);return res;}",
+    "takeaway": "Sorted intervals let you merge in one pass by splitting around the new interval.",
+    "starter": "// Insert Interval  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction insertInterval(intervals, newInterval) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "meetingRoomsII",
+    "num": 96,
+    "title": "Meeting Rooms II",
+    "difficulty": "Medium",
+    "pattern": "Sweep line / min-heap",
+    "prompt": "Given meeting time intervals, return the minimum number of conference rooms required so no two overlapping meetings share a room.",
+    "input": "intervals = [[0,30],[5,10],[15,20]]",
+    "output": "2",
+    "constraints": "0 ≤ intervals.length ≤ 10^4",
+    "why": "The classic 'max concurrent intervals' — a sweep over sorted starts and ends counts peak overlap.",
+    "brute": "For each meeting, count how many others overlap it → O(n²).",
+    "optimal": "Sort starts and ends separately; sweep starts, freeing a room whenever an end ≤ the current start. The peak room count is the answer. O(n log n).",
+    "intuition": "You need a new room only when a meeting starts before an earlier one has ended — track concurrency over time.",
+    "dryRun": "starts [0,5,15], ends [10,20,30]. s=0 rooms=1; s=5 (end 10>5) rooms=2; s=15 (end 10≤15 free) rooms=1→2. peak = 2.",
+    "time": "O(n log n).",
+    "space": "O(n).",
+    "mistakes": "Comparing intervals against each other (O(n²)); using ≤ vs < wrong for the free condition; not sorting ends separately.",
+    "followups": "• Return the actual room assignment.\n• Meeting Rooms I — can a single person attend all meetings?",
+    "solution": "function minMeetingRooms(intervals){const starts=intervals.map(i=>i[0]).sort((a,b)=>a-b);const ends=intervals.map(i=>i[1]).sort((a,b)=>a-b);let rooms=0,max=0,e=0;for(let s=0;s<starts.length;s++){while(ends[e]<=starts[s]){rooms--;e++;}rooms++;max=Math.max(max,rooms);}return max;}",
+    "takeaway": "Decoupling starts and ends turns overlap-counting into a linear sweep.",
+    "starter": "// Meeting Rooms II  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction minMeetingRooms(intervals) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "taskScheduler",
+    "num": 97,
+    "title": "Task Scheduler",
+    "difficulty": "Medium",
+    "pattern": "Greedy (fill the gaps)",
+    "prompt": "Given task labels and a cooldown n (identical tasks must be at least n apart), return the least number of time units the CPU needs to finish all tasks (idles allowed).",
+    "input": "tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 2",
+    "output": "8",
+    "constraints": "1 ≤ tasks.length ≤ 10^4 · 0 ≤ n ≤ 100",
+    "why": "A counting-greedy gem — the most frequent task dictates a rigid frame you fill with the others.",
+    "brute": "Simulate the schedule slot by slot with a ready queue → correct but heavier.",
+    "optimal": "Let maxCount be the highest task frequency and t the number of tasks tied at it. Answer = max(tasks.length, (maxCount-1)·(n+1)+t). O(n).",
+    "intuition": "The busiest task lays out (maxCount-1) blocks of width n+1; you slot other tasks into the gaps, and if there aren't enough gaps the tasks themselves fill the time.",
+    "dryRun": "3 A's, 3 B's, n=2: frame = (3-1)·(2+1)+2 = 8 → A B _ A B _ A B.",
+    "time": "O(n).",
+    "space": "O(1) (26 letters).",
+    "mistakes": "Forgetting the max(...) with tasks.length when there's no idling needed; miscounting how many tasks share the max frequency.",
+    "followups": "• Return an actual valid schedule.\n• What if there are more than 26 distinct task types?",
+    "solution": "function leastInterval(tasks,n){const cnt={};let max=0;for(const t of tasks){cnt[t]=(cnt[t]||0)+1;max=Math.max(max,cnt[t]);}let ties=0;for(const k in cnt)if(cnt[k]===max)ties++;return Math.max(tasks.length,(max-1)*(n+1)+ties);}",
+    "takeaway": "The most frequent element often fixes a rigid skeleton the rest fits into — count first, then reason about gaps.",
+    "starter": "// Task Scheduler  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction leastInterval(tasks, n) {\n  // your code here\n}\n"
    }
   ]
  },
  {
-  "id": 14,
+  "id": 16,
   "name": "Bit Manipulation",
   "tier": "Mastery",
   "difficulty": "Easy",
@@ -1869,7 +2394,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q74",
-    "num": 76,
+    "num": 98,
     "title": "Single Number",
     "difficulty": "Easy",
     "pattern": "Bit Manipulation (XOR)",
@@ -1892,7 +2417,7 @@ window.LEVELS = [
    },
    {
     "id": "q75",
-    "num": 77,
+    "num": 99,
     "title": "Number of 1 Bits",
     "difficulty": "Easy",
     "pattern": "Bit Manipulation (bit clearing trick)",
@@ -1912,6 +2437,29 @@ window.LEVELS = [
     "takeaway": "n & (n-1) clears the lowest set bit — a fast, elegant way to count or manipulate set bits without checking every position. SECTION 7 Final Revision Cheat Sheet CAN YOU SOLVE THESE WITHOUT HELP? Close the book. Give yourself 25 minutes each for: Q7 (Subarray Sum Equals K), Q11 (Container With Most Water), Q16 (Minimum Window Substring), Q21 (Koko Eating Bananas), Q34 (Reorder List), Q39 (Largest Rectangle in Histogram), Q50 (Find Median from Data Stream), Q55 (N- Queens), Q60 (Pacific Atlantic Water Flow), Q68 (Longest Common Subsequence). If you can solve 8 of 10 cleanly — without peeking — you are interview-ready.\n\nTop 15 Questions to Revise Before an Interview Q1 · Two Sum Q40 · Invert Binary Tree Q7 · Subarray Sum Equals K Q44 · Validate Binary Search Tree Q10 · 3Sum Q47 · Kth Largest Element in an Array Q14 · Longest Substring Without Repeating Characters Q51 · Subsets Q19 · Search in Rotated Sorted Array Q56 · Number of Islands Q29 · Reverse Linked List Q58 · Course Schedule Q33 · Remove Nth Node From End of List Q64 · House Robber Q73 · Merge Intervals Top DSA Patterns to Memorize Two Pointers · Sliding Window · Prefix Sum · Fast & Slow Pointers · Binary Search on Answer · Monotonic Stack · BFS · DFS · Topological Sort · Heap / Priority Queue · Backtracking · Greedy · 1D DP · 2D DP Last-Minute Complexity Cheat Sheet Hash map ops: O(1) avg · Sorting: O(n log n) · Binary search: O(log n) · Heap push/pop: O(log n) · Tree traversal: O(n) · Graph traversal: O(V+E) · DP table fill: O(states × transitions)\n\nSECTION 8 Interview-Day Checklist Before You Start Coding ☐ Repeat the problem back in your own words ☐ Confirm input size, constraints, and edge cases ☐ State the brute-force approach and its complexity out loud ☐ Name the pattern you recognize before coding ☐ Confirm the optimal approach with the interviewer before writing code While Coding ☐ Think out loud, don't code in silence ☐ Use meaningful variable names, not single letters ☐ Handle empty input / null / single-element edge cases ☐ Dry-run your own code on the example before saying \"done\" ☐ State final time and space complexity unprompted Common Red Flags to Avoid ☐ Jumping to code before agreeing on approach ☐ Ignoring the interviewer's hints ☐ Silence for more than 30 seconds ☐ Leaving obvious bugs unaddressed after a hint Night Before ☐ Skim the Pattern Cheat Sheet, not new problems ☐ Re-read your Top 15 revision list ☐ Sleep — a rested brain outperforms one more practice problem\n\nSECTION 9 Progress Tracker Check off each question as you complete it without help. ☐ Q1 · Two Sum ☐ Q2 · Contains Duplicate ☐ Q3 · Valid Anagram ☐ Q4 · Group Anagrams ☐ Q5 · Top K Frequent Elements☐ Q6 · Product of Array Except Self ☐ Q7 · Subarray Sum Equals K ☐ Q8 · Valid Palindrome ☐ Q9 · Two Sum II — Sorted Array ☐ Q10 · 3Sum ☐ Q11 · Container With Most Water ☐ Q12 · Trapping Rain Water ☐ Q13 · Best Time to Buy and Sell Stock ☐ Q14 · Longest Substring Without Repeating Characters ☐ Q15 · Longest Repeating Character Replacement ☐ Q16 · Minimum Window Substring☐ Q17 · Sliding Window Maximum☐ Q18 · Binary Search ☐ Q19 · Search in Rotated Sorted Array ☐ Q20 · Find Minimum in Rotated Sorted Array ☐ Q21 · Koko Eating Bananas ☐ Q22 · Find First and Last Position of Element in Sorted Array ☐ Q23 · Median of Two Sorted Arrays ☐ Q24 · Longest Common Prefix ☐ Q25 · Longest Palindromic Substring ☐ Q26 · Palindromic Substrings ☐ Q27 · String to Integer (atoi) ☐ Q28 · Encode and Decode Strings☐ Q29 · Reverse Linked List ☐ Q30 · Linked List Cycle ☐ Q31 · Middle of the Linked List☐ Q32 · Merge Two Sorted Lists ☐ Q33 · Remove Nth Node From End of List ☐ Q34 · Reorder List ☐ Q35 · Valid Parentheses ☐ Q36 · Min Stack ☐ Q37 · Evaluate Reverse Polish Notation ☐ Q38 · Daily Temperatures ☐ Q39 · Largest Rectangle in Histogram ☐ Q40 · Invert Binary Tree ☐ Q41 · Maximum Depth of Binary Tree ☐ Q42 · Diameter of Binary Tree ☐ Q43 · Binary Tree Level Order Traversal ☐ Q44 · Validate Binary Search Tree ☐ Q45 · Lowest Common Ancestor of a BST ☐ Q46 · Kth Smallest Element in a BST ☐ Q47 · Kth Largest Element in an Array ☐ Q48 · K Closest Points to Origin ☐ Q49 · Merge K Sorted Lists ☐ Q50 · Find Median from Data Stream ☐ Q51 · Subsets ☐ Q52 · Permutations ☐ Q53 · Combination Sum ☐ Q54 · Word Search ☐ Q55 · N-Queens ☐ Q56 · Number of Islands ☐ Q57 · Clone Graph ☐ Q58 · Course Schedule ☐ Q59 · Course Schedule II ☐ Q60 · Pacific Atlantic Water Flow ☐ Q61 · Graph Valid Tree ☐ Q62 · Network Delay Time ☐ Q63 · Climbing Stairs ☐ Q64 · House Robber ☐ Q65 · Longest Increasing Subsequence ☐ Q66 · Coin Change ☐ Q67 · Unique Paths ☐ Q68 · Longest Common Subsequence ☐ Q69 · Word Break\n\n☐ Q70 · Jump Game ☐ Q71 · Gas Station ☐ Q72 · Non-overlapping Intervals ☐ Q73 · Merge Intervals ☐ Q74 · Single Number ☐ Q75 · Number of 1 Bits Completed all 75? You now recognize every major interview pattern on sight. Return to the Final Revision Cheat Sheet and re-solve the Top 15 cold, without notes, one more time before your interview.",
     "starter": "// Number of 1 Bits  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction numberOf1Bits(n) {\n  // your code here\n}\n",
     "solution": "function numberOf1Bits(n){let c=0;while(n){n&=n-1;c++;}return c;}"
+   },
+   {
+    "id": "swapNumbers",
+    "num": 100,
+    "title": "Swap Numbers (without temp)",
+    "difficulty": "Easy",
+    "pattern": "Bit Manipulation (XOR)",
+    "prompt": "Swap two integers a and b without using a temporary variable, and return them as [a, b] after swapping.",
+    "input": "a = 3, b = 5",
+    "output": "[5, 3]",
+    "constraints": "-2^31 ≤ a, b < 2^31",
+    "why": "A tiny but classic demonstration of XOR's self-inverse property (x ^ x = 0, x ^ 0 = x).",
+    "brute": "Use a temporary variable — the normal way; the point here is to avoid it.",
+    "optimal": "a ^= b; b ^= a; a ^= b. Each step uses XOR's reversibility to move the values. O(1).",
+    "intuition": "XOR encodes both values, then peels them back out — no extra storage needed.",
+    "dryRun": "a=3(011), b=5(101). a=3^5=6; b=6^5=3; a=6^3=5 → a=5, b=3.",
+    "time": "O(1).",
+    "space": "O(1).",
+    "mistakes": "Using it when a and b alias the same variable (zeroes it out); assuming it's faster than a temp (it isn't in practice); readability concerns in real code.",
+    "followups": "• Add/subtract swap (a=a+b; b=a-b; a=a-b) — what overflow risk does it carry?\n• Why is a temp variable clearer in production code?",
+    "solution": "function swap(a,b){a=a^b;b=a^b;a=a^b;return [a,b];}",
+    "takeaway": "XOR is its own inverse, which lets you swap or 'cancel' values without extra space.",
+    "starter": "// Swap Numbers (without temp)  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction swap(a, b) {\n  // your code here\n}\n"
    }
   ]
  }

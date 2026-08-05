@@ -21,7 +21,8 @@ DSA.AchievementService = (function () {
     { at: 10, key: "double_digits", icon: "💪", title: "Double Digits", desc: "10 problems solved." },
     { at: 25, key: "quarter",     icon: "🚀", title: "Quarter Century", desc: "25 problems solved." },
     { at: 50, key: "half_way",    icon: "🏅", title: "Halfway Hero",   desc: "50 problems solved." },
-    { at: 75, key: "century",     icon: "🏆", title: "Pattern Master", desc: "All questions solved!" },
+    { at: 75, key: "seventy_five", icon: "🥇", title: "Seasoned Solver", desc: "75 problems solved." },
+    { at: 100, key: "century",    icon: "🏆", title: "Pattern Master", desc: "All questions solved!" },
   ];
 
   const STREAK_BADGES = [

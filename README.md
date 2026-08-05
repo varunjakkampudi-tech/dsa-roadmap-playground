@@ -10,7 +10,7 @@ Code), no build step required.
 
 ## Features
 
-- **75 curated questions across 14 pattern categories** — Arrays & Hashing, Two
+- **100 curated questions across 16 pattern categories** — Arrays & Hashing, Two
   Pointers, Sliding Window, Binary Search, Strings, Linked Lists, Stack & Queue,
   Trees & BST, Heap, Backtracking, Graphs, DP, Greedy, Bit Manipulation — in the
   exact order of the interview guide.

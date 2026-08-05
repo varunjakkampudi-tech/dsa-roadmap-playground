@@ -7,12 +7,13 @@ window.DSA = window.DSA || {};
 
 DSA.RankService = (function () {
   // Each rank: dark `color` (text/border) on light `bg` = strong contrast.
-  // The 14 pattern categories are grouped into four learning tiers.
+  // Categories are grouped into learning tiers by their position (id).
   const RANKS = [
-    { key: "foundations", tier: "Foundations",    title: "Pattern Foundations",  emoji: "🌱", color: "#15803d", bg: "#dcfce7", min: 1,  max: 5 },
-    { key: "core",        tier: "Core Structures", title: "Data-Structure Core",  emoji: "🧱", color: "#1d4ed8", bg: "#dbe7ff", min: 6,  max: 9 },
-    { key: "advanced",    tier: "Advanced",        title: "Algorithmic Depth",    emoji: "🚀", color: "#6d28d9", bg: "#ede9fe", min: 10, max: 12 },
-    { key: "mastery",     tier: "Mastery",         title: "Interview Mastery",    emoji: "👑", color: "#a16207", bg: "#fef3c7", min: 13, max: 14 },
+    { key: "foundations", tier: "Foundations",    title: "Pattern Foundations",  emoji: "🌱", color: "#15803d", bg: "#dcfce7", min: 1,  max: 6 },
+    { key: "core",        tier: "Core Structures", title: "Data-Structure Core",  emoji: "🧱", color: "#1d4ed8", bg: "#dbe7ff", min: 7,  max: 11 },
+    { key: "advanced",    tier: "Advanced",        title: "Algorithmic Depth",    emoji: "🚀", color: "#6d28d9", bg: "#ede9fe", min: 12, max: 14 },
+    { key: "mastery",     tier: "Mastery",         title: "Interview Mastery",    emoji: "👑", color: "#a16207", bg: "#fef3c7", min: 15, max: 16 },
+    { key: "extended",    tier: "Extended Practice", title: "Advanced Topics",    emoji: "🧠", color: "#0e7490", bg: "#d3f6fb", min: 17, max: 60 },
   ];
 
   const LAST = RANKS[RANKS.length - 1];
