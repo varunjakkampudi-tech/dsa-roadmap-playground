@@ -200,10 +200,10 @@ window.DSA = window.DSA || {};
       codeEl.textContent = code;
       pre.classList.add("hidden");
       if (toggle) {
-        toggle.textContent = "Show";
+        toggle.textContent = "Reveal Answer";
         toggle.onclick = () => {
           const hidden = pre.classList.toggle("hidden");
-          toggle.textContent = hidden ? "Show" : "Hide";
+          toggle.textContent = hidden ? "Reveal Answer" : "Hide Answer";
         };
       }
     }

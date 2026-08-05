@@ -13,10 +13,10 @@ DSA.AuthService = class AuthService {
     // ONE shared password everyone uses. Pick any username — your progress is
     // saved under that name, so different people can keep separate progress
     // while signing in with the same common password.
-    this.COMMON_PASSWORD = "dsa2024";
+    this.COMMON_PASSWORD = "dsa2026";
     // Specific users with their own password (checked before the common one).
     this.USERS = {
-      teja: "admin",
+      teja: "dsa2026",
     };
     this.SESSION_KEY = "dsa_auth_user";
   }
