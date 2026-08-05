@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DSA Roadmap Playground</title>
+    <title>DSA Patterns Playground · 75 Interview Questions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -15,19 +15,19 @@
     <div class="login-overlay" id="loginOverlay">
         <form class="login-card" id="loginForm" autocomplete="off">
             <div class="login-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-            <h1>DSA Roadmap Playground</h1>
-            <p class="login-sub">Sign in to load your progress</p>
+            <h1>DSA Patterns Playground</h1>
+            <p class="login-sub">75 pattern-based interview questions · learn by doing</p>
             <label class="login-field">
-                <span>Username</span>
-                <input type="text" id="loginUser" placeholder="admin or varun" autocomplete="username" />
+                <span>Your name</span>
+                <input type="text" id="loginUser" placeholder="pick any name" autocomplete="username" />
             </label>
             <label class="login-field">
                 <span>Password</span>
                 <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" />
             </label>
-            <div class="login-error hidden" id="loginError">Invalid username or password</div>
-            <button type="submit" class="btn btn-primary login-btn">Sign In</button>
-            <p class="login-hint">Users: <code>admin</code> / <code>varun</code></p>
+            <div class="login-error hidden" id="loginError">Wrong password — use the shared password below</div>
+            <button type="submit" class="btn btn-primary login-btn">Enter Playground</button>
+            <p class="login-hint">Common login — any name, shared password <code>dsa2024</code></p>
         </form>
     </div>
 
@@ -35,8 +35,8 @@
         <div class="header-left">
             <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
             <div>
-                <h1>DSA Roadmap Playground</h1>
-                <p class="subtitle">Beginner · Top-Tier · Learn by Doing 🚀</p>
+                <h1>DSA Patterns Playground</h1>
+                <p class="subtitle">75 Questions · 14 Patterns · Learn by Doing 🚀</p>
             </div>
         </div>
         <div class="header-right">
@@ -51,7 +51,7 @@
             <div class="overall-progress">
                 <div class="progress-label">
                     <span>Overall Progress</span>
-                    <span id="overallText">0 / 103</span>
+                    <span id="overallText">0 / 75</span>
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="overallFill"></div>
@@ -120,34 +120,46 @@
                             <line x1="58" y1="60" x2="62" y2="40" stroke="var(--il-accent)" stroke-width="2.6" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <h2><span class="spark">✨</span> Pick a challenge</h2>
-                    <p>Choose a level on the left, then write ES6 JavaScript in the center. Your <code>console.log</code> output shows below.</p>
+                    <h2><span class="spark">✨</span> Pick a pattern &amp; question</h2>
+                    <p>Open a pattern category on the left (Arrays &amp; Hashing → Bit Manipulation), pick a question, and read its full walkthrough here. Practice in JavaScript in the center — the Python reference is one click away.</p>
                     <div class="tips-card">
-                        <div class="tips-title">💡 Tips</div>
+                        <div class="tips-title">💡 How to use this</div>
                         <ul>
-                            <li>Use modern ES6+ features</li>
-                            <li>Think optimal &amp; clean</li>
-                            <li>Test with edge cases</li>
-                            <li>Learn by practicing!</li>
+                            <li>Read <b>Why this matters</b> &amp; the <b>pattern</b> first</li>
+                            <li>Attempt before revealing the solution</li>
+                            <li>Dry-run the example on paper</li>
+                            <li>Match new problems to one of the 14 patterns</li>
                         </ul>
                     </div>
                     <blockquote class="quote-card">
-                        The more you practice,<br />the better you get.
-                        <cite>– Keep Coding 🚀</cite>
+                        Master the pattern,<br />and unseen problems feel familiar.
+                        <cite>– 75 DSA Questions 🚀</cite>
                     </blockquote>
                 </div>
 
                 <article class="problem-detail hidden" id="problemDetail">
                     <div class="problem-head">
-                        <span class="badge" id="problemBadge">Level 1</span>
-                        <span class="difficulty" id="problemDifficulty">Beginner</span>
+                        <span class="badge" id="problemBadge">Arrays &amp; Hashing</span>
+                        <span class="qnum" id="problemQnum">Q1 / 75</span>
+                    </div>
+                    <div class="pill-row">
+                        <span class="difficulty" id="problemDifficulty">Easy</span>
+                        <span class="pattern-pill" id="problemPattern">Pattern</span>
                     </div>
                     <h2 id="problemTitle">Title</h2>
+
+                    <div class="why-card" id="problemWhyWrap">
+                        <span class="why-ic">🔓</span>
+                        <div><span class="why-key">Why this matters</span><p id="problemWhy"></p></div>
+                    </div>
+
                     <div class="signature hidden" id="problemSignature">
                         <span class="sig-key">Define</span>
                         <code id="signatureCode"></code>
                     </div>
+
                     <p class="prompt" id="problemPrompt">Prompt</p>
+
                     <div class="example">
                         <div class="example-row">
                             <span class="example-key">Example Input</span>
@@ -157,6 +169,60 @@
                             <span class="example-key">Example Output</span>
                             <code id="exampleOutput"></code>
                         </div>
+                    </div>
+
+                    <div class="detail-block hidden" id="constraintsWrap">
+                        <h3 class="detail-h">📏 Constraints</h3>
+                        <p class="detail-text" id="problemConstraints"></p>
+                    </div>
+
+                    <div class="approach-grid">
+                        <div class="approach-card brute hidden" id="bruteWrap">
+                            <h3 class="detail-h">🐢 Brute Force</h3>
+                            <p class="detail-text" id="problemBrute"></p>
+                        </div>
+                        <div class="approach-card optimal hidden" id="optimalWrap">
+                            <h3 class="detail-h">⚡ Optimal</h3>
+                            <p class="detail-text" id="problemOptimal"></p>
+                        </div>
+                    </div>
+
+                    <div class="detail-block hidden" id="intuitionWrap">
+                        <h3 class="detail-h">💭 Step-by-Step Intuition</h3>
+                        <p class="detail-text" id="problemIntuition"></p>
+                    </div>
+
+                    <div class="detail-block dry hidden" id="dryRunWrap">
+                        <h3 class="detail-h">🧪 Dry Run</h3>
+                        <p class="detail-text mono" id="problemDryRun"></p>
+                    </div>
+
+                    <div class="complexity-row" id="complexityWrap">
+                        <div class="cx-chip time"><span class="cx-key">⏱ Time</span><span class="cx-val" id="problemTime"></span></div>
+                        <div class="cx-chip space"><span class="cx-key">💾 Space</span><span class="cx-val" id="problemSpace"></span></div>
+                    </div>
+
+                    <div class="detail-block warn hidden" id="mistakesWrap">
+                        <h3 class="detail-h">⚠️ Common Mistakes</h3>
+                        <p class="detail-text" id="problemMistakes"></p>
+                    </div>
+
+                    <div class="detail-block hidden" id="followupsWrap">
+                        <h3 class="detail-h">🎤 Interview Follow-ups</h3>
+                        <div class="detail-text" id="problemFollowups"></div>
+                    </div>
+
+                    <div class="solution-card hidden" id="solutionWrap">
+                        <div class="solution-head">
+                            <h3 class="detail-h">🐍 Reference Solution <span class="sol-lang">Python</span></h3>
+                            <button class="btn btn-ghost sol-reveal" id="solutionToggle" type="button">Show</button>
+                        </div>
+                        <pre class="solution-code hidden" id="problemSolution"><code></code></pre>
+                    </div>
+
+                    <div class="takeaway-card hidden" id="takeawayWrap">
+                        <span class="takeaway-ic">🔑</span>
+                        <div><span class="takeaway-key">Key Takeaway</span><p id="problemTakeaway"></p></div>
                     </div>
                 </article>
             </div>

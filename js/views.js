@@ -111,31 +111,100 @@ window.DSA = window.DSA || {};
   class ProblemView {
     constructor(refs) { this.refs = refs; }
 
+    _set(id, value, wrapId) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value || "";
+      if (wrapId) {
+        const w = document.getElementById(wrapId);
+        if (w) w.classList.toggle("hidden", !(value && String(value).trim()));
+      }
+    }
+
     show(problem, level, rank) {
       const r = this.refs;
       r.emptyState.classList.add("hidden");
       r.detail.classList.remove("hidden");
-      // retrigger entrance animation on every selection
       r.detail.classList.remove("enter");
       void r.detail.offsetWidth;
       r.detail.classList.add("enter");
-      r.badge.textContent = "Level " + level.id + " · " + level.name;
-      r.badge.style.background = rank.color;
-      r.difficulty.textContent = rank.emoji + " " + rank.tier + " · " + level.difficulty;
-      r.difficulty.style.color = rank.color;
-      r.difficulty.style.borderColor = rank.color;
-      r.title.textContent = problem.title;
-      r.prompt.textContent = problem.prompt;
-      r.exInput.textContent = problem.input;
-      r.exOutput.textContent = problem.output;
+      r.detail.scrollTop = 0;
 
-      // show the expected function/class name so the user names it correctly
+      // header: category badge + question number
+      r.badge.textContent = (level.icon ? level.icon + " " : "") + level.name;
+      r.badge.style.background = rank.color;
+      this._set("problemQnum", "Q" + (problem.num || "") + " / 75");
+
+      // difficulty pill (color by difficulty) + pattern pill
+      const diff = problem.difficulty || level.difficulty || "Easy";
+      r.difficulty.textContent = diff;
+      r.difficulty.className = "difficulty diff-" + diff.toLowerCase();
+      this._set("problemPattern", problem.pattern, null);
+      const pp = document.getElementById("problemPattern");
+      if (pp) pp.classList.toggle("hidden", !(problem.pattern && problem.pattern.trim()));
+
+      r.title.textContent = problem.title;
+      this._set("problemWhy", problem.why, "problemWhyWrap");
+
+      r.prompt.textContent = problem.prompt;
+      r.exInput.textContent = problem.input || "—";
+      r.exOutput.textContent = problem.output || "—";
+
+      this._set("problemConstraints", problem.constraints, "constraintsWrap");
+      this._set("problemBrute", problem.brute, "bruteWrap");
+      this._set("problemOptimal", problem.optimal, "optimalWrap");
+      this._set("problemIntuition", problem.intuition, "intuitionWrap");
+      this._set("problemDryRun", problem.dryRun, "dryRunWrap");
+
+      this._set("problemTime", problem.time, null);
+      this._set("problemSpace", problem.space, null);
+      const cx = document.getElementById("complexityWrap");
+      if (cx) cx.classList.toggle("hidden", !((problem.time && problem.time.trim()) || (problem.space && problem.space.trim())));
+
+      this._set("problemMistakes", problem.mistakes, "mistakesWrap");
+      this._renderFollowups(problem.followups);
+      this._renderSolution(problem.solutionPy);
+      this._set("problemTakeaway", problem.takeaway, "takeawayWrap");
+
+      // expected function/class name to guide the JS attempt
       const sig = DSA.util.signatureOf(problem.starter);
       if (sig && r.signature && r.signatureCode) {
         r.signatureCode.textContent = sig;
         r.signature.classList.remove("hidden");
       } else if (r.signature) {
         r.signature.classList.add("hidden");
+      }
+    }
+
+    _renderFollowups(text) {
+      const wrap = document.getElementById("followupsWrap");
+      const host = document.getElementById("problemFollowups");
+      if (!host || !wrap) return;
+      const items = (text || "")
+        .split(/\n|(?=•)/)
+        .map((s) => s.replace(/^[•\-\s]+/, "").trim())
+        .filter(Boolean);
+      if (!items.length) { wrap.classList.add("hidden"); host.innerHTML = ""; return; }
+      wrap.classList.remove("hidden");
+      host.innerHTML = "<ul class='followup-list'>" +
+        items.map((i) => "<li>" + escapeHtml(i) + "</li>").join("") + "</ul>";
+    }
+
+    _renderSolution(code) {
+      const wrap = document.getElementById("solutionWrap");
+      const pre = document.getElementById("problemSolution");
+      const toggle = document.getElementById("solutionToggle");
+      if (!wrap || !pre) return;
+      if (!code || !code.trim()) { wrap.classList.add("hidden"); return; }
+      wrap.classList.remove("hidden");
+      const codeEl = pre.querySelector("code") || pre;
+      codeEl.textContent = code;
+      pre.classList.add("hidden");
+      if (toggle) {
+        toggle.textContent = "Show";
+        toggle.onclick = () => {
+          const hidden = pre.classList.toggle("hidden");
+          toggle.textContent = hidden ? "Show" : "Hide";
+        };
       }
     }
   }

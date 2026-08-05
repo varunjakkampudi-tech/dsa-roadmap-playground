@@ -9,11 +9,11 @@ DSA.ReportService = (function () {
   const RankService = DSA.RankService;
   const util = DSA.util;
 
-  // Map a level's rank tier to a coarse difficulty bucket.
+  // Map a level's learning tier to a coarse difficulty bucket.
   function bucket(levelId) {
     const key = RankService.forLevel(levelId).key;
-    if (key === "bronze" || key === "silver") return "Easy";
-    if (key === "gold" || key === "platinum" || key === "diamond") return "Medium";
+    if (key === "foundations") return "Easy";
+    if (key === "core" || key === "advanced") return "Medium";
     return "Hard";
   }
 

@@ -8,8 +8,8 @@ window.DSA = window.DSA || {};
 DSA.AchievementService = (function () {
   const RankService = DSA.RankService;
 
-  // XP per solved problem, scaled by rank difficulty.
-  const XP_BY_RANK = { bronze: 10, silver: 15, gold: 20, platinum: 25, diamond: 35, grandmaster: 50 };
+  // XP per solved problem, scaled by learning tier.
+  const XP_BY_RANK = { foundations: 10, core: 20, advanced: 35, mastery: 50 };
   function xpForLevel(levelId) {
     return XP_BY_RANK[RankService.forLevel(levelId).key] || 10;
   }
@@ -21,7 +21,7 @@ DSA.AchievementService = (function () {
     { at: 10, key: "double_digits", icon: "💪", title: "Double Digits", desc: "10 problems solved." },
     { at: 25, key: "quarter",     icon: "🚀", title: "Quarter Century", desc: "25 problems solved." },
     { at: 50, key: "half_way",    icon: "🏅", title: "Halfway Hero",   desc: "50 problems solved." },
-    { at: 90, key: "century",     icon: "🏆", title: "Roadmap Master", desc: "All core problems solved!" },
+    { at: 75, key: "century",     icon: "🏆", title: "Pattern Master", desc: "All 75 questions solved!" },
   ];
 
   const STREAK_BADGES = [
