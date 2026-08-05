@@ -433,13 +433,15 @@ window.DSA = window.DSA || {};
     }
 
     resetAll() {
-      if (!confirm("Clear ALL saved progress and code? This cannot be undone.")) return;
+      if (!confirm("⚠️ Reset EVERYTHING?\n\nThis clears all solved progress, XP, streaks, and every solution you've written. This cannot be undone.")) return;
+      if (!confirm("Are you absolutely sure? This is your last chance — click OK to permanently erase all your data.")) return;
       this.storage.reset();
       if (this.current) this.editorView.setValue("");
       this._updateCompleteBtn();
       this.renderSidebar();
       this.refreshProgress();
       this.refreshStats();
+      this.toast.show({ icon: "🗑️", title: "All progress reset", msg: "You're starting fresh." });
     }
 
     // ---- helpers ----
