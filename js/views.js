@@ -162,7 +162,7 @@ window.DSA = window.DSA || {};
 
       this._set("problemMistakes", problem.mistakes, "mistakesWrap");
       this._renderFollowups(problem.followups);
-      this._renderSolution(problem.solutionPy);
+      this._renderSolution(problem.solution);
       this._set("problemTakeaway", problem.takeaway, "takeawayWrap");
 
       // expected function/class name to guide the JS attempt

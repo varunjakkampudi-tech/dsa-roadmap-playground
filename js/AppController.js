@@ -374,6 +374,25 @@ window.DSA = window.DSA || {};
       });
     }
 
+    // Structural helpers (ListNode/TreeNode/Node + builders) injected before the
+    // user's code so test cases can construct lists/trees/graphs. Only the
+    // constructors the user didn't already define are added.
+    _helperPreamble(code) {
+      const defines = (name) => new RegExp("(?:class|function)\\s+" + name + "\\b|\\b" + name + "\\s*=[^=]").test(code);
+      let p = "";
+      if (!defines("ListNode")) p += "function ListNode(val,next){this.val=(val===undefined?0:val);this.next=(next===undefined?null:next);}\n";
+      if (!defines("TreeNode")) p += "function TreeNode(val,left,right){this.val=(val===undefined?0:val);this.left=(left===undefined?null:left);this.right=(right===undefined?null:right);}\n";
+      if (!defines("Node")) p += "function Node(val,neighbors){this.val=(val===undefined?0:val);this.neighbors=(neighbors===undefined?[]:neighbors);}\n";
+      p += "function _L(a){let d=null;for(let i=a.length-1;i>=0;i--)d=new ListNode(a[i],d);return d;}\n";
+      p += "function _LA(h){let o=[],g=0;while(h&&g++<100000){o.push(h.val);h=h.next;}return o;}\n";
+      p += "function _T(a){if(!a||!a.length)return null;let root=new TreeNode(a[0]);let q=[root],i=1;while(i<a.length){let n=q.shift();if(a[i]!=null){n.left=new TreeNode(a[i]);q.push(n.left);}i++;if(i<a.length&&a[i]!=null){n.right=new TreeNode(a[i]);q.push(n.right);}i++;}return root;}\n";
+      p += "function _TA(r){let o=[],q=[r];while(q.length){let n=q.shift();if(n){o.push(n.val);q.push(n.left,n.right);}else o.push(null);}while(o.length&&o[o.length-1]===null)o.pop();return o;}\n";
+      p += "function _cyc(a,pos){let ns=a.map(function(v){return new ListNode(v);});for(let i=0;i<ns.length-1;i++)ns[i].next=ns[i+1];if(pos>=0&&ns.length)ns[ns.length-1].next=ns[pos];return ns[0]||null;}\n";
+      p += "function _graph(adj){if(!adj.length)return null;let ns=adj.map(function(_,i){return new Node(i+1);});adj.forEach(function(nb,i){ns[i].neighbors=nb.map(function(x){return ns[x-1];});});return ns[0];}\n";
+      p += "function _gser(node){if(!node)return [];let all=[];(function dfs(n){if(all.indexOf(n)>=0)return;all.push(n);n.neighbors.forEach(dfs);})(node);all.sort(function(a,b){return a.val-b.val;});return all.map(function(n){return n.neighbors.map(function(x){return x.val;}).sort(function(a,b){return a-b;});});}\n";
+      return p;
+    }
+
     check() {
       if (!this.current) return;
       this._persistCode();
@@ -385,7 +404,9 @@ window.DSA = window.DSA || {};
       this.el.checkBtn.disabled = true;
       this._setLabel(this.el.checkBtn, "checking…");
 
-      this.runner.check(this.editorView.getValue(), tests, (result) => {
+      const userCode = this.editorView.getValue();
+      const code = this._helperPreamble(userCode) + userCode;
+      this.runner.check(code, tests, (result) => {
         this.el.checkBtn.disabled = false;
         this._setLabel(this.el.checkBtn, "Check");
         this.outputView.clear();

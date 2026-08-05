@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=3" />
+    <link rel="stylesheet" href="styles.css?v=4" />
     <script>(function(){try{var t=localStorage.getItem("dsa_theme")||"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body>
@@ -118,7 +118,7 @@
                         </svg>
                     </div>
                     <h2><span class="spark">✨</span> Pick a pattern &amp; question</h2>
-                    <p>Open a pattern category on the left (Arrays &amp; Hashing → Bit Manipulation), pick a question, and read its full walkthrough here. Practice in JavaScript in the center — the Python reference is one click away.</p>
+                    <p>Open a pattern category on the left (Arrays &amp; Hashing → Bit Manipulation), pick a question, and read its full walkthrough here. Practice in JavaScript in the center, then click Check to run it against the test cases.</p>
                     <div class="tips-card">
                         <div class="tips-title">💡 How to use this</div>
                         <ul>
@@ -211,7 +211,7 @@
 
                     <div class="solution-card hidden" id="solutionWrap">
                         <div class="solution-head">
-                            <h3 class="detail-h">🐍 Reference Solution <span class="sol-lang">Python</span></h3>
+                            <h3 class="detail-h">� Reference Solution <span class="sol-lang">JavaScript</span></h3>
                             <button class="btn btn-primary sol-reveal" id="solutionToggle" type="button">Reveal Answer</button>
                         </div>
                         <pre class="solution-code hidden" id="problemSolution"><code></code></pre>
@@ -239,19 +239,19 @@
     </div>
     <script>(function(){var box=document.getElementById("themeToggle");function apply(t){document.documentElement.setAttribute("data-theme",t);try{localStorage.setItem("dsa_theme",t);}catch(e){}box.querySelectorAll(".tt-btn").forEach(function(b){b.classList.toggle("on",b.dataset.set===t);});window.dispatchEvent(new CustomEvent("themechange",{detail:t}));}box.addEventListener("click",function(e){var b=e.target.closest(".tt-btn");if(b)apply(b.dataset.set);});apply(document.documentElement.getAttribute("data-theme")||"light");})();</script>
 
-    <script src="data.js?v=3"></script>
-    <script src="js/util.js?v=3"></script>
-    <script src="js/tests.js?v=3"></script>
-    <script src="js/confetti.js?v=3"></script>
-    <script src="js/AuthService.js?v=3"></script>
-    <script src="js/StorageService.js?v=3"></script>
-    <script src="js/RankService.js?v=3"></script>
-    <script src="js/AchievementService.js?v=3"></script>
-    <script src="js/ReportService.js?v=3"></script>
-    <script src="js/CodeRunner.js?v=3"></script>
-    <script src="js/views.js?v=3"></script>
+    <script src="data.js?v=4"></script>
+    <script src="js/util.js?v=4"></script>
+    <script src="js/tests.js?v=4"></script>
+    <script src="js/confetti.js?v=4"></script>
+    <script src="js/AuthService.js?v=4"></script>
+    <script src="js/StorageService.js?v=4"></script>
+    <script src="js/RankService.js?v=4"></script>
+    <script src="js/AchievementService.js?v=4"></script>
+    <script src="js/ReportService.js?v=4"></script>
+    <script src="js/CodeRunner.js?v=4"></script>
+    <script src="js/views.js?v=4"></script>
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
-    <script src="js/MonacoEditor.js?v=3"></script>
-    <script src="js/AppController.js?v=3"></script>
+    <script src="js/MonacoEditor.js?v=4"></script>
+    <script src="js/AppController.js?v=4"></script>
 </body>
 </html>

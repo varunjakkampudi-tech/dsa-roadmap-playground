@@ -1,204 +1,84 @@
 /**
- * Test fixtures — kept separate from domain data (data.js).
- * Map of problemId -> array of assertions.
- *   { call: "<JS expression that uses the user's function/class>", expected: <value>, unordered?: true }
- * The expression is evaluated in the SAME scope as the user's code, so it can
- * reference functions/classes the user defined (e.g. isPrime, twoSum, MinStack).
- * `unordered: true` compares arrays ignoring order (deep-sorted) — for problems
- * whose valid output order isn't fixed.
- *
- * Problems without an entry here have no automated tests (self-check against the example).
+ * Test fixtures — one suite per question (q1..q75).
+ * Expected values were computed from correct JS reference solutions.
+ * Shared helpers (ListNode, TreeNode, Node, _L, _LA, _T, _TA, _cyc, _graph, _gser)
+ * are injected by AppController before the user's code runs.
  */
 window.DSA = window.DSA || {};
 DSA.TESTS = {
-  // Level 1 — Math Basics
-  "1-1": [{ call: "isPrime(7)", expected: true }, { call: "isPrime(1)", expected: false }, { call: "isPrime(12)", expected: false }, { call: "isPrime(29)", expected: true }, { call: "isPrime(2)", expected: true }, { call: "isPrime(0)", expected: false }, { call: "isPrime(97)", expected: true }],
-  "1-2": [{ call: "isArmstrong(153)", expected: true }, { call: "isArmstrong(123)", expected: false }, { call: "isArmstrong(9474)", expected: true }, { call: "isArmstrong(370)", expected: true }, { call: "isArmstrong(100)", expected: false }, { call: "isArmstrong(1634)", expected: true }],
-  "1-3": [{ call: "factorial(5)", expected: 120 }, { call: "factorial(0)", expected: 1 }, { call: "factorial(6)", expected: 720 }, { call: "factorial(1)", expected: 1 }, { call: "factorial(7)", expected: 5040 }],
-
-  // Level 2 — Arrays
-  "2-1": [{ call: "twoSum([2,7,11,15], 9)", expected: [0, 1] }, { call: "twoSum([3,2,4], 6)", expected: [1, 2] }, { call: "twoSum([3,3], 6)", expected: [0, 1] }],
-  "2-2": [{ call: "maxProfit([7,1,5,3,6,4])", expected: 5 }, { call: "maxProfit([7,6,4,3,1])", expected: 0 }, { call: "maxProfit([1,2,3,4,5])", expected: 4 }, { call: "maxProfit([2,4,1])", expected: 2 }],
-  "2-3": [{ call: "removeDuplicates([1,1,2])", expected: 2 }, { call: "removeDuplicates([0,0,1,1,1,2,2,3,3,4])", expected: 5 }, { call: "removeDuplicates([1,2,3])", expected: 3 }, { call: "removeDuplicates([5])", expected: 1 }],
-
-  // Level 3 — Strings
-  "3-1": [{ call: 'isAnagram("anagram","nagaram")', expected: true }, { call: 'isAnagram("rat","car")', expected: false }, { call: 'isAnagram("listen","silent")', expected: true }, { call: 'isAnagram("ab","a")', expected: false }],
-  "3-2": [{ call: 'isPalindrome("A man, a plan, a canal: Panama")', expected: true }, { call: 'isPalindrome("race a car")', expected: false }, { call: 'isPalindrome("")', expected: true }, { call: 'isPalindrome("0P")', expected: false }],
-  "3-3": [{ call: 'longestCommonPrefix(["flower","flow","flight"])', expected: "fl" }, { call: 'longestCommonPrefix(["dog","racecar","car"])', expected: "" }, { call: 'longestCommonPrefix(["throne","throne"])', expected: "throne" }, { call: 'longestCommonPrefix(["a"])', expected: "a" }],
-
-  // Level 4 — Hashing
-  "4-1": [{ call: "containsDuplicate([1,2,3,1])", expected: true }, { call: "containsDuplicate([1,2,3,4])", expected: false }, { call: "containsDuplicate([1,1,1,3,3,4,3,2,4,2])", expected: true }, { call: "containsDuplicate([5])", expected: false }],
-  "4-2": [{ call: 'groupAnagrams(["eat","tea","tan","ate","nat","bat"])', expected: [["ate", "eat", "tea"], ["bat"], ["nat", "tan"]], unordered: true }],
-  "4-3": [{ call: "topKFrequent([1,1,1,2,2,3], 2)", expected: [1, 2], unordered: true }],
-
-  // Level 5 — Stack & Queue
-  "5-1": [{ call: 'isValid("{[]}")', expected: true }, { call: 'isValid("(]")', expected: false }, { call: 'isValid("()[]{}")', expected: true }, { call: 'isValid("(")', expected: false }, { call: 'isValid("([)]")', expected: false }, { call: 'isValid("")', expected: true }],
-  "5-2": [{ call: "(()=>{const s=new MinStack();s.push(-2);s.push(0);s.push(-3);return s.getMin();})()", expected: -3 }],
-  "5-3": [{ call: "(()=>{const q=new MyQueue();q.push(1);q.push(2);return [q.peek(),q.pop(),q.empty()];})()", expected: [1, 1, false] }],
-  "5-4": [{ call: "(()=>{const s=new Stack();s.push(1);s.push(2);s.push(3);return [s.pop(),s.peek(),s.size(),s.isEmpty()];})()", expected: [3, 2, 2, false] }, { call: "(()=>{const s=new Stack();return [s.pop(),s.isEmpty()];})()", expected: [undefined, true] }],
-  "5-5": [{ call: "(()=>{const q=new Queue();q.enqueue(1);q.enqueue(2);q.enqueue(3);return [q.dequeue(),q.front(),q.size(),q.isEmpty()];})()", expected: [1, 2, 2, false] }, { call: "(()=>{const q=new Queue();return [q.dequeue(),q.isEmpty()];})()", expected: [undefined, true] }],
-  "5-6": [{ call: "(()=>{const d=new Deque();d.addRear(1);d.addFront(2);return [d.removeRear(),d.removeFront(),d.size()];})()", expected: [1, 2, 0] }],
-
-  // Level 6 — Linked List
-  "6-1": [{ call: "(()=>{const h=new ListNode(1,new ListNode(2,new ListNode(3)));let r=reverseList(h),o=[];while(r){o.push(r.val);r=r.next;}return o;})()", expected: [3, 2, 1] }],
-  "6-2": [{ call: "(()=>{const h=new ListNode(1,new ListNode(2,new ListNode(3,new ListNode(4,new ListNode(5)))));return middleNode(h).val;})()", expected: 3 }],
-  "6-3": [{ call: "(()=>{const a=new ListNode(3),b=new ListNode(2),c=new ListNode(0),d=new ListNode(-4);a.next=b;b.next=c;c.next=d;d.next=b;return hasCycle(a);})()", expected: true }, { call: "(()=>{const a=new ListNode(1,new ListNode(2));return hasCycle(a);})()", expected: false }],
-  "6-4": [{ call: "(()=>{const l=new LinkedList();l.append(1);l.append(2);l.prepend(0);return [l.toArray(),l.size()];})()", expected: [[0, 1, 2], 3] }],
-  "6-5": [
-    { call: "(()=>{const d=new DoublyLinkedList();d.addLast(1);d.addLast(2);d.addFirst(0);return [d.toArray(),d.toArrayReverse()];})()", expected: [[0, 1, 2], [2, 1, 0]] },
-    { call: "(()=>{const d=new DoublyLinkedList();return [d.toArray(),d.toArrayReverse()];})()", expected: [[], []] },
-    { call: "(()=>{const d=new DoublyLinkedList();d.addFirst(1);return d.toArray();})()", expected: [1] },
-    { call: "(()=>{const d=new DoublyLinkedList();d.addLast(1);d.addLast(2);d.addLast(3);return d.toArrayReverse();})()", expected: [3, 2, 1] },
-    { call: "(()=>{const d=new DoublyLinkedList();d.addFirst(2);d.addFirst(1);d.addLast(3);return d.toArray();})()", expected: [1, 2, 3] }
-  ],
-
-  // Level 7 — Recursion
-  "7-1": [{ call: "fib(6)", expected: 8 }, { call: "fib(10)", expected: 55 }, { call: "fib(0)", expected: 0 }, { call: "fib(1)", expected: 1 }, { call: "fib(9)", expected: 34 }],
-  "7-2": [{ call: "generateParenthesis(3)", expected: ["((()))", "(()())", "(())()", "()(())", "()()()"], unordered: true }],
-  "7-3": [{ call: 'letterCombinations("23")', expected: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"], unordered: true }],
-
-  // Level 8 — Binary Search
-  "8-1": [{ call: "search([-1,0,3,5,9,12], 9)", expected: 4 }, { call: "search([-1,0,3,5,9,12], 2)", expected: -1 }, { call: "search([5], 5)", expected: 0 }, { call: "search([2,5], 5)", expected: 1 }],
-  "8-2": [{ call: "search([4,5,6,7,0,1,2], 0)", expected: 4 }, { call: "search([4,5,6,7,0,1,2], 3)", expected: -1 }],
-  "8-3": [{ call: "findPeakElement([1,2,3,1])", expected: 2 }],
-
-  // Level 9 — Sorting
-  "9-1": [{ call: "(()=>{const n=[2,0,2,1,1,0];sortColors(n);return n;})()", expected: [0, 0, 1, 1, 2, 2] }],
-  "9-2": [{ call: "merge([[1,3],[2,6],[8,10],[15,18]])", expected: [[1, 6], [8, 10], [15, 18]] }, { call: "merge([[1,4],[4,5]])", expected: [[1, 5]] }, { call: "merge([[1,4],[2,3]])", expected: [[1, 4]] }],
-  "9-3": [{ call: "findKthLargest([3,2,1,5,6,4], 2)", expected: 5 }],
-  "9-4": [{ call: "bubbleSort([5,2,9,1,5,6])", expected: [1, 2, 5, 5, 6, 9] }, { call: "bubbleSort([])", expected: [] }, { call: "bubbleSort([1])", expected: [1] }, { call: "bubbleSort([3,2,1])", expected: [1, 2, 3] }, { call: "bubbleSort([-2,5,-1,0,3])", expected: [-2, -1, 0, 3, 5] }],
-  "9-5": [{ call: "insertionSort([5,2,9,1])", expected: [1, 2, 5, 9] }, { call: "insertionSort([])", expected: [] }, { call: "insertionSort([2,1])", expected: [1, 2] }, { call: "insertionSort([4,4,4])", expected: [4, 4, 4] }, { call: "insertionSort([-3,10,-7,2])", expected: [-7, -3, 2, 10] }],
-  "9-6": [{ call: "selectionSort([64,25,12,22,11])", expected: [11, 12, 22, 25, 64] }, { call: "selectionSort([])", expected: [] }, { call: "selectionSort([1])", expected: [1] }, { call: "selectionSort([5,1,4,2,8])", expected: [1, 2, 4, 5, 8] }, { call: "selectionSort([-1,-5,3,0])", expected: [-5, -1, 0, 3] }],
-  "9-7": [{ call: "mergeSort([38,27,43,3,9,82,10])", expected: [3, 9, 10, 27, 38, 43, 82] }, { call: "mergeSort([])", expected: [] }, { call: "mergeSort([2,1])", expected: [1, 2] }, { call: "mergeSort([5,5,3,3,1])", expected: [1, 3, 3, 5, 5] }, { call: "mergeSort([-4,1,-9,2,0])", expected: [-9, -4, 0, 1, 2] }],
-  "9-8": [{ call: "quickSort([10,7,8,9,1,5])", expected: [1, 5, 7, 8, 9, 10] }, { call: "quickSort([])", expected: [] }, { call: "quickSort([3])", expected: [3] }, { call: "quickSort([2,2,1,1,3,3])", expected: [1, 1, 2, 2, 3, 3] }, { call: "quickSort([-2,-8,4,-1,7])", expected: [-8, -2, -1, 4, 7] }],
-  "9-9": [{ call: "radixSort([170,45,75,90,802,24,2,66])", expected: [2, 24, 45, 66, 75, 90, 170, 802] }, { call: "radixSort([])", expected: [] }, { call: "radixSort([5,3,1,2,4])", expected: [1, 2, 3, 4, 5] }, { call: "radixSort([100,10,1,1000])", expected: [1, 10, 100, 1000] }, { call: "radixSort([9,9,8,8,0])", expected: [0, 8, 8, 9, 9] }],
-
-  // Level 10 — Two Pointers
-  "10-1": [{ call: "twoSum([2,7,11,15], 9)", expected: [1, 2] }],
-  "10-2": [{ call: "threeSum([-1,0,1,2,-1,-4])", expected: [[-1, -1, 2], [-1, 0, 1]], unordered: true }],
-  "10-3": [{ call: "maxArea([1,8,6,2,5,4,8,3,7])", expected: 49 }],
-
-  // Level 11 — Sliding Window
-  "11-1": [{ call: 'lengthOfLongestSubstring("abcabcbb")', expected: 3 }, { call: 'lengthOfLongestSubstring("bbbbb")', expected: 1 }, { call: 'lengthOfLongestSubstring("pwwkew")', expected: 3 }, { call: 'lengthOfLongestSubstring("")', expected: 0 }, { call: 'lengthOfLongestSubstring("au")', expected: 2 }],
-  "11-2": [{ call: "findMaxAverage([1,12,-5,-6,50,3], 4)", expected: 12.75 }],
-  "11-3": [{ call: "minSubArrayLen(7, [2,3,1,2,4,3])", expected: 2 }],
-
-  // Level 12 — Prefix Sum
-  "12-1": [{ call: "(()=>{const na=new NumArray([-2,0,3,-5,2,-1]);return [na.sumRange(0,2),na.sumRange(2,5)];})()", expected: [1, -1] }],
-  "12-2": [{ call: "subarraySum([1,1,1], 2)", expected: 2 }, { call: "subarraySum([1,2,3], 3)", expected: 2 }],
-  "12-3": [{ call: "productExceptSelf([1,2,3,4])", expected: [24, 12, 8, 6] }],
-
-  // Level 13 — Intervals
-  "13-1": [{ call: "insert([[1,3],[6,9]], [2,5])", expected: [[1, 5], [6, 9]] }],
-  "13-2": [{ call: "eraseOverlapIntervals([[1,2],[2,3],[3,4],[1,3]])", expected: 1 }],
-  "13-3": [{ call: "minMeetingRooms([[0,30],[5,10],[15,20]])", expected: 2 }],
-
-  // Level 14 — Binary Trees
-  "14-1": [{ call: "(()=>{const r=new TreeNode(3,new TreeNode(9),new TreeNode(20,new TreeNode(15),new TreeNode(7)));return maxDepth(r);})()", expected: 3 }],
-  "14-2": [{ call: "(()=>{const r=new TreeNode(3,new TreeNode(9),new TreeNode(20,new TreeNode(15),new TreeNode(7)));return levelOrder(r);})()", expected: [[3], [9, 20], [15, 7]] }],
-
-  // Level 15 — BST
-  "15-1": [{ call: "(()=>{const r=new TreeNode(2,new TreeNode(1),new TreeNode(3));return isValidBST(r);})()", expected: true }, { call: "(()=>{const r=new TreeNode(5,new TreeNode(1),new TreeNode(4,new TreeNode(3),new TreeNode(6)));return isValidBST(r);})()", expected: false }],
-  "15-2": [{ call: "(()=>{const r=new TreeNode(6,new TreeNode(2),new TreeNode(8));return lowestCommonAncestor(r,r.left,r.right).val;})()", expected: 6 }],
-  "15-3": [{ call: "(()=>{const r=new TreeNode(3,new TreeNode(1,null,new TreeNode(2)),new TreeNode(4));return kthSmallest(r,1);})()", expected: 1 }],
-  "15-4": [
-    { call: "(()=>{const t=new BST();[5,3,7,2,4].forEach(v=>t.insert(v));return t.inorder();})()", expected: [2, 3, 4, 5, 7] },
-    { call: "(()=>{const t=new BST();[5,3,7,2,4].forEach(v=>t.insert(v));return [t.search(4),t.search(6)];})()", expected: [true, false] },
-    { call: "(()=>{const t=new BST();[8,4,12,2,6,10,14].forEach(v=>t.insert(v));return t.inorder();})()", expected: [2, 4, 6, 8, 10, 12, 14] },
-    { call: "(()=>{const t=new BST();t.insert(1);return [t.inorder(),t.search(1)];})()", expected: [[1], true] },
-    { call: "(()=>{const t=new BST();[5,3,8,3,5].forEach(v=>t.insert(v));return t.inorder();})()", expected: [3, 5, 8] }
-  ],
-
-  // Level 16 — Heap
-  "16-1": [{ call: "kClosest([[1,3],[-2,2]], 1)", expected: [[-2, 2]], unordered: true }],
-  "16-2": [{ call: "lastStoneWeight([2,7,4,1,8,1])", expected: 1 }],
-  "16-3": [{ call: "(()=>{const m=new MedianFinder();m.addNum(1);m.addNum(2);const a=m.findMedian();m.addNum(3);return [a,m.findMedian()];})()", expected: [1.5, 2] }],
-
-  // Level 17 — Trie
-  "17-1": [{ call: '(()=>{const t=new Trie();t.insert("apple");return [t.search("apple"),t.search("app"),t.startsWith("app")];})()', expected: [true, false, true] }],
-  "17-2": [{ call: '(()=>{const d=new WordDictionary();d.addWord("bad");d.addWord("dad");return [d.search("pad"),d.search("bad"),d.search(".ad"),d.search("b..")];})()', expected: [false, true, true, true] }],
-  "17-3": [{ call: 'replaceWords(["cat","bat","rat"], "the cattle was rattled by the battery")', expected: "the cat was rat by the bat" }],
-
-  // Level 18 — Union Find
-  "18-1": [{ call: "findCircleNum([[1,1,0],[1,1,0],[0,0,1]])", expected: 2 }],
-  "18-2": [{ call: "findRedundantConnection([[1,2],[1,3],[2,3]])", expected: [2, 3] }],
-
-  // Level 19 — Graph Traversal
-  "19-1": [{ call: 'numIslands([["1","1","0"],["0","1","0"],["0","0","1"]])', expected: 2 }],
-  "19-3": [{ call: "floodFill([[1,1,1],[1,1,0],[1,0,1]], 1, 1, 2)", expected: [[2, 2, 2], [2, 2, 0], [2, 0, 1]] }],
-  "19-4": [
-    { call: "(()=>{const g=new Graph();g.addEdge(1,2);g.addEdge(1,3);g.addEdge(2,4);g.addEdge(3,4);return g.bfs(1);})()", expected: [1, 2, 3, 4] },
-    { call: "(()=>{const g=new Graph();g.addEdge(1,2);g.addEdge(1,3);g.addEdge(2,4);g.addEdge(3,4);return g.dfs(1);})()", expected: [1, 2, 4, 3] },
-    { call: "(()=>{const g=new Graph();g.addEdge(0,1);g.addEdge(0,2);g.addEdge(1,3);return g.bfs(0);})()", expected: [0, 1, 2, 3] },
-    { call: "(()=>{const g=new Graph();g.addEdge(0,1);g.addEdge(0,2);g.addEdge(1,3);return g.dfs(0);})()", expected: [0, 1, 3, 2] },
-    { call: "(()=>{const g=new Graph();g.addEdge(5,6);return [g.bfs(5),g.dfs(5)];})()", expected: [[5, 6], [5, 6]] }
-  ],
-
-  // Level 20 — Topological Sort
-  "20-1": [{ call: "canFinish(2, [[1,0]])", expected: true }, { call: "canFinish(2, [[1,0],[0,1]])", expected: false }],
-
-  // Level 21 — Shortest Paths
-  "21-1": [{ call: "networkDelayTime([[2,1,1],[2,3,1],[3,4,1]], 4, 2)", expected: 2 }],
-  "21-2": [{ call: "findCheapestPrice(4, [[0,1,100],[1,2,100],[2,3,100]], 0, 3, 1)", expected: -1 }, { call: "findCheapestPrice(3, [[0,1,100],[1,2,100],[0,2,500]], 0, 2, 1)", expected: 200 }],
-  "21-3": [{ call: "minimumEffortPath([[1,2,2],[3,8,2],[5,3,5]])", expected: 2 }],
-
-  // Level 22 — MST
-  "22-1": [{ call: "minCostConnectPoints([[0,0],[2,2],[3,10],[5,2],[7,0]])", expected: 20 }],
-  "22-2": [{ call: "minimumCost(3, [[1,2,5],[1,3,6],[2,3,1]])", expected: 6 }],
-  "22-3": [{ call: "minCostToSupplyWater(3, [1,2,2], [[1,2,1],[2,3,1]])", expected: 3 }],
-
-  // Level 23 — Greedy
-  "23-1": [{ call: "canJump([2,3,1,1,4])", expected: true }, { call: "canJump([3,2,1,0,4])", expected: false }],
-  "23-2": [{ call: "canCompleteCircuit([1,2,3,4,5], [3,4,5,1,2])", expected: 3 }],
-  "23-3": [{ call: 'leastInterval(["A","A","A","B","B","B"], 2)', expected: 8 }],
-
-  // Level 24 — DP I
-  "24-1": [{ call: "climbStairs(5)", expected: 8 }, { call: "climbStairs(2)", expected: 2 }, { call: "climbStairs(1)", expected: 1 }, { call: "climbStairs(3)", expected: 3 }],
-  "24-2": [{ call: "rob([2,7,9,3,1])", expected: 12 }, { call: "rob([1,2,3,1])", expected: 4 }, { call: "rob([2,1,1,2])", expected: 4 }, { call: "rob([5])", expected: 5 }],
-  "24-3": [{ call: "coinChange([1,2,5], 11)", expected: 3 }, { call: "coinChange([2], 3)", expected: -1 }, { call: "coinChange([1], 0)", expected: 0 }, { call: "coinChange([1,2,5], 100)", expected: 20 }],
-
-  // Level 25 — DP II
-  "25-1": [{ call: "lengthOfLIS([10,9,2,5,3,7,101,18])", expected: 4 }, { call: "lengthOfLIS([0,1,0,3,2,3])", expected: 4 }, { call: "lengthOfLIS([7,7,7,7])", expected: 1 }],
-  "25-2": [{ call: 'longestCommonSubsequence("abcde","ace")', expected: 3 }],
-  "25-3": [{ call: "knapsack([1,3,4,5], [1,4,5,7], 7)", expected: 9 }],
-
-  // Level 26 — Backtracking
-  "26-1": [{ call: "subsets([1,2,3])", expected: [[], [1], [2], [3], [1, 2], [1, 3], [2, 3], [1, 2, 3]], unordered: true }],
-  "26-2": [{ call: "solveNQueens(4).length", expected: 2 }],
-
-  // Level 27 — Bit Manipulation
-  "27-1": [{ call: "singleNumber([4,1,2,1,2])", expected: 4 }, { call: "singleNumber([1])", expected: 1 }, { call: "singleNumber([2,2,1])", expected: 1 }],
-  "27-2": [{ call: "hammingWeight(11)", expected: 3 }, { call: "hammingWeight(128)", expected: 1 }, { call: "hammingWeight(0)", expected: 0 }, { call: "hammingWeight(7)", expected: 3 }],
-  "27-3": [{ call: "swap(5,9)", expected: [9, 5] }],
-
-  // Level 28 — Advanced Data Structures
-  "28-1": [{ call: "(()=>{const c=new LRUCache(2);c.put(1,1);c.put(2,2);const a=c.get(1);c.put(3,3);const b=c.get(2);return [a,b];})()", expected: [1, -1] }],
-  "28-2": [{ call: "(()=>{const t=new Twitter();t.postTweet(1,5);return t.getNewsFeed(1);})()", expected: [5] }],
-
-  // Level 30 — Advanced Topics
-  "30-1": [{ call: "(()=>{const st=new SegmentTree([1,3,5]);const a=st.query(0,2);st.update(1,2);return [a,st.query(0,2)];})()", expected: [9, 8] }],
-  "30-2": [{ call: "(()=>{const b=new FenwickTree(4);[1,2,3,4].forEach((v,i)=>b.update(i+1,v));const a=b.query(2);b.update(1,5);return [a,b.query(2)];})()", expected: [3, 8] }],
-  "30-3": [{ call: "countSubsetsWithSum([1,2,3,4], 5)", expected: 2 }],
-
-  // ---- validity-based checks for problems with multiple valid answers ----
-  "14-3": [{ call: `(()=>{const r=new TreeNode(4,new TreeNode(2,new TreeNode(1),new TreeNode(3)),new TreeNode(7,new TreeNode(6),new TreeNode(9)));const inv=invertTree(r)||r;const out=[],q=[inv];while(q.length){const n=q.shift();if(!n)continue;out.push(n.val);q.push(n.left,n.right);}return out;})()`, expected: [4, 7, 2, 9, 6, 3, 1] }],
-
-  "18-3": [{ call: `(()=>{const r=accountsMerge([["John","a@x","b@x"],["John","b@x","c@x"],["Mary","m@x"]]);return r.map(a=>[a[0]].concat(a.slice(1).sort())).sort((x,y)=>JSON.stringify(x)<JSON.stringify(y)?-1:1);})()`, expected: [["John", "a@x", "b@x", "c@x"], ["Mary", "m@x"]] }],
-
-  "19-2": [{ call: `(()=>{const a=new Node(1),b=new Node(2),c=new Node(3),d=new Node(4);a.neighbors=[b,d];b.neighbors=[a,c];c.neighbors=[b,d];d.neighbors=[a,c];const cl=cloneGraph(a);const seen=new Set(),order=[],q=[cl];seen.add(cl);while(q.length){const n=q.shift();order.push([n.val,n.neighbors.map(x=>x.val).sort((p,q)=>p-q)]);for(const nb of n.neighbors)if(!seen.has(nb)){seen.add(nb);q.push(nb);}}order.sort((x,y)=>x[0]-y[0]);return {same:cl===a,order};})()`, expected: { same: false, order: [[1, [2, 4]], [2, [1, 3]], [3, [2, 4]], [4, [1, 3]]] } }],
-
-  "20-2": [
-    { call: `(()=>{const p=[[1,0],[2,0],[3,1],[3,2]];const o=findOrder(4,p);if(!o||o.length!==4)return false;const pos={};o.forEach((c,i)=>pos[c]=i);return p.every(([a,b])=>pos[b]<pos[a]);})()`, expected: true },
-    { call: `(()=>{const o=findOrder(2,[[1,0],[0,1]]);return o.length;})()`, expected: 0 },
-  ],
-
-  "20-3": [{ call: `(()=>{const words=["wrt","wrf","er","ett","rftt"];const res=alienOrder(words);if(!res)return false;const pos={};[...res].forEach((c,i)=>pos[c]=i);for(let i=0;i+1<words.length;i++){const a=words[i],b=words[i+1];let k=0;while(k<a.length&&k<b.length&&a[k]===b[k])k++;if(k<a.length&&k<b.length){if(pos[a[k]]>=pos[b[k]])return false;}else if(a.length>b.length)return false;}return res.length>=1;})()`, expected: true }],
-
-  "26-3": [{ call: `(()=>{const board=[["5","3",".",".","7",".",".",".","."],["6",".",".","1","9","5",".",".","."],[".","9","8",".",".",".",".","6","."],["8",".",".",".","6",".",".",".","3"],["4",".",".","8",".","3",".",".","1"],["7",".",".",".","2",".",".",".","6"],[".","6",".",".",".",".","2","8","."],[".",".",".","4","1","9",".",".","5"],[".",".",".",".","8",".",".","7","9"]];solveSudoku(board);const n=board.map(r=>r.map(Number));const ok=a=>{const s=new Set(a);return s.size===9&&![...s].some(x=>x<1||x>9);};for(let i=0;i<9;i++){if(!ok(n[i]))return false;if(!ok(n.map(r=>r[i])))return false;}for(let bi=0;bi<9;bi+=3)for(let bj=0;bj<9;bj+=3){const box=[];for(let i=0;i<3;i++)for(let j=0;j<3;j++)box.push(n[bi+i][bj+j]);if(!ok(box))return false;}return true;})()`, expected: true }],
-
-  "28-3": [{ call: `(()=>{const s=new RandomizedSet();const a=s.insert(1);const b=s.insert(1);const c=s.remove(2);s.insert(2);const d=s.remove(1);return [a,b,c,d,s.getRandom()];})()`, expected: [true, false, false, true, 2] }],
-
-  "29-1": [{ call: "kosarajuSCC(5, [[0,1],[1,2],[2,0],[1,3],[3,4]])", expected: [[0, 1, 2], [3], [4]], unordered: true }],
-  "29-2": [{ call: "articulationPoints(5, [[0,1],[1,2],[2,0],[1,3],[3,4]])", expected: [1, 3], unordered: true }],
-  "29-3": [{ call: "findBridges(5, [[0,1],[1,2],[2,0],[1,3],[3,4]])", expected: [[1, 3], [3, 4]], unordered: true }],
+  "q1": [{ call: "twoSum([2,7,11,15],9)", expected: [0,1] }, { call: "twoSum([3,2,4],6)", expected: [1,2] }, { call: "twoSum([3,3],6)", expected: [0,1] }, { call: "twoSum([-1,-2,-3,-4,-5],-8)", expected: [2,4] }, { call: "twoSum([0,4,3,0],0)", expected: [0,3] } ],
+  "q2": [{ call: "containsDuplicate([1,2,3,1])", expected: true }, { call: "containsDuplicate([1,2,3,4])", expected: false }, { call: "containsDuplicate([1,1,1,3,3,4,3,2,4,2])", expected: true }, { call: "containsDuplicate([])", expected: false }, { call: "containsDuplicate([5])", expected: false } ],
+  "q3": [{ call: "validAnagram(\"anagram\",\"nagaram\")", expected: true }, { call: "validAnagram(\"rat\",\"car\")", expected: false }, { call: "validAnagram(\"listen\",\"silent\")", expected: true }, { call: "validAnagram(\"a\",\"ab\")", expected: false }, { call: "validAnagram(\"\",\"\")", expected: true } ],
+  "q4": [{ call: "groupAnagrams([\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"])", expected: [["eat","tea","ate"],["tan","nat"],["bat"]], unordered: true }, { call: "groupAnagrams([\"\"])", expected: [[""]], unordered: true }, { call: "groupAnagrams([\"a\"])", expected: [["a"]], unordered: true }, { call: "groupAnagrams([\"abc\",\"bca\",\"cab\",\"xyz\"])", expected: [["abc","bca","cab"],["xyz"]], unordered: true } ],
+  "q5": [{ call: "topKFrequentElements([1,1,1,2,2,3],2)", expected: [1,2], unordered: true }, { call: "topKFrequentElements([1],1)", expected: [1], unordered: true }, { call: "topKFrequentElements([4,4,4,5,5,6],2)", expected: [4,5], unordered: true }, { call: "topKFrequentElements([5,5,5,5],1)", expected: [5], unordered: true } ],
+  "q6": [{ call: "productOfArrayExceptSelf([1,2,3,4])", expected: [24,12,8,6] }, { call: "productOfArrayExceptSelf([-1,1,0,-3,3])", expected: [0,0,9,0,0] }, { call: "productOfArrayExceptSelf([2,3])", expected: [3,2] }, { call: "productOfArrayExceptSelf([1,1,1])", expected: [1,1,1] } ],
+  "q7": [{ call: "subarraySumEqualsK([1,1,1],2)", expected: 2 }, { call: "subarraySumEqualsK([1,2,3],3)", expected: 2 }, { call: "subarraySumEqualsK([1,-1,0],0)", expected: 3 }, { call: "subarraySumEqualsK([3,4,7,2,-3,1,4,2],7)", expected: 4 }, { call: "subarraySumEqualsK([1],0)", expected: 0 } ],
+  "q8": [{ call: "validPalindrome(\"A man, a plan, a canal: Panama\")", expected: true }, { call: "validPalindrome(\"race a car\")", expected: false }, { call: "validPalindrome(\"\")", expected: true }, { call: "validPalindrome(\"0P\")", expected: false }, { call: "validPalindrome(\".,\")", expected: true }, { call: "validPalindrome(\"aba\")", expected: true } ],
+  "q9": [{ call: "twoSumIiSortedArray([2,7,11,15],9)", expected: [1,2] }, { call: "twoSumIiSortedArray([2,3,4],6)", expected: [1,3] }, { call: "twoSumIiSortedArray([-1,0],-1)", expected: [1,2] }, { call: "twoSumIiSortedArray([1,2,3,4,4,9,56,90],8)", expected: [4,5] } ],
+  "q10": [{ call: "threeSum([-1,0,1,2,-1,-4])", expected: [[-1,-1,2],[-1,0,1]], unordered: true }, { call: "threeSum([0,1,1])", expected: [], unordered: true }, { call: "threeSum([0,0,0])", expected: [[0,0,0]], unordered: true }, { call: "threeSum([-2,0,1,1,2])", expected: [[-2,0,2],[-2,1,1]], unordered: true } ],
+  "q11": [{ call: "containerWithMostWater([1,8,6,2,5,4,8,3,7])", expected: 49 }, { call: "containerWithMostWater([1,1])", expected: 1 }, { call: "containerWithMostWater([4,3,2,1,4])", expected: 16 }, { call: "containerWithMostWater([1,2,1])", expected: 2 } ],
+  "q12": [{ call: "trappingRainWater([0,1,0,2,1,0,1,3,2,1,2,1])", expected: 6 }, { call: "trappingRainWater([4,2,0,3,2,5])", expected: 9 }, { call: "trappingRainWater([])", expected: 0 }, { call: "trappingRainWater([1,2,3])", expected: 0 } ],
+  "q13": [{ call: "bestTimeToBuyAndSellStock([7,1,5,3,6,4])", expected: 5 }, { call: "bestTimeToBuyAndSellStock([7,6,4,3,1])", expected: 0 }, { call: "bestTimeToBuyAndSellStock([1,2,3,4,5])", expected: 4 }, { call: "bestTimeToBuyAndSellStock([2,4,1])", expected: 2 } ],
+  "q14": [{ call: "longestSubstringWithoutRepeatingCharacters(\"abcabcbb\")", expected: 3 }, { call: "longestSubstringWithoutRepeatingCharacters(\"bbbbb\")", expected: 1 }, { call: "longestSubstringWithoutRepeatingCharacters(\"pwwkew\")", expected: 3 }, { call: "longestSubstringWithoutRepeatingCharacters(\"\")", expected: 0 }, { call: "longestSubstringWithoutRepeatingCharacters(\"au\")", expected: 2 } ],
+  "q15": [{ call: "longestRepeatingCharacterReplacement(\"ABAB\",2)", expected: 4 }, { call: "longestRepeatingCharacterReplacement(\"AABABBA\",1)", expected: 4 }, { call: "longestRepeatingCharacterReplacement(\"AAAA\",0)", expected: 4 }, { call: "longestRepeatingCharacterReplacement(\"ABCDE\",1)", expected: 2 } ],
+  "q16": [{ call: "minimumWindowSubstring(\"ADOBECODEBANC\",\"ABC\")", expected: "BANC" }, { call: "minimumWindowSubstring(\"a\",\"a\")", expected: "a" }, { call: "minimumWindowSubstring(\"a\",\"aa\")", expected: "" }, { call: "minimumWindowSubstring(\"aa\",\"aa\")", expected: "aa" } ],
+  "q17": [{ call: "slidingWindowMaximum([1,3,-1,-3,5,3,6,7],3)", expected: [3,3,5,5,6,7] }, { call: "slidingWindowMaximum([1],1)", expected: [1] }, { call: "slidingWindowMaximum([9,11],2)", expected: [11] }, { call: "slidingWindowMaximum([4,-2],2)", expected: [4] } ],
+  "q18": [{ call: "binarySearch([-1,0,3,5,9,12],9)", expected: 4 }, { call: "binarySearch([-1,0,3,5,9,12],2)", expected: -1 }, { call: "binarySearch([5],5)", expected: 0 }, { call: "binarySearch([2,5],5)", expected: 1 }, { call: "binarySearch([1,2,3,4,5],1)", expected: 0 } ],
+  "q19": [{ call: "searchInRotatedSortedArray([4,5,6,7,0,1,2],0)", expected: 4 }, { call: "searchInRotatedSortedArray([4,5,6,7,0,1,2],3)", expected: -1 }, { call: "searchInRotatedSortedArray([1],0)", expected: -1 }, { call: "searchInRotatedSortedArray([5,1,3],5)", expected: 0 } ],
+  "q20": [{ call: "findMinimumInRotatedSortedArray([3,4,5,1,2])", expected: 1 }, { call: "findMinimumInRotatedSortedArray([4,5,6,7,0,1,2])", expected: 0 }, { call: "findMinimumInRotatedSortedArray([11,13,15,17])", expected: 11 }, { call: "findMinimumInRotatedSortedArray([2,1])", expected: 1 } ],
+  "q21": [{ call: "kokoEatingBananas([3,6,7,11],8)", expected: 4 }, { call: "kokoEatingBananas([30,11,23,4,20],5)", expected: 30 }, { call: "kokoEatingBananas([30,11,23,4,20],6)", expected: 23 }, { call: "kokoEatingBananas([312884470],968709470)", expected: 1 } ],
+  "q22": [{ call: "searchRange([5,7,7,8,8,10],8)", expected: [3,4] }, { call: "searchRange([5,7,7,8,8,10],6)", expected: [-1,-1] }, { call: "searchRange([],0)", expected: [-1,-1] }, { call: "searchRange([1],1)", expected: [0,0] } ],
+  "q23": [{ call: "medianOfTwoSortedArrays([1,3],[2])", expected: 2 }, { call: "medianOfTwoSortedArrays([1,2],[3,4])", expected: 2.5 }, { call: "medianOfTwoSortedArrays([],[1])", expected: 1 }, { call: "medianOfTwoSortedArrays([1,3],[2,7])", expected: 2.5 } ],
+  "q24": [{ call: "longestCommonPrefix([\"flower\",\"flow\",\"flight\"])", expected: "fl" }, { call: "longestCommonPrefix([\"dog\",\"racecar\",\"car\"])", expected: "" }, { call: "longestCommonPrefix([\"throne\"])", expected: "throne" }, { call: "longestCommonPrefix([])", expected: "" } ],
+  "q25": [{ call: "(function(){var r=longestPalindromicSubstring(\"babad\");return [r.length,r===[...r].reverse().join(\"\"),\"babad\".includes(r)];})()", expected: [3,true,true] }, { call: "(function(){var r=longestPalindromicSubstring(\"cbbd\");return [r.length,r===[...r].reverse().join(\"\"),\"cbbd\".includes(r)];})()", expected: [2,true,true] }, { call: "longestPalindromicSubstring(\"a\")", expected: "a" }, { call: "longestPalindromicSubstring(\"racecar\")", expected: "racecar" } ],
+  "q26": [{ call: "palindromicSubstrings(\"abc\")", expected: 3 }, { call: "palindromicSubstrings(\"aaa\")", expected: 6 }, { call: "palindromicSubstrings(\"\")", expected: 0 }, { call: "palindromicSubstrings(\"aba\")", expected: 4 } ],
+  "q27": [{ call: "stringToIntegerAtoi(\"42\")", expected: 42 }, { call: "stringToIntegerAtoi(\"   -42\")", expected: -42 }, { call: "stringToIntegerAtoi(\"4193 with words\")", expected: 4193 }, { call: "stringToIntegerAtoi(\"words and 987\")", expected: 0 }, { call: "stringToIntegerAtoi(\"-91283472332\")", expected: -2147483648 } ],
+  "q28": [{ call: "decode(encode([\"neet\",\"code\",\"love\",\"you\"]))", expected: ["neet","code","love","you"] }, { call: "decode(encode([\"\"]))", expected: [""] }, { call: "decode(encode([\"a#b\",\"::\",\"x\"]))", expected: ["a#b","::","x"] }, { call: "decode(encode([]))", expected: [] } ],
+  "q29": [{ call: "_LA(reverseLinkedList(_L([1,2,3,4,5])))", expected: [5,4,3,2,1] }, { call: "_LA(reverseLinkedList(_L([])))", expected: [] }, { call: "_LA(reverseLinkedList(_L([1])))", expected: [1] } ],
+  "q30": [{ call: "linkedListCycle(_cyc([3,2,0,-4],1))", expected: true }, { call: "linkedListCycle(_cyc([1,2],0))", expected: true }, { call: "linkedListCycle(_cyc([1],-1))", expected: false }, { call: "linkedListCycle(_cyc([],-1))", expected: false } ],
+  "q31": [{ call: "middleOfTheLinkedList(_L([1,2,3,4,5])).val", expected: 3 }, { call: "middleOfTheLinkedList(_L([1,2,3,4,5,6])).val", expected: 4 }, { call: "middleOfTheLinkedList(_L([1])).val", expected: 1 } ],
+  "q32": [{ call: "_LA(mergeTwoSortedLists(_L([1,2,4]),_L([1,3,4])))", expected: [1,1,2,3,4,4] }, { call: "_LA(mergeTwoSortedLists(_L([]),_L([])))", expected: [] }, { call: "_LA(mergeTwoSortedLists(_L([]),_L([0])))", expected: [0] } ],
+  "q33": [{ call: "_LA(removeNthNodeFromEndOfList(_L([1,2,3,4,5]),2))", expected: [1,2,3,5] }, { call: "_LA(removeNthNodeFromEndOfList(_L([1]),1))", expected: [] }, { call: "_LA(removeNthNodeFromEndOfList(_L([1,2]),1))", expected: [1] } ],
+  "q34": [{ call: "(function(){var h=_L([1,2,3,4]);reorderList(h);return _LA(h);})()", expected: [1,4,2,3] }, { call: "(function(){var h=_L([1,2,3,4,5]);reorderList(h);return _LA(h);})()", expected: [1,5,2,4,3] } ],
+  "q35": [{ call: "validParentheses(\"()\")", expected: true }, { call: "validParentheses(\"()[]{}\")", expected: true }, { call: "validParentheses(\"(]\")", expected: false }, { call: "validParentheses(\"([)]\")", expected: false }, { call: "validParentheses(\"{[]}\")", expected: true }, { call: "validParentheses(\"\")", expected: true } ],
+  "q36": [{ call: "(function(){var s=new MinStack();s.push(-2);s.push(0);s.push(-3);var a=s.getMin();s.pop();var b=s.top();var c=s.getMin();return [a,b,c];})()", expected: [-3,0,-2] } ],
+  "q37": [{ call: "evaluateReversePolishNotation([\"2\",\"1\",\"+\",\"3\",\"*\"])", expected: 9 }, { call: "evaluateReversePolishNotation([\"4\",\"13\",\"5\",\"/\",\"+\"])", expected: 6 }, { call: "evaluateReversePolishNotation([\"10\",\"6\",\"9\",\"3\",\"+\",\"-11\",\"*\",\"/\",\"*\",\"17\",\"+\",\"5\",\"+\"])", expected: 22 } ],
+  "q38": [{ call: "dailyTemperatures([73,74,75,71,69,72,76,73])", expected: [1,1,4,2,1,1,0,0] }, { call: "dailyTemperatures([30,40,50,60])", expected: [1,1,1,0] }, { call: "dailyTemperatures([30,60,90])", expected: [1,1,0] } ],
+  "q39": [{ call: "largestRectangleInHistogram([2,1,5,6,2,3])", expected: 10 }, { call: "largestRectangleInHistogram([2,4])", expected: 4 }, { call: "largestRectangleInHistogram([1,1])", expected: 2 }, { call: "largestRectangleInHistogram([0])", expected: 0 } ],
+  "q40": [{ call: "_TA(invertBinaryTree(_T([4,2,7,1,3,6,9])))", expected: [4,7,2,9,6,3,1] }, { call: "_TA(invertBinaryTree(_T([2,1,3])))", expected: [2,3,1] }, { call: "_TA(invertBinaryTree(_T([])))", expected: [] } ],
+  "q41": [{ call: "maximumDepthOfBinaryTree(_T([3,9,20,null,null,15,7]))", expected: 3 }, { call: "maximumDepthOfBinaryTree(_T([1,null,2]))", expected: 2 }, { call: "maximumDepthOfBinaryTree(_T([]))", expected: 0 } ],
+  "q42": [{ call: "diameterOfBinaryTree(_T([1,2,3,4,5]))", expected: 3 }, { call: "diameterOfBinaryTree(_T([1,2]))", expected: 1 }, { call: "diameterOfBinaryTree(_T([]))", expected: 0 } ],
+  "q43": [{ call: "binaryTreeLevelOrderTraversal(_T([3,9,20,null,null,15,7]))", expected: [[3],[9,20],[15,7]] }, { call: "binaryTreeLevelOrderTraversal(_T([1]))", expected: [[1]] }, { call: "binaryTreeLevelOrderTraversal(_T([]))", expected: [] } ],
+  "q44": [{ call: "validateBinarySearchTree(_T([2,1,3]))", expected: true }, { call: "validateBinarySearchTree(_T([5,1,4,null,null,3,6]))", expected: false }, { call: "validateBinarySearchTree(_T([]))", expected: true }, { call: "validateBinarySearchTree(_T([2,2,2]))", expected: false } ],
+  "q45": [{ call: "(function(){var r=_T([6,2,8,0,4,7,9,null,null,3,5]);var find=function(n,v){return !n?null:n.val===v?n:(find(n.left,v)||find(n.right,v));};return lowestCommonAncestorOfABst(r,find(r,2),find(r,8)).val;})()", expected: 6 }, { call: "(function(){var r=_T([6,2,8,0,4,7,9,null,null,3,5]);var find=function(n,v){return !n?null:n.val===v?n:(find(n.left,v)||find(n.right,v));};return lowestCommonAncestorOfABst(r,find(r,2),find(r,4)).val;})()", expected: 2 } ],
+  "q46": [{ call: "kthSmallestElementInABst(_T([3,1,4,null,2]),1)", expected: 1 }, { call: "kthSmallestElementInABst(_T([5,3,6,2,4,null,null,1]),3)", expected: 3 }, { call: "kthSmallestElementInABst(_T([1]),1)", expected: 1 } ],
+  "q47": [{ call: "kthLargestElementInAnArray([3,2,1,5,6,4],2)", expected: 5 }, { call: "kthLargestElementInAnArray([3,2,3,1,2,4,5,5,6],4)", expected: 4 }, { call: "kthLargestElementInAnArray([1],1)", expected: 1 } ],
+  "q48": [{ call: "kClosestPointsToOrigin([[1,3],[-2,2]],1)", expected: [[-2,2]], unordered: true }, { call: "kClosestPointsToOrigin([[3,3],[5,-1],[-2,4]],2)", expected: [[3,3],[-2,4]], unordered: true }, { call: "kClosestPointsToOrigin([[0,1],[1,0]],2)", expected: [[0,1],[1,0]], unordered: true } ],
+  "q49": [{ call: "_LA(mergeKSortedLists([_L([1,4,5]),_L([1,3,4]),_L([2,6])]))", expected: [1,1,2,3,4,4,5,6] }, { call: "_LA(mergeKSortedLists([]))", expected: [] }, { call: "_LA(mergeKSortedLists([_L([])]))", expected: [] } ],
+  "q50": [{ call: "(function(){var m=new MedianFinder();m.addNum(1);m.addNum(2);var a=m.findMedian();m.addNum(3);var b=m.findMedian();return [a,b];})()", expected: [1.5,2] } ],
+  "q51": [{ call: "subsets([1,2,3])", expected: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]], unordered: true }, { call: "subsets([0])", expected: [[],[0]], unordered: true }, { call: "subsets([])", expected: [[]], unordered: true } ],
+  "q52": [{ call: "permutations([1,2,3])", expected: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]], unordered: true }, { call: "permutations([0,1])", expected: [[0,1],[1,0]], unordered: true }, { call: "permutations([1])", expected: [[1]], unordered: true } ],
+  "q53": [{ call: "combinationSum([2,3,6,7],7)", expected: [[2,2,3],[7]], unordered: true }, { call: "combinationSum([2,3,5],8)", expected: [[2,2,2,2],[2,3,3],[3,5]], unordered: true }, { call: "combinationSum([2],1)", expected: [], unordered: true } ],
+  "q54": [{ call: "wordSearch([[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]],\"ABCCED\")", expected: true }, { call: "wordSearch([[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]],\"SEE\")", expected: true }, { call: "wordSearch([[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]],\"ABCB\")", expected: false } ],
+  "q55": [{ call: "nQueens(4)", expected: 2 }, { call: "nQueens(1)", expected: 1 }, { call: "nQueens(2)", expected: 0 }, { call: "nQueens(3)", expected: 0 }, { call: "nQueens(6)", expected: 4 } ],
+  "q56": [{ call: "numberOfIslands([[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]])", expected: 1 }, { call: "numberOfIslands([[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]])", expected: 3 }, { call: "numberOfIslands([[\"0\"]])", expected: 0 } ],
+  "q57": [{ call: "(function(){var g=_graph([[2,4],[1,3],[2,4],[1,3]]);var c=cloneGraph(g);return [_gser(c),c!==g];})()", expected: [[[2,4],[1,3],[2,4],[1,3]],true] }, { call: "(function(){var g=_graph([[]]);var c=cloneGraph(g);return [_gser(c),c!==g];})()", expected: [[[]],true] } ],
+  "q58": [{ call: "courseSchedule(2,[[1,0]])", expected: true }, { call: "courseSchedule(2,[[1,0],[0,1]])", expected: false }, { call: "courseSchedule(1,[])", expected: true }, { call: "courseSchedule(5,[[1,0],[2,1],[3,2],[4,3]])", expected: true } ],
+  "q59": [{ call: "findOrder(2,[[1,0]])", expected: [0,1] }, { call: "findOrder(4,[[1,0],[2,1],[3,2]])", expected: [0,1,2,3] }, { call: "findOrder(1,[])", expected: [0] }, { call: "findOrder(2,[[0,1],[1,0]])", expected: [] } ],
+  "q60": [{ call: "pacificAtlanticWaterFlow([[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]])", expected: [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]], unordered: true }, { call: "pacificAtlanticWaterFlow([[1]])", expected: [[0,0]], unordered: true } ],
+  "q61": [{ call: "graphValidTree(5,[[0,1],[0,2],[0,3],[1,4]])", expected: true }, { call: "graphValidTree(5,[[0,1],[1,2],[2,3],[1,3],[1,4]])", expected: false }, { call: "graphValidTree(1,[])", expected: true }, { call: "graphValidTree(2,[])", expected: false } ],
+  "q62": [{ call: "networkDelayTime([[2,1,1],[2,3,1],[3,4,1]],4,2)", expected: 2 }, { call: "networkDelayTime([[1,2,1]],2,1)", expected: 1 }, { call: "networkDelayTime([[1,2,1]],2,2)", expected: -1 } ],
+  "q63": [{ call: "climbingStairs(2)", expected: 2 }, { call: "climbingStairs(3)", expected: 3 }, { call: "climbingStairs(5)", expected: 8 }, { call: "climbingStairs(1)", expected: 1 }, { call: "climbingStairs(10)", expected: 89 } ],
+  "q64": [{ call: "houseRobber([1,2,3,1])", expected: 4 }, { call: "houseRobber([2,7,9,3,1])", expected: 12 }, { call: "houseRobber([])", expected: 0 }, { call: "houseRobber([5])", expected: 5 } ],
+  "q65": [{ call: "longestIncreasingSubsequence([10,9,2,5,3,7,101,18])", expected: 4 }, { call: "longestIncreasingSubsequence([0,1,0,3,2,3])", expected: 4 }, { call: "longestIncreasingSubsequence([7,7,7])", expected: 1 }, { call: "longestIncreasingSubsequence([])", expected: 0 } ],
+  "q66": [{ call: "coinChange([1,2,5],11)", expected: 3 }, { call: "coinChange([2],3)", expected: -1 }, { call: "coinChange([1],0)", expected: 0 }, { call: "coinChange([1,2,5],100)", expected: 20 } ],
+  "q67": [{ call: "uniquePaths(3,7)", expected: 28 }, { call: "uniquePaths(3,2)", expected: 3 }, { call: "uniquePaths(1,1)", expected: 1 }, { call: "uniquePaths(3,3)", expected: 6 } ],
+  "q68": [{ call: "longestCommonSubsequence(\"abcde\",\"ace\")", expected: 3 }, { call: "longestCommonSubsequence(\"abc\",\"abc\")", expected: 3 }, { call: "longestCommonSubsequence(\"abc\",\"def\")", expected: 0 } ],
+  "q69": [{ call: "wordBreak(\"leetcode\",[\"leet\",\"code\"])", expected: true }, { call: "wordBreak(\"applepenapple\",[\"apple\",\"pen\"])", expected: true }, { call: "wordBreak(\"catsandog\",[\"cats\",\"dog\",\"sand\",\"and\",\"cat\"])", expected: false } ],
+  "q70": [{ call: "jumpGame([2,3,1,1,4])", expected: true }, { call: "jumpGame([3,2,1,0,4])", expected: false }, { call: "jumpGame([0])", expected: true } ],
+  "q71": [{ call: "gasStation([1,2,3,4,5],[3,4,5,1,2])", expected: 3 }, { call: "gasStation([2,3,4],[3,4,3])", expected: -1 }, { call: "gasStation([5],[4])", expected: 0 } ],
+  "q72": [{ call: "nonOverlappingIntervals([[1,2],[2,3],[3,4],[1,3]])", expected: 1 }, { call: "nonOverlappingIntervals([[1,2],[1,2],[1,2]])", expected: 2 }, { call: "nonOverlappingIntervals([[1,2],[2,3]])", expected: 0 } ],
+  "q73": [{ call: "mergeIntervals([[1,3],[2,6],[8,10],[15,18]])", expected: [[1,6],[8,10],[15,18]] }, { call: "mergeIntervals([[1,4],[4,5]])", expected: [[1,5]] }, { call: "mergeIntervals([[1,4],[2,3]])", expected: [[1,4]] } ],
+  "q74": [{ call: "singleNumber([2,2,1])", expected: 1 }, { call: "singleNumber([4,1,2,1,2])", expected: 4 }, { call: "singleNumber([1])", expected: 1 } ],
+  "q75": [{ call: "numberOf1Bits(11)", expected: 3 }, { call: "numberOf1Bits(128)", expected: 1 }, { call: "numberOf1Bits(255)", expected: 8 }, { call: "numberOf1Bits(0)", expected: 0 } ],
 };

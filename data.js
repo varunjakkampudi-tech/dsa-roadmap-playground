@@ -1,9 +1,7 @@
 /**
  * DSA dataset — 75 curated interview problems across 14 pattern categories.
  * Source: 'The Ultimate Pattern-Based Coding Interview Guide' (75 DSA Questions).
- * Ordered exactly as the guide: Arrays & Hashing -> ... -> Bit Manipulation.
- * Each problem carries the full walkthrough (why, approaches, dry run,
- * complexity, mistakes, follow-ups, Python reference solution, key takeaway).
+ * Each problem carries the full walkthrough plus a JavaScript reference solution.
  * Exposed as a global so the app works over file:// too.
  */
 window.LEVELS = [
@@ -34,9 +32,9 @@ window.LEVELS = [
     "space": "O(n) — hash map can hold up to n entries.",
     "mistakes": "Using the same element twice; forgetting to check 'need' before inserting the current number (which would let an element pair with itself incorrectly); assuming the array is sorted.",
     "followups": "• What if the array is sorted — can you do O(1) space?\n• What if there are multiple valid pairs and you need all of them?\n• How would you handle streaming input where nums arrive one at a time?",
-    "solutionPy": "def two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        need = target - num\n        if need in seen:\n            return [seen[need], i]\n        seen[num] = i\n    return []",
     "takeaway": "When you need to find a complement of the current element, a hash map converts an O(n²) search into O(n).",
-    "starter": "// Two Sum  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction twoSum(nums, target) {\n  // your code here\n}\n"
+    "starter": "// Two Sum  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction twoSum(nums, target) {\n  // your code here\n}\n",
+    "solution": "function twoSum(nums,target){const m=new Map();for(let i=0;i<nums.length;i++){const need=target-nums[i];if(m.has(need))return [m.get(need),i];m.set(nums[i],i);}return [];}"
    },
    {
     "id": "q2",
@@ -57,9 +55,9 @@ window.LEVELS = [
     "space": "O(n) for the set.",
     "mistakes": "Sorting first when O(n) is achievable and expected; forgetting early-exit (checking membership before insertion, not after).",
     "followups": "• What if memory is extremely constrained — can sorting in place beat the hash set on space?\n• How would you find the actual duplicate value, not just true/false?",
-    "solutionPy": "def contains_duplicate(nums):\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False",
     "takeaway": "'Have I seen this before' almost always means: reach for a hash set.",
-    "starter": "// Contains Duplicate  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction containsDuplicate(nums) {\n  // your code here\n}\n"
+    "starter": "// Contains Duplicate  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction containsDuplicate(nums) {\n  // your code here\n}\n",
+    "solution": "function containsDuplicate(nums){const s=new Set();for(const n of nums){if(s.has(n))return true;s.add(n);}return false;}"
    },
    {
     "id": "q3",
@@ -80,9 +78,9 @@ window.LEVELS = [
     "space": "O(1) if the alphabet size is fixed (26 letters), else O(k) for k distinct characters.",
     "mistakes": "Not checking lengths first as a fast fail; using sorted() when interviewer wants O(n); ignoring Unicode/uppercase edge cases.",
     "followups": "• What if the inputs contain Unicode characters, not just lowercase letters?\n• How would you check if s is an anagram of t while ignoring spaces and case?",
-    "solutionPy": "from collections import Counter\ndef is_anagram(s, t):\n    if len(s) != len(t):\n        return False\n    return Counter(s) == Counter(t)",
     "takeaway": "Frequency maps let you compare 'same multiset of items' in linear time.",
-    "starter": "// Valid Anagram  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction validAnagram(s, t) {\n  // your code here\n}\n"
+    "starter": "// Valid Anagram  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction validAnagram(s, t) {\n  // your code here\n}\n",
+    "solution": "function validAnagram(s,t){if(s.length!==t.length)return false;const c={};for(const ch of s)c[ch]=(c[ch]||0)+1;for(const ch of t){if(!c[ch])return false;c[ch]--;}return true;}"
    },
    {
     "id": "q4",
@@ -103,9 +101,9 @@ window.LEVELS = [
     "space": "O(n · k) to store all strings in the map.",
     "mistakes": "Using sorted string as key when k is large (count-tuple is faster); forgetting strings can be empty; mutating the input list.",
     "followups": "• Can you build the key in O(k) instead of O(k log k)?\n• How would this scale if strs had 10^7 entries?",
-    "solutionPy": "from collections import defaultdict\ndef group_anagrams(strs):\n    groups = defaultdict(list)\n    for s in strs:\n        key = tuple(sorted(s))\n        groups[key].append(s)\n    return list(groups.values())",
     "takeaway": "When grouping by a shared property, hash on a canonical signature of that property.",
-    "starter": "// Group Anagrams  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction groupAnagrams(strs) {\n  // your code here\n}\n"
+    "starter": "// Group Anagrams  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction groupAnagrams(strs) {\n  // your code here\n}\n",
+    "solution": "function groupAnagrams(strs){const m=new Map();for(const s of strs){const k=[...s].sort().join('');if(!m.has(k))m.set(k,[]);m.get(k).push(s);}return [...m.values()];}"
    },
    {
     "id": "q5",
@@ -126,9 +124,9 @@ window.LEVELS = [
     "space": "O(n) for counts and buckets.",
     "mistakes": "Using a full sort when O(n) bucket sort is expected in a follow-up; off-by-one on bucket size (max frequency = n).",
     "followups": "• Could you solve this with a min-heap of size k instead? What's the time complexity?\n• What if k could equal n (return all elements sorted by frequency)?",
-    "solutionPy": "from collections import Counter\ndef top_k_frequent(nums, k):\n    count = Counter(nums)\n    buckets = [[] for _ in range(len(nums) + 1)]\n    for num, freq in count.items():\n        buckets[freq].append(num)\n    result = []\n    for freq in range(len(buckets) - 1, 0, -1):\n        for num in buckets[freq]:\n            result.append(num)\n            if len(result) == k:\n                return result\n    return result",
     "takeaway": "When a value is bounded by n (like frequency), bucket sort beats comparison sort.",
-    "starter": "// Top K Frequent Elements  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction topKFrequentElements(nums, k) {\n  // your code here\n}\n"
+    "starter": "// Top K Frequent Elements  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction topKFrequentElements(nums, k) {\n  // your code here\n}\n",
+    "solution": "function topKFrequentElements(nums,k){const m=new Map();for(const n of nums)m.set(n,(m.get(n)||0)+1);return [...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,k).map(e=>e[0]);}"
    },
    {
     "id": "q6",
@@ -149,9 +147,9 @@ window.LEVELS = [
     "space": "O(1) extra (excluding the output array) using the running-suffix trick.",
     "mistakes": "Reaching for division then special-casing zeros (fragile); allocating a separate suffix array when the running- variable trick avoids it.",
     "followups": "• How do you handle the array containing one or more zeros?\n• Can you do this with O(1) extra space, not counting the output?",
-    "solutionPy": "def product_except_self(nums):\n    n = len(nums)\n    answer = [1] * n\n    prefix = 1\n    for i in range(n):\n        answer[i] = prefix\n        prefix *= nums[i]\n    suffix = 1\n    for i in range(n - 1, -1, -1):\n        answer[i] *= suffix\n        suffix *= nums[i]\n    return answer",
     "takeaway": "When you can't use an operation directly (division), precompute both directions and combine.",
-    "starter": "// Product of Array Except Self  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction productOfArrayExceptSelf(nums) {\n  // your code here\n}\n"
+    "starter": "// Product of Array Except Self  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction productOfArrayExceptSelf(nums) {\n  // your code here\n}\n",
+    "solution": "function productOfArrayExceptSelf(nums){const n=nums.length,res=new Array(n).fill(1);let pre=1;for(let i=0;i<n;i++){res[i]=pre;pre*=nums[i];}let post=1;for(let i=n-1;i>=0;i--){res[i]*=post;post*=nums[i];}return res;}"
    },
    {
     "id": "q7",
@@ -172,9 +170,9 @@ window.LEVELS = [
     "space": "O(n) for the prefix-sum map.",
     "mistakes": "Forgetting to seed the map with {0:1} (accounts for a prefix itself summing to k); recomputing sums from scratch per subarray.",
     "followups": "• What if you needed the actual subarrays, not just the count?\n• How would you handle a streaming array where k can change?",
-    "solutionPy": "from collections import defaultdict\ndef subarray_sum(nums, k):\n    count = defaultdict(int)\n    count[0] = 1\n    running = 0\n    total = 0\n    for num in nums:\n        running += num\n        total += count[running - k]\n        count[running] += 1\n    return total",
     "takeaway": "Whenever you see 'contiguous subarray sums to X', think prefix sum + hash map, not nested loops.",
-    "starter": "// Subarray Sum Equals K  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction subarraySumEqualsK(nums, k) {\n  // your code here\n}\n"
+    "starter": "// Subarray Sum Equals K  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction subarraySumEqualsK(nums, k) {\n  // your code here\n}\n",
+    "solution": "function subarraySumEqualsK(nums,k){const m=new Map([[0,1]]);let sum=0,c=0;for(const n of nums){sum+=n;c+=m.get(sum-k)||0;m.set(sum,(m.get(sum)||0)+1);}return c;}"
    }
   ]
  },
@@ -205,9 +203,9 @@ window.LEVELS = [
     "space": "O(1) — no extra string built.",
     "mistakes": "Building a new string (works, but not O(1) space as follow-up expects); forgetting to lowercase before comparing; mishandling pointers skipping past each other.",
     "followups": "• Can you solve it in O(1) space (in-place, no cleaned copy)?\n• What if at most one character can be removed to make it a palindrome (Valid Palindrome II)?",
-    "solutionPy": "def is_palindrome(s):\n    left, right = 0, len(s) - 1\n    while left < right:\n        while left < right and not s[left].isalnum():\n            left += 1\n        while left < right and not s[right].isalnum():\n            right -= 1\n        if s[left].lower() != s[right].lower():\n            return False\n        left += 1\n        right -= 1\n    return True",
     "takeaway": "Converging two pointers avoid building an extra copy of the data whenever you're comparing from both ends.",
-    "starter": "// Valid Palindrome  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction validPalindrome(s) {\n  // your code here\n}\n"
+    "starter": "// Valid Palindrome  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction validPalindrome(s) {\n  // your code here\n}\n",
+    "solution": "function validPalindrome(s){s=s.toLowerCase().replace(/[^a-z0-9]/g,'');let l=0,r=s.length-1;while(l<r){if(s[l]!==s[r])return false;l++;r--;}return true;}"
    },
    {
     "id": "q9",
@@ -228,9 +226,9 @@ window.LEVELS = [
     "space": "O(1) — no extra structures.",
     "mistakes": "Ignoring the sorted property and using the Two Sum hash-map solution (works, but wastes the O(1)-space opportunity); forgetting the 1-indexed return.",
     "followups": "• What changes if the array can contain duplicates and you need all unique pairs?\n• How would you adapt this to Three Sum?",
-    "solutionPy": "def two_sum_sorted(numbers, target):\n    left, right = 0, len(numbers) - 1\n    while left < right:\n        total = numbers[left] + numbers[right]\n        if total == target:\n            return [left + 1, right + 1]\n        elif total < target:\n            left += 1\n        else:\n            right -= 1\n    return []",
     "takeaway": "A sorted array is a strong signal to try two pointers before reaching for extra memory.",
-    "starter": "// Two Sum II — Sorted Array  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction twoSumIiSortedArray(numbers, target) {\n  // your code here\n}\n"
+    "starter": "// Two Sum II — Sorted Array  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction twoSumIiSortedArray(numbers, target) {\n  // your code here\n}\n",
+    "solution": "function twoSumIiSortedArray(numbers,target){let l=0,r=numbers.length-1;while(l<r){const s=numbers[l]+numbers[r];if(s===target)return [l+1,r+1];if(s<target)l++;else r--;}return [];}"
    },
    {
     "id": "q10",
@@ -251,9 +249,9 @@ window.LEVELS = [
     "space": "O(1) extra (excluding sort and output), or O(log n)/O(n) depending on sort implementation.",
     "mistakes": "Forgetting to skip duplicate values at all three positions (produces duplicate triplets); not sorting first; off-by- one when advancing pointers past duplicates.",
     "followups": "• How would you extend this to 4Sum?\n• What if you needed triplets closest to a target instead of exactly zero (3Sum Closest)?",
-    "solutionPy": "def three_sum(nums):\n    nums.sort()\n    result = []\n    n = len(nums)\n    for i in range(n - 2):\n        if i > 0 and nums[i] == nums[i - 1]:\n            continue\n        left, right = i + 1, n - 1\n        while left < right:\n            total = nums[i] + nums[left] + nums[right]\n            if total < 0:\n                left += 1\n            elif total > 0:\n                right -= 1\n            else:\n                result.append([nums[i], nums[left], nums[right]])\n                left += 1\n                right -= 1\n                while left < right and nums[left] == nums[left - 1]:\n                    left += 1\n                while left < right and nums[right] == nums[right + 1]:\n                    right -= 1\n    return result",
     "takeaway": "Sorting + fixing one element reduces k-Sum problems to a two-pointer subproblem.",
-    "starter": "// 3Sum  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction q3sum(nums) {\n  // your code here\n}\n"
+    "starter": "// 3Sum  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction threeSum(nums) {\n  // your code here\n}\n",
+    "solution": "function threeSum(nums){nums=[...nums].sort((a,b)=>a-b);const res=[];for(let i=0;i<nums.length-2;i++){if(i>0&&nums[i]===nums[i-1])continue;let l=i+1,r=nums.length-1;while(l<r){const s=nums[i]+nums[l]+nums[r];if(s<0)l++;else if(s>0)r--;else{res.push([nums[i],nums[l],nums[r]]);while(l<r&&nums[l]===nums[l+1])l++;while(l<r&&nums[r]===nums[r-1])r--;l++;r--;}}}return res;}"
    },
    {
     "id": "q11",
@@ -274,9 +272,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Moving the taller pointer (breaks the greedy proof, misses the optimum); recomputing area with a nested loop.",
     "followups": "• Can you prove why moving the shorter line is always safe?\n• What if you needed the actual pair of indices, not just the area?",
-    "solutionPy": "def max_area(height):\n    left, right = 0, len(height) - 1\n    best = 0\n    while left < right:\n        area = (right - left) * min(height[left], height[right])\n        best = max(best, area)\n        if height[left] < height[right]:\n            left += 1\n        else:\n            right -= 1\n    return best",
     "takeaway": "When width shrinks monotonically, moving the limiting (smaller) side is the only move that can improve the result.",
-    "starter": "// Container With Most Water  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction containerWithMostWater(height) {\n  // your code here\n}\n"
+    "starter": "// Container With Most Water  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction containerWithMostWater(height) {\n  // your code here\n}\n",
+    "solution": "function containerWithMostWater(height){let l=0,r=height.length-1,max=0;while(l<r){max=Math.max(max,Math.min(height[l],height[r])*(r-l));if(height[l]<height[r])l++;else r--;}return max;}"
    },
    {
     "id": "q12",
@@ -297,9 +295,9 @@ window.LEVELS = [
     "space": "O(1) with two pointers (vs O(n) for the prefix-array version).",
     "mistakes": "Only tracking one side's max (must track both leftMax and rightMax); off-by-one in when to add water vs update max.",
     "followups": "• Can you also solve it with a monotonic stack?\n• How would this generalize to a 2D elevation map (Trapping Rain Water II)?",
-    "solutionPy": "def trap(height):\n    if not height:\n        return 0\n    left, right = 0, len(height) - 1\n    left_max, right_max = height[left], height[right]\n    water = 0\n    while left < right:\n        if left_max < right_max:\n            left += 1\n            left_max = max(left_max, height[left])\n            water += left_max - height[left]\n        else:\n            right -= 1\n            right_max = max(right_max, height[right])\n            water += right_max - height[right]\n    return water",
     "takeaway": "When a value depends on the min of two running maximums, resolve the side with the smaller max first — it's already determined.",
-    "starter": "// Trapping Rain Water  (Hard)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction trappingRainWater(height) {\n  // your code here\n}\n"
+    "starter": "// Trapping Rain Water  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction trappingRainWater(height) {\n  // your code here\n}\n",
+    "solution": "function trappingRainWater(height){let l=0,r=height.length-1,lm=0,rm=0,res=0;while(l<r){if(height[l]<height[r]){lm=Math.max(lm,height[l]);res+=lm-height[l];l++;}else{rm=Math.max(rm,height[r]);res+=rm-height[r];r--;}}return res;}"
    }
   ]
  },
@@ -330,9 +328,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Nested-loop brute force when O(n) is expected; forgetting profit can be 0 (no valid transaction); updating minPrice after computing profit instead of using the pre-update value from earlier days only.",
     "followups": "• What if you can make unlimited transactions (Best Time II)?\n• What if there's a cooldown period after selling?",
-    "solutionPy": "def max_profit(prices):\n    min_price = float('inf')\n    profit = 0\n    for price in prices:\n        min_price = min(min_price, price)\n        profit = max(profit, price - min_price)\n    return profit",
     "takeaway": "A single running minimum (or maximum) turns an O(n²) comparison problem into O(n).",
-    "starter": "// Best Time to Buy and Sell Stock  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction bestTimeToBuyAndSellStock(prices) {\n  // your code here\n}\n"
+    "starter": "// Best Time to Buy and Sell Stock  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction bestTimeToBuyAndSellStock(prices) {\n  // your code here\n}\n",
+    "solution": "function bestTimeToBuyAndSellStock(prices){let min=Infinity,max=0;for(const p of prices){min=Math.min(min,p);max=Math.max(max,p-min);}return max;}"
    },
    {
     "id": "q14",
@@ -353,9 +351,9 @@ window.LEVELS = [
     "space": "O(min(n, alphabet size)) for the window's character set/map.",
     "mistakes": "Using a naive left+=1 loop instead of jumping left directly to last_seen[char]+1 (still correct but can be less efficient to reason about); forgetting the last-seen index might be outside the current window (must check left <= last_seen[char]).",
     "followups": "• Can you solve this with at most K distinct characters allowed?\n• What if you need the actual substring, not just its length?",
-    "solutionPy": "def length_of_longest_substring(s):\n    last_seen = {}\n    left = 0\n    best = 0\n    for right, ch in enumerate(s):\n        if ch in last_seen and last_seen[ch] >= left:\n            left = last_seen[ch] + 1\n        last_seen[ch] = right\n        best = max(best, right - left + 1)\n    return best",
     "takeaway": "A variable-size window with a map of 'last seen index' avoids restarting the scan on every repeat.",
-    "starter": "// Longest Substring Without Repeating Characters  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction longestSubstringWithoutRepeatingCharacters(s) {\n  // your code here\n}\n"
+    "starter": "// Longest Substring Without Repeating Characters  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction longestSubstringWithoutRepeatingCharacters(s) {\n  // your code here\n}\n",
+    "solution": "function longestSubstringWithoutRepeatingCharacters(s){const seen=new Map();let l=0,max=0;for(let r=0;r<s.length;r++){if(seen.has(s[r])&&seen.get(s[r])>=l)l=seen.get(s[r])+1;seen.set(s[r],r);max=Math.max(max,r-l+1);}return max;}"
    },
    {
     "id": "q15",
@@ -376,9 +374,9 @@ window.LEVELS = [
     "space": "O(1) — fixed 26-letter count array.",
     "mistakes": "Shrinking the window even when it's still the best size so far (the window size only needs to be non- decreasing, not always minimal); recomputing maxFreq by scanning all 26 counts every step (an approximate running max, never decremented, is sufficient and correct here).",
     "followups": "• Why is it correct to never decrease maxFreq even after shrinking the window?\n• How would this change with a lowercase + uppercase mixed alphabet?",
-    "solutionPy": "def character_replacement(s, k):\n    counts = {}\n    left = 0\n    max_freq = 0\n    best = 0\n    for right, ch in enumerate(s):\n        counts[ch] = counts.get(ch, 0) + 1\n        max_freq = max(max_freq, counts[ch])\n        window_size = right - left + 1\n        if window_size - max_freq > k:\n            counts[s[left]] -= 1\n            left += 1\n        best = max(best, right - left + 1)\n    return best",
     "takeaway": "A window is valid as long as (window size − dominant count) stays within budget — track the dominant count, don't recompute it.",
-    "starter": "// Longest Repeating Character Replacement  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction longestRepeatingCharacterReplacement(s, k) {\n  // your code here\n}\n"
+    "starter": "// Longest Repeating Character Replacement  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction longestRepeatingCharacterReplacement(s, k) {\n  // your code here\n}\n",
+    "solution": "function longestRepeatingCharacterReplacement(s,k){const c={};let l=0,max=0,most=0;for(let r=0;r<s.length;r++){c[s[r]]=(c[s[r]]||0)+1;most=Math.max(most,c[s[r]]);while(r-l+1-most>k){c[s[l]]--;l++;}max=Math.max(max,r-l+1);}return max;}"
    },
    {
     "id": "q16",
@@ -399,9 +397,9 @@ window.LEVELS = [
     "space": "O(|s| + |t|) for the count maps (bounded by alphabet size in practice, O(1) if fixed alphabet).",
     "mistakes": "Recomputing 'does window contain all of t' from scratch each time (must be an incremental 'formed' counter); not handling duplicate characters in t correctly (need exact counts, not just presence).",
     "followups": "• How would you return all minimum windows, not just one?\n• What if t could be empty?",
-    "solutionPy": "from collections import Counter\ndef min_window(s, t):\n    if not s or not t:\n        return \"\"\n    need = Counter(t)\n    required = len(need)\n    window_counts = {}\n    formed = 0\n    left = 0\n    best_len, best_l, best_r = float('inf'), 0, 0\n    for right, ch in enumerate(s):\n        window_counts[ch] = window_counts.get(ch, 0) + 1\n        if ch in need and window_counts[ch] == need[ch]:\n            formed += 1\n        while formed == required:\n            if right - left + 1 < best_len:\n                best_len = right - left + 1\n                best_l, best_r = left, right\n            left_ch = s[left]\n            window_counts[left_ch] -= 1\n            if left_ch in need and window_counts[left_ch] < need[left_ch]:\n                formed -= 1\n            left += 1\n    return \"\" if best_len == float('inf') else s[best_l:best_r + 1]",
     "takeaway": "Track validity with an incremental 'formed vs required' counter — never re-scan the whole window to check a condition.",
-    "starter": "// Minimum Window Substring  (Hard)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction minimumWindowSubstring(s, t) {\n  // your code here\n}\n"
+    "starter": "// Minimum Window Substring  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction minimumWindowSubstring(s, t) {\n  // your code here\n}\n",
+    "solution": "function minimumWindowSubstring(s,t){if(!t||!s)return\"\";const need={};for(const ch of t)need[ch]=(need[ch]||0)+1;let required=Object.keys(need).length,l=0,formed=0,win={},best=[Infinity,0,0];for(let r=0;r<s.length;r++){const ch=s[r];win[ch]=(win[ch]||0)+1;if(need[ch]&&win[ch]===need[ch])formed++;while(formed===required){if(r-l+1<best[0])best=[r-l+1,l,r];const lc=s[l];win[lc]--;if(need[lc]&&win[lc]<need[lc])formed--;l++;}}return best[0]===Infinity?\"\":s.slice(best[1],best[2]+1);}"
    },
    {
     "id": "q17",
@@ -422,9 +420,9 @@ window.LEVELS = [
     "space": "O(k) for the deque.",
     "mistakes": "Storing values instead of indices in the deque (can't tell when an element falls outside the window); using a max-heap (works but O(n log n), not optimal).",
     "followups": "• Could you solve this with a balanced BST or heap instead — what's the time complexity trade-off?\n• How would you track the sliding window minimum instead?",
-    "solutionPy": "from collections import deque\ndef max_sliding_window(nums, k):\n    dq = deque()\n    result = []\n    for i, num in enumerate(nums):\n        while dq and nums[dq[-1]] < num:\n            dq.pop()\n        dq.append(i)\n        if dq[0] <= i - k:\n            dq.popleft()\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    return result",
     "takeaway": "A monotonic deque of indices gives O(1) amortized access to a sliding window's max (or min).",
-    "starter": "// Sliding Window Maximum  (Hard)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction slidingWindowMaximum(nums, k) {\n  // your code here\n}\n"
+    "starter": "// Sliding Window Maximum  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction slidingWindowMaximum(nums, k) {\n  // your code here\n}\n",
+    "solution": "function slidingWindowMaximum(nums,k){const dq=[],res=[];for(let i=0;i<nums.length;i++){while(dq.length&&dq[0]<=i-k)dq.shift();while(dq.length&&nums[dq[dq.length-1]]<=nums[i])dq.pop();dq.push(i);if(i>=k-1)res.push(nums[dq[0]]);}return res;}"
    }
   ]
  },
@@ -455,9 +453,9 @@ window.LEVELS = [
     "space": "O(1) iterative (O(log n) if written recursively).",
     "mistakes": "Using mid = (low+high)/2 without worrying about overflow in other languages; off-by-one in the loop condition (low <= high vs low < high) causing infinite loops or missed elements.",
     "followups": "• How do you adapt this to find the leftmost or rightmost occurrence when duplicates exist?\n• How would you binary search on a 2D sorted matrix?",
-    "solutionPy": "def binary_search(nums, target):\n    low, high = 0, len(nums) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1",
     "takeaway": "Every binary search is: pick a midpoint, discard the half that can't hold the answer, repeat.",
-    "starter": "// Binary Search  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction binarySearch(nums, target) {\n  // your code here\n}\n"
+    "starter": "// Binary Search  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction binarySearch(nums, target) {\n  // your code here\n}\n",
+    "solution": "function binarySearch(nums,target){let l=0,r=nums.length-1;while(l<=r){const m=(l+r)>>1;if(nums[m]===target)return m;if(nums[m]<target)l=m+1;else r=m-1;}return -1;}"
    },
    {
     "id": "q19",
@@ -478,9 +476,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Forgetting to handle the case where low == mid (single element range); comparing target against the wrong half's bounds; not handling duplicates (which breaks this approach — needs linear fallback).",
     "followups": "• What if the array contains duplicate values (Search in Rotated Sorted Array II)?\n• How would you find the rotation pivot index itself?",
-    "solutionPy": "def search_rotated(nums, target):\n    low, high = 0, len(nums) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[low] <= nums[mid]:\n            if nums[low] <= target < nums[mid]:\n                high = mid - 1\n            else:\n                low = mid + 1\n        else:\n            if nums[mid] < target <= nums[high]:\n                low = mid + 1\n            else:\n                high = mid - 1\n    return -1",
     "takeaway": "When an array isn't fully sorted, check which half IS sorted at each step — that half's bounds tell you where to search.",
-    "starter": "// Search in Rotated Sorted Array  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction searchInRotatedSortedArray(nums, target) {\n  // your code here\n}\n"
+    "starter": "// Search in Rotated Sorted Array  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction searchInRotatedSortedArray(nums, target) {\n  // your code here\n}\n",
+    "solution": "function searchInRotatedSortedArray(nums,target){let l=0,r=nums.length-1;while(l<=r){const m=(l+r)>>1;if(nums[m]===target)return m;if(nums[l]<=nums[m]){if(nums[l]<=target&&target<nums[m])r=m-1;else l=m+1;}else{if(nums[m]<target&&target<=nums[r])l=m+1;else r=m-1;}}return -1;}"
    },
    {
     "id": "q20",
@@ -501,9 +499,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Comparing to nums[low] instead of nums[high] (breaks the logic in several rotation cases); not converging the loop condition to low < high correctly.",
     "followups": "• How does the approach change if duplicates are allowed?\n• Can you find the number of times the array was rotated?",
-    "solutionPy": "def find_min(nums):\n    low, high = 0, len(nums) - 1\n    while low < high:\n        mid = (low + high) // 2\n        if nums[mid] > nums[high]:\n            low = mid + 1\n        else:\n            high = mid\n    return nums[low]",
     "takeaway": "Compare the midpoint to the RIGHT boundary (not the left) to locate a single break point in a rotated sequence.",
-    "starter": "// Find Minimum in Rotated Sorted Array  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction findMinimumInRotatedSortedArray(nums) {\n  // your code here\n}\n"
+    "starter": "// Find Minimum in Rotated Sorted Array  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction findMinimumInRotatedSortedArray(nums) {\n  // your code here\n}\n",
+    "solution": "function findMinimumInRotatedSortedArray(nums){let l=0,r=nums.length-1;while(l<r){const m=(l+r)>>1;if(nums[m]>nums[r])l=m+1;else r=m;}return nums[l];}"
    },
    {
     "id": "q21",
@@ -524,9 +522,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Forgetting ceiling division (a partial pile still costs a full hour); searching the wrong bounds (low should be 1, not 0, since speed 0 is invalid).",
     "followups": "• How would you adapt this to 'minimum days to ship packages within weight capacity D' (an isomorphic\nproblem)?\n• What if k must be one of a fixed set of allowed speeds?",
-    "solutionPy": "import math\ndef min_eating_speed(piles, h):\n    low, high = 1, max(piles)\n    while low < high:\n        mid = (low + high) // 2\n        hours = sum(math.ceil(pile / mid) for pile in piles)\n        if hours <= h:\n            high = mid\n        else:\n            low = mid + 1\n    return low",
     "takeaway": "When feasibility of an answer is monotonic (works → everything bigger also works), binary search the answer space directly.",
-    "starter": "// Koko Eating Bananas  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction kokoEatingBananas(piles, h) {\n  // your code here\n}\n"
+    "starter": "// Koko Eating Bananas  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction kokoEatingBananas(piles, h) {\n  // your code here\n}\n",
+    "solution": "function kokoEatingBananas(piles,h){let l=1,r=Math.max(...piles);while(l<r){const m=(l+r)>>1;let t=0;for(const p of piles)t+=Math.ceil(p/m);if(t<=h)r=m;else l=m+1;}return l;}"
    },
    {
     "id": "q22",
@@ -547,9 +545,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Writing one binary search and trying to reuse it for both bounds without changing the tie-breaking direction; off-by-one errors when narrowing after a match.",
     "followups": "• How would you count the total occurrences of target using these two bounds?\n• Can you generalize this to find the k-th occurrence?",
-    "solutionPy": "def search_range(nums, target):\n    def find_bound(is_first):\n        low, high = 0, len(nums) - 1\n        result = -1\n        while low <= high:\n            mid = (low + high) // 2\n            if nums[mid] == target:\n                result = mid\n                if is_first:\n                    high = mid - 1\n                else:\n                    low = mid + 1\n            elif nums[mid] < target:\n                low = mid + 1\n            else:\n                high = mid - 1\n        return result\n    return [find_bound(True), find_bound(False)]",
     "takeaway": "To find a boundary (not just any match), keep searching past a hit in the direction of the boundary you want.",
-    "starter": "// Find First and Last Positionof Element in Sorted Array  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction findFirstAndLastPositionofElementInSortedArray(nums, target) {\n  // your code here\n}\n"
+    "starter": "// Find First and Last Positionof Element in Sorted Array  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction searchRange(nums, target) {\n  // your code here\n}\n",
+    "solution": "function searchRange(nums,target){function b(left){let l=0,r=nums.length-1,res=-1;while(l<=r){const m=(l+r)>>1;if(nums[m]===target){res=m;if(left)r=m-1;else l=m+1;}else if(nums[m]<target)l=m+1;else r=m-1;}return res;}return [b(true),b(false)];}"
    },
    {
     "id": "q23",
@@ -570,9 +568,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Binary searching the larger array (still correct but slower — interviewers want the smaller one for the tight bound); mishandling empty-partition edge cases (use ±infinity sentinels).",
     "followups": "• How would you find the k-th smallest element of two sorted arrays generally (this is a special case of that)?\n• What if the arrays could contain duplicates — does anything change?",
-    "solutionPy": "def find_median_sorted_arrays(nums1, nums2):\n    if len(nums1) > len(nums2):\n        nums1, nums2 = nums2, nums1\n    m, n = len(nums1), len(nums2)\n    low, high = 0, m\n    half = (m + n + 1) // 2\n    while low <= high:\n        i = (low + high) // 2\n        j = half - i\n        left1 = nums1[i - 1] if i > 0 else float('-inf')\n        right1 = nums1[i] if i < m else float('inf')\n        left2 = nums2[j - 1] if j > 0 else float('-inf')\n        right2 = nums2[j] if j < n else float('inf')\n        if left1 <= right2 and left2 <= right1:\n            if (m + n) % 2 == 0:\n                return (max(left1, left2) + min(right1, right2)) / 2\n            return float(max(left1, left2))\n        elif left1 > right2:\n            high = i - 1\n        else:\n            low = i + 1\n    return 0.0",
     "takeaway": "Binary search doesn't need to search 'in' a single array — it can search over a space of valid partitions or configurations.",
-    "starter": "// Median of Two Sorted Arrays  (Hard)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction medianOfTwoSortedArrays(nums1, nums2) {\n  // your code here\n}\n"
+    "starter": "// Median of Two Sorted Arrays  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction medianOfTwoSortedArrays(nums1, nums2) {\n  // your code here\n}\n",
+    "solution": "function medianOfTwoSortedArrays(nums1,nums2){const m=[...nums1,...nums2].sort((a,b)=>a-b);const n=m.length,mid=n>>1;return n%2?m[mid]:(m[mid-1]+m[mid])/2;}"
    }
   ]
  },
@@ -603,9 +601,9 @@ window.LEVELS = [
     "space": "O(1) extra beyond the output.",
     "mistakes": "Not handling an empty input list; not stopping as soon as any string is exhausted; comparing strings in a way that's O(n²) unnecessarily.",
     "followups": "• How would you find the longest common suffix instead?\n• Can you solve this with a Trie for repeated queries?",
-    "solutionPy": "def longest_common_prefix(strs):\n    if not strs:\n        return \"\"\n    for i, ch in enumerate(strs[0]):\n        for s in strs[1:]:\n            if i >= len(s) or s[i] != ch:\n                return strs[0][:i]\n    return strs[0]",
     "takeaway": "When comparing many strings, scan column by column and bail out at the first disagreement.",
-    "starter": "// Longest Common Prefix  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction longestCommonPrefix(strs) {\n  // your code here\n}\n"
+    "starter": "// Longest Common Prefix  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction longestCommonPrefix(strs) {\n  // your code here\n}\n",
+    "solution": "function longestCommonPrefix(strs){if(!strs.length)return\"\";let p=strs[0];for(const s of strs){while(s.indexOf(p)!==0)p=p.slice(0,-1);if(!p)return\"\";}return p;}"
    },
    {
     "id": "q25",
@@ -626,9 +624,9 @@ window.LEVELS = [
     "space": "O(1) extra.",
     "mistakes": "Forgetting even-length palindromes (centers between characters); off-by-one in the expansion bounds check.",
     "followups": "• Can you solve this in O(n) with Manacher's Algorithm?\n• How would you count all palindromic substrings instead of finding just the longest?",
-    "solutionPy": "def longest_palindrome(s):\n    def expand(l, r):\n        while l >= 0 and r < len(s) and s[l] == s[r]:\n            l -= 1\n            r += 1\n        return s[l + 1:r]\n    best = \"\"\n    for i in range(len(s)):\n        odd = expand(i, i)\n        even = expand(i, i + 1)\n        for cand in (odd, even):\n            if len(cand) > len(best):\n                best = cand\n    return best",
     "takeaway": "Expanding outward from every possible center is a simple O(n²) alternative to palindrome DP.",
-    "starter": "// Longest Palindromic Substring  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction longestPalindromicSubstring(s) {\n  // your code here\n}\n"
+    "starter": "// Longest Palindromic Substring  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction longestPalindromicSubstring(s) {\n  // your code here\n}\n",
+    "solution": "function longestPalindromicSubstring(s){if(s.length<2)return s;let start=0,len=1;function exp(l,r){while(l>=0&&r<s.length&&s[l]===s[r]){l--;r++;}if(r-l-1>len){len=r-l-1;start=l+1;}}for(let i=0;i<s.length;i++){exp(i,i);exp(i,i+1);}return s.slice(start,start+len);}"
    },
    {
     "id": "q26",
@@ -649,9 +647,9 @@ window.LEVELS = [
     "space": "O(1) extra.",
     "mistakes": "Forgetting even-length centers; double counting or under counting by mismanaging the expansion loop's stopping condition.",
     "followups": "• Can you do this in O(n) using Manacher's Algorithm?\n• How would you list the substrings themselves, not just the count?",
-    "solutionPy": "def count_substrings(s):\n    def expand(l, r):\n        count = 0\n        while l >= 0 and r < len(s) and s[l] == s[r]:\n            count += 1\n            l -= 1\n            r += 1\n        return count\n    total = 0\n    for i in range(len(s)):\n        total += expand(i, i)\n        total += expand(i, i + 1)\n    return total",
     "takeaway": "Counting successful center-expansions is equivalent to counting all palindromic substrings.",
-    "starter": "// Palindromic Substrings  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction palindromicSubstrings(s) {\n  // your code here\n}\n"
+    "starter": "// Palindromic Substrings  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction palindromicSubstrings(s) {\n  // your code here\n}\n",
+    "solution": "function palindromicSubstrings(s){let c=0;function exp(l,r){while(l>=0&&r<s.length&&s[l]===s[r]){c++;l--;r++;}}for(let i=0;i<s.length;i++){exp(i,i);exp(i,i+1);}return c;}"
    },
    {
     "id": "q27",
@@ -672,9 +670,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Not clamping to INT_MIN/INT_MAX; not stopping at the first non-digit character (e.g. \"4193 with words\" must stop at the space); mishandling '+' vs '-' vs no sign; not skipping leading whitespace only (not embedded whitespace).",
     "followups": "• How would you also support scientific notation like \"1e10\"?\n• What would change if this needed to support 64-bit integers instead?",
-    "solutionPy": "def my_atoi(s):\n    i, n = 0, len(s)\n    while i < n and s[i] == ' ':\n        i += 1\n    if i == n:\n        return 0\n    sign = 1\n    if s[i] in '+-':\n        sign = -1 if s[i] == '-' else 1\n        i += 1\n    num = 0\n    INT_MAX, INT_MIN = 2**31 - 1, -2**31\n    while i < n and s[i].isdigit():\n        num = num * 10 + int(s[i])\n        i += 1\n        if sign * num > INT_MAX:\n            return INT_MAX\n        if sign * num < INT_MIN:\n            return INT_MIN\n    return sign * num",
     "takeaway": "When a problem is 'implement this spec correctly', enumerate every edge case as an explicit state before writing code.",
-    "starter": "// String to Integer (atoi)  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction stringToIntegerAtoi(s) {\n  // your code here\n}\n"
+    "starter": "// String to Integer (atoi)  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction stringToIntegerAtoi(s) {\n  // your code here\n}\n",
+    "solution": "function stringToIntegerAtoi(s){let i=0;const n=s.length;while(i<n&&s[i]===' ')i++;let sign=1;if(s[i]==='+'||s[i]==='-'){if(s[i]==='-')sign=-1;i++;}let num=0;while(i<n&&s[i]>='0'&&s[i]<='9'){num=num*10+(s[i].charCodeAt(0)-48);i++;}num*=sign;const INT_MAX=2147483647,INT_MIN=-2147483648;if(num<INT_MIN)return INT_MIN;if(num>INT_MAX)return INT_MAX;return num;}"
    },
    {
     "id": "q28",
@@ -695,9 +693,9 @@ window.LEVELS = [
     "space": "O(total characters) for the encoded string.",
     "mistakes": "Choosing a fixed delimiter character that could appear in the data (fragile); forgetting to handle empty strings in the list.",
     "followups": "• How would you handle extremely large strings where length could exceed normal integer display width?\n• Could you design this to be streamable (decode without holding the entire string in memory)?",
-    "solutionPy": "def encode(strs):\n    return ''.join(f\"{len(s)}#{s}\" for s in strs)\ndef decode(s):\n    result = []\n    i = 0\n    while i < len(s):\n        j = i\n        while s[j] != '#':\n            j += 1\n        length = int(s[i:j])\n        start = j + 1\n        result.append(s[start:start + length])\n        i = start + length\n    return result",
     "takeaway": "Length-prefixing beats delimiter characters whenever the data itself can contain arbitrary characters.",
-    "starter": "// Encode and Decode Strings  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction encodeAndDecodeStrings() {\n  // your code here\n}\n"
+    "starter": "// Encode and Decode Strings  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\n// Two functions: encode(strs) -> string, decode(str) -> strs\nfunction encode(strs) {\n  // your code here\n}\n\nfunction decode(str) {\n  // your code here\n}\n",
+    "solution": "function encode(strs){return strs.map(s=>s.length+'#'+s).join('');}function decode(str){const res=[];let i=0;while(i<str.length){let j=i;while(str[j]!=='#')j++;const len=parseInt(str.slice(i,j),10);res.push(str.slice(j+1,j+1+len));i=j+1+len;}return res;}"
    }
   ]
  },
@@ -728,9 +726,9 @@ window.LEVELS = [
     "space": "O(1) iterative (O(n) call stack if done recursively).",
     "mistakes": "Losing the reference to 'next' before reassigning current.next (causes a broken/lost list); returning 'current' instead of 'prev' at the end (current is None when the loop ends).",
     "followups": "• Can you write the recursive version, and what's its space trade-off?\n• How would you reverse only a sublist between positions m and n?",
-    "solutionPy": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\ndef reverse_list(head):\n    prev = None\n    cur = head\n    while cur:\n        nxt = cur.next\n        cur.next = prev\n        prev = cur\n        cur = nxt\n    return prev",
     "takeaway": "Reversing a singly linked list is three pointers (prev, current, next) walked in lockstep — memorize this cold.",
-    "starter": "// Reverse Linked List  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction reverseLinkedList() {\n  // your code here\n}\n"
+    "starter": "// Reverse Linked List  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction reverseLinkedList(head) {\n  // your code here\n}\n",
+    "solution": "function reverseLinkedList(head){let prev=null;while(head){const nx=head.next;head.next=prev;prev=head;head=nx;}return prev;}"
    },
    {
     "id": "q30",
@@ -751,9 +749,9 @@ window.LEVELS = [
     "space": "O(1) — no extra data structure, unlike the hash-set approach.",
     "mistakes": "Not checking fast and fast.next for None before advancing (causes a null pointer error); using a hash set when O(1) space is explicitly requested.",
     "followups": "• How would you find the node where the cycle BEGINS (Linked List Cycle II)?\n• How would you find the length of the cycle?",
-    "solutionPy": "def has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True\n    return False",
     "takeaway": "A pointer moving twice as fast as another will always catch up inside a cycle — that's the whole trick.",
-    "starter": "// Linked List Cycle  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction linkedListCycle() {\n  // your code here\n}\n"
+    "starter": "// Linked List Cycle  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction linkedListCycle(head) {\n  // your code here\n}\n",
+    "solution": "function linkedListCycle(head){let slow=head,fast=head;while(fast&&fast.next){slow=slow.next;fast=fast.next.next;if(slow===fast)return true;}return false;}"
    },
    {
     "id": "q31",
@@ -774,9 +772,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Using two separate passes when one is expected; getting the 'first vs second middle' convention wrong for even-length lists.",
     "followups": "• How would this change if you needed the FIRST middle node for even-length lists instead?\n• Can you use this to check if a linked list is a palindrome?",
-    "solutionPy": "def middle_node(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    return slow",
     "takeaway": "Fast/slow pointers find the midpoint of a list in one pass without knowing its length in advance.",
-    "starter": "// Middle of the Linked List  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction middleOfTheLinkedList() {\n  // your code here\n}\n"
+    "starter": "// Middle of the Linked List  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction middleOfTheLinkedList(head) {\n  // your code here\n}\n",
+    "solution": "function middleOfTheLinkedList(head){let slow=head,fast=head;while(fast&&fast.next){slow=slow.next;fast=fast.next.next;}return slow;}"
    },
    {
     "id": "q32",
@@ -797,9 +795,9 @@ window.LEVELS = [
     "space": "O(1) extra — reuses existing nodes (O(n+m) if done recursively, due to call stack).",
     "mistakes": "Building brand-new nodes instead of splicing existing ones (wastes memory); forgetting to attach the remaining tail of whichever list isn't exhausted first.",
     "followups": "• How would you extend this to merge k sorted lists (see Question 49)?\n• Can you write this recursively, and what's the trade-off?",
-    "solutionPy": "def merge_two_lists(l1, l2):\n    dummy = ListNode()\n    tail = dummy\n    while l1 and l2:\n        if l1.val <= l2.val:\n            tail.next = l1\n            l1 = l1.next\n        else:\n            tail.next = l2\n            l2 = l2.next\n        tail = tail.next\n    tail.next = l1 if l1 else l2\n    return dummy.next",
     "takeaway": "A dummy head node simplifies list-building code by removing all 'is this the first node' special cases.",
-    "starter": "// Merge Two Sorted Lists  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction mergeTwoSortedLists(l1, l2) {\n  // your code here\n}\n"
+    "starter": "// Merge Two Sorted Lists  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction mergeTwoSortedLists(l1, l2) {\n  // your code here\n}\n",
+    "solution": "function mergeTwoSortedLists(l1,l2){const dummy=new ListNode(0);let t=dummy;while(l1&&l2){if(l1.val<=l2.val){t.next=l1;l1=l1.next;}else{t.next=l2;l2=l2.next;}t=t.next;}t.next=l1||l2;return dummy.next;}"
    },
    {
     "id": "q33",
@@ -820,9 +818,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Off-by-one on how far ahead to advance the fast pointer (should be n+1 steps from the dummy, not n); forgetting the dummy head, which is what makes removing the actual head node (n == length) work cleanly.",
     "followups": "• How would you solve this in two passes if single-pass wasn't required?\n• Can you remove the nth node from the START just as easily — why or why not?",
-    "solutionPy": "def remove_nth_from_end(head, n):\n    dummy = ListNode(0, head)\n    fast = slow = dummy\n    for _ in range(n + 1):\n        fast = fast.next\n    while fast:\n        fast = fast.next\n        slow = slow.next\n    slow.next = slow.next.next\n    return dummy.next",
     "takeaway": "A fixed-gap two-pointer walk finds a position relative to the END of a list without a length precomputation.",
-    "starter": "// Remove Nth Node From End of List  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction removeNthNodeFromEndOfList(head, n) {\n  // your code here\n}\n"
+    "starter": "// Remove Nth Node From End of List  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction removeNthNodeFromEndOfList(head, n) {\n  // your code here\n}\n",
+    "solution": "function removeNthNodeFromEndOfList(head,n){const dummy=new ListNode(0,head);let fast=dummy,slow=dummy;for(let i=0;i<n;i++)fast=fast.next;while(fast.next){fast=fast.next;slow=slow.next;}slow.next=slow.next.next;return dummy.next;}"
    },
    {
     "id": "q34",
@@ -843,9 +841,9 @@ window.LEVELS = [
     "space": "O(1) extra — all done via pointer rewiring, no extra array.",
     "mistakes": "Not cleanly splitting the list into two halves (off-by-one on where the split happens for odd vs even length); forgetting to terminate the first half's list with None before merging (creates a cycle).",
     "followups": "• How would you verify a linked list is a palindrome using the same 'find middle + reverse half' toolkit?\n• What changes for a doubly linked list?",
-    "solutionPy": "def reorder_list(head):\n    if not head or not head.next:\n        return\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    second = slow.next\n    slow.next = None\n    prev = None\n    while second:\n        nxt = second.next\n        second.next = prev\n        prev = second\n        second = nxt\n    first, second = head, prev\n    while second:\n        n1, n2 = first.next, second.next\n        first.next = second\n        second.next = n1\n        first, second = n1, n2",
     "takeaway": "Hard list problems often decompose into a sequence of easier list primitives you already know — find middle, reverse, merge.",
-    "starter": "// Reorder List  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction reorderList() {\n  // your code here\n}\n"
+    "starter": "// Reorder List  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction reorderList(head) {\n  // your code here\n}\n",
+    "solution": "function reorderList(head){if(!head||!head.next)return head;let slow=head,fast=head;while(fast.next&&fast.next.next){slow=slow.next;fast=fast.next.next;}let second=slow.next;slow.next=null;let prev=null;while(second){const nx=second.next;second.next=prev;prev=second;second=nx;}let first=head;while(prev){const t1=first.next,t2=prev.next;first.next=prev;prev.next=t1;first=t1;prev=t2;}return head;}"
    }
   ]
  },
@@ -876,9 +874,9 @@ window.LEVELS = [
     "space": "O(n) worst case (all opening brackets).",
     "mistakes": "Popping from an empty stack without checking (causes a crash on inputs like \")(\" ); forgetting the final check that the stack is empty (catches unclosed brackets like \"(((\").",
     "followups": "• How would you find the position of the first invalid character?\n• What's the minimum number of insertions to make the string valid?",
-    "solutionPy": "def is_valid(s):\n    pairs = {')': '(', ']': '[', '}': '{'}\n    stack = []\n    for ch in s:\n        if ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n        else:\n            stack.append(ch)\n    return not stack",
     "takeaway": "Any 'most recent must be resolved first' matching problem is a stack problem.",
-    "starter": "// Valid Parentheses  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction validParentheses(s) {\n  // your code here\n}\n"
+    "starter": "// Valid Parentheses  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction validParentheses(s) {\n  // your code here\n}\n",
+    "solution": "function validParentheses(s){const st=[],m={')':'(',']':'[','}':'{'};for(const ch of s){if(ch in m){if(st.pop()!==m[ch])return false;}else st.push(ch);}return st.length===0;}"
    },
    {
     "id": "q36",
@@ -899,9 +897,9 @@ window.LEVELS = [
     "space": "O(n) for the auxiliary min-stack.",
     "mistakes": "Storing the min only once instead of once per push (breaks when popping); forgetting to pop the min-stack in lockstep with the main stack.",
     "followups": "• Can you do this with O(1) extra space (not a full second stack) using difference encoding?\n• How would you also support getMax() simultaneously?",
-    "solutionPy": "class MinStack:\n    def __init__(self):\n        self.stack = []\n        self.min_stack = []\n    def push(self, val):\n        self.stack.append(val)\n        m = val if not self.min_stack else min(val, self.min_stack[-1])\n        self.min_stack.append(m)\n    def pop(self):\n        self.stack.pop()\n        self.min_stack.pop()\n    def top(self):\n        return self.stack[-1]\n    def get_min(self):\n        return self.min_stack[-1]",
     "takeaway": "A parallel auxiliary stack lets you answer 'what was true at this depth' in O(1), without recomputation.",
-    "starter": "// Min Stack  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction minStack() {\n  // your code here\n}\n"
+    "starter": "// Min Stack  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nclass MinStack {\n  constructor() {\n    // your code here\n  }\n  push(val) {}\n  pop() {}\n  top() {}\n  getMin() {}\n}\n",
+    "solution": "class MinStack{constructor(){this.st=[];this.mn=[];}push(v){this.st.push(v);this.mn.push(this.mn.length?Math.min(v,this.mn[this.mn.length-1]):v);}pop(){this.mn.pop();return this.st.pop();}top(){return this.st[this.st.length-1];}getMin(){return this.mn[this.mn.length-1];}}"
    },
    {
     "id": "q37",
@@ -922,9 +920,9 @@ window.LEVELS = [
     "space": "O(n) for the stack.",
     "mistakes": "Popping operands in the wrong order for non-commutative operators (subtraction/division — the FIRST popped value is the right operand, not the left); not truncating division toward zero as specified (Python's // rounds toward negative infinity, requiring int(a/b) instead).",
     "followups": "• How would you evaluate a standard infix expression with operator precedence instead?\n• How would you support additional operators like exponentiation?",
-    "solutionPy": "def eval_rpn(tokens):\n    stack = []\n    ops = {'+', '-', '*', '/'}\n    for token in tokens:\n        if token in ops:\n            b = stack.pop()\n            a = stack.pop()\n            if token == '+':\n                stack.append(a + b)\n            elif token == '-':\n                stack.append(a - b)\n            elif token == '*':\n                stack.append(a * b)\n            else:\n                stack.append(int(a / b))\n        else:\n            stack.append(int(token))\n    return stack[0]",
     "takeaway": "Postfix expressions evaluate directly with a stack — no parsing or precedence rules needed.",
-    "starter": "// Evaluate Reverse Polish Notation  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction evaluateReversePolishNotation(tokens) {\n  // your code here\n}\n"
+    "starter": "// Evaluate Reverse Polish Notation  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction evaluateReversePolishNotation(tokens) {\n  // your code here\n}\n",
+    "solution": "function evaluateReversePolishNotation(tokens){const st=[];for(const t of tokens){if(t==='+'||t==='-'||t==='*'||t==='/'){const b=st.pop(),a=st.pop();st.push(t==='+'?a+b:t==='-'?a-b:t==='*'?a*b:Math.trunc(a/b));}else st.push(parseInt(t,10));}return st[0];}"
    },
    {
     "id": "q38",
@@ -945,9 +943,9 @@ window.LEVELS = [
     "space": "O(n) for the stack.",
     "mistakes": "Using the brute-force nested loop when O(n) is clearly expected; storing temperatures instead of indices on the stack (you need the index to compute the day-difference).",
     "followups": "• How would you solve 'Next Greater Element' for a circular array?\n• Can you adapt this pattern to find the previous smaller element instead?",
-    "solutionPy": "def daily_temperatures(temperatures):\n    n = len(temperatures)\n    answer = [0] * n\n    stack = []\n    for i, temp in enumerate(temperatures):\n        while stack and temperatures[stack[-1]] < temp:\n            j = stack.pop()\n            answer[j] = i - j\n        stack.append(i)\n    return answer",
     "takeaway": "'Next greater/smaller element' problems are solved in one pass with a monotonic stack of indices.",
-    "starter": "// Daily Temperatures  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction dailyTemperatures(temperatures) {\n  // your code here\n}\n"
+    "starter": "// Daily Temperatures  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction dailyTemperatures(temperatures) {\n  // your code here\n}\n",
+    "solution": "function dailyTemperatures(temperatures){const res=new Array(temperatures.length).fill(0),st=[];for(let i=0;i<temperatures.length;i++){while(st.length&&temperatures[i]>temperatures[st[st.length-1]]){const j=st.pop();res[j]=i-j;}st.push(i);}return res;}"
    },
    {
     "id": "q39",
@@ -968,9 +966,9 @@ window.LEVELS = [
     "space": "O(n) for the stack.",
     "mistakes": "Forgetting to process the remaining stack after the main loop (bars that never got popped during the scan); miscalculating width when the stack becomes empty (no left boundary — use -1 as a sentinel).",
     "followups": "• How would you extend this to find the Maximal Rectangle in a binary matrix (uses this as a subroutine per\nrow)?\n• Can you solve this with a divide-and-conquer approach instead — what's its complexity?",
-    "solutionPy": "def largest_rectangle_area(heights):\n    stack = []\n    max_area = 0\n    for i, h in enumerate(heights + [0]):\n        while stack and heights[stack[-1]] >= h:\n            height = heights[stack.pop()]\n            width = i if not stack else i - stack[-1] - 1\n            max_area = max(max_area, height * width)\n        stack.append(i)\n    return max_area",
     "takeaway": "A monotonic stack finds, for each bar, exactly how far it can extend before hitting a shorter neighbor — in one pass.",
-    "starter": "// Largest Rectangle in Histogram  (Hard)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction largestRectangleInHistogram(heights) {\n  // your code here\n}\n"
+    "starter": "// Largest Rectangle in Histogram  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction largestRectangleInHistogram(heights) {\n  // your code here\n}\n",
+    "solution": "function largestRectangleInHistogram(heights){const st=[];let max=0;for(let i=0;i<=heights.length;i++){const h=i===heights.length?0:heights[i];while(st.length&&heights[st[st.length-1]]>=h){const height=heights[st.pop()];const width=st.length?i-st[st.length-1]-1:i;max=Math.max(max,height*width);}st.push(i);}return max;}"
    }
   ]
  },
@@ -1001,9 +999,9 @@ window.LEVELS = [
     "space": "O(h) for the recursion stack, h = tree height (O(log n) balanced, O(n) worst case).",
     "mistakes": "Swapping children before recursing into the ALREADY-swapped subtrees (order doesn't actually matter here since recursion is on original left/right references, but it's a common source of confusion); forgetting the base case (None node).",
     "followups": "• Can you write this iteratively using a BFS queue instead of recursion?\n• How would you verify two trees are mirror images of each other without modifying either?",
-    "solutionPy": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\ndef invert_tree(root):\n    if not root:\n        return None\n    root.left, root.right = invert_tree(root.right), invert_tree(root.left)\n    return root",
     "takeaway": "Most tree transformations are 'recurse on children, then combine' — trust the recursion to handle subtrees.",
-    "starter": "// Invert Binary Tree  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction invertBinaryTree(root) {\n  // your code here\n}\n"
+    "starter": "// Invert Binary Tree  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction invertBinaryTree(root) {\n  // your code here\n}\n",
+    "solution": "function invertBinaryTree(root){if(!root)return null;const t=root.left;root.left=invertBinaryTree(root.right);root.right=invertBinaryTree(t);return root;}"
    },
    {
     "id": "q41",
@@ -1024,9 +1022,9 @@ window.LEVELS = [
     "space": "O(h) recursion stack.",
     "mistakes": "Off-by-one (counting edges instead of nodes, or vice versa — clarify the definition with the interviewer); forgetting the base case for an empty tree (depth 0).",
     "followups": "• Can you solve this iteratively with BFS, counting levels?\n• How would you find the minimum depth (nearest leaf), and why is it trickier?",
-    "solutionPy": "def max_depth(root):\n    if not root:\n        return 0\n    return 1 + max(max_depth(root.left), max_depth(root.right))",
     "takeaway": "Tree depth/height problems recurse to the leaves and combine with a simple '1 + max/min of children'.",
-    "starter": "// Maximum Depth of Binary Tree  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction maximumDepthOfBinaryTree(root) {\n  // your code here\n}\n"
+    "starter": "// Maximum Depth of Binary Tree  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction maximumDepthOfBinaryTree(root) {\n  // your code here\n}\n",
+    "solution": "function maximumDepthOfBinaryTree(root){if(!root)return 0;return 1+Math.max(maximumDepthOfBinaryTree(root.left),maximumDepthOfBinaryTree(root.right));}"
    },
    {
     "id": "q42",
@@ -1047,9 +1045,9 @@ window.LEVELS = [
     "space": "O(h) recursion stack.",
     "mistakes": "Recomputing height as a separate top-level call per node (leads to O(n²)); confusing 'diameter in nodes' vs 'diameter in edges' (this problem counts edges).",
     "followups": "• How would you find the diameter of a general (non-binary) tree?\n• Can you also return the two actual endpoint nodes of the diameter path?",
-    "solutionPy": "def diameter_of_binary_tree(root):\n    best = [0]\n    def height(node):\n        if not node:\n            return 0\n        left = height(node.left)\n        right = height(node.right)\n        best[0] = max(best[0], left + right)\n        return 1 + max(left, right)\n    height(root)\n    return best[0]",
     "takeaway": "When a recursive helper already computes what you need locally, piggyback a global best-tracker on the same pass instead of a second traversal.",
-    "starter": "// Diameter of Binary Tree  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction diameterOfBinaryTree(root) {\n  // your code here\n}\n"
+    "starter": "// Diameter of Binary Tree  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction diameterOfBinaryTree(root) {\n  // your code here\n}\n",
+    "solution": "function diameterOfBinaryTree(root){let d=0;(function dfs(n){if(!n)return 0;const l=dfs(n.left),r=dfs(n.right);d=Math.max(d,l+r);return 1+Math.max(l,r);})(root);return d;}"
    },
    {
     "id": "q43",
@@ -1070,9 +1068,9 @@ window.LEVELS = [
     "space": "O(n) for the queue, worst case (a wide tree's last level).",
     "mistakes": "Not snapshotting the queue's length before the inner loop (mixes levels together); using DFS without tracking depth (produces the wrong grouping if not handled carefully).",
     "followups": "• How would you return the traversal bottom-up (deepest level first)?\n• How would you do a zig-zag level order traversal (alternating left-to-right and right-to-left)?",
-    "solutionPy": "from collections import deque\ndef level_order(root):\n    if not root:\n        return []\n    result = []\n    queue = deque([root])\n    while queue:\n        level = []\n        for _ in range(len(queue)):\n            node = queue.popleft()\n            level.append(node.val)\n            if node.left:\n                queue.append(node.left)\n            if node.right:\n                queue.append(node.right)\n        result.append(level)\n    return result",
     "takeaway": "Snapshot the queue's size before the inner loop to process exactly one BFS level at a time.",
-    "starter": "// Binary Tree Level Order Traversal  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction binaryTreeLevelOrderTraversal(root) {\n  // your code here\n}\n"
+    "starter": "// Binary Tree Level Order Traversal  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction binaryTreeLevelOrderTraversal(root) {\n  // your code here\n}\n",
+    "solution": "function binaryTreeLevelOrderTraversal(root){const res=[];if(!root)return res;let q=[root];while(q.length){const lvl=[],nx=[];for(const n of q){lvl.push(n.val);if(n.left)nx.push(n.left);if(n.right)nx.push(n.right);}res.push(lvl);q=nx;}return res;}"
    },
    {
     "id": "q44",
@@ -1093,9 +1091,9 @@ window.LEVELS = [
     "space": "O(h) recursion stack.",
     "mistakes": "Only checking a node against its immediate parent/children (the classic wrong-but-common mistake); not handling duplicate values correctly (a BST here requires STRICT inequality).",
     "followups": "• How would you validate a BST with an in-order traversal check instead of range-passing?\n• How would this change if the BST allowed duplicate values on one side?",
-    "solutionPy": "def is_valid_bst(root, low=float('-inf'), high=float('inf')):\n    if not root:\n        return True\n    if not (low < root.val < high):\n        return False\n    return (is_valid_bst(root.left, low, root.val) and\n            is_valid_bst(root.right, root.val, high))",
     "takeaway": "BST validity depends on ALL ancestors, not just the parent — pass the accumulated valid range down the recursion.",
-    "starter": "// Validate Binary Search Tree  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction validateBinarySearchTree(root) {\n  // your code here\n}\n"
+    "starter": "// Validate Binary Search Tree  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction validateBinarySearchTree(root) {\n  // your code here\n}\n",
+    "solution": "function validateBinarySearchTree(root){return (function v(n,lo,hi){if(!n)return true;if(n.val<=lo||n.val>=hi)return false;return v(n.left,lo,n.val)&&v(n.right,n.val,hi);})(root,-Infinity,Infinity);}"
    },
    {
     "id": "q45",
@@ -1116,9 +1114,9 @@ window.LEVELS = [
     "space": "O(1) iterative, O(h) if recursive.",
     "mistakes": "Using the general binary tree LCA algorithm (which is O(n) and ignores the BST property entirely — correct but not optimal here); not handling the case where p or q IS the current node.",
     "followups": "• How would you solve LCA for a general (non-BST) binary tree?\n• How would you handle LCA queries for more than two nodes at once?",
-    "solutionPy": "def lowest_common_ancestor(root, p, q):\n    node = root\n    while node:\n        if p.val < node.val and q.val < node.val:\n            node = node.left\n        elif p.val > node.val and q.val > node.val:\n            node = node.right\n        else:\n            return node\n    return None",
     "takeaway": "In a BST, the LCA is the first node where the two targets' values 'split' to opposite sides.",
-    "starter": "// Lowest Common Ancestor of a BST  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction lowestCommonAncestorOfABst(root, p, q) {\n  // your code here\n}\n"
+    "starter": "// Lowest Common Ancestor of a BST  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction lowestCommonAncestorOfABst(root, p, q) {\n  // your code here\n}\n",
+    "solution": "function lowestCommonAncestorOfABst(root,p,q){while(root){if(p.val<root.val&&q.val<root.val)root=root.left;else if(p.val>root.val&&q.val>root.val)root=root.right;else return root;}return null;}"
    },
    {
     "id": "q46",
@@ -1139,9 +1137,9 @@ window.LEVELS = [
     "space": "O(h) for the stack.",
     "mistakes": "Collecting the entire tree into a list when early-stopping is expected as a follow-up; forgetting in-order visits LEFT, then node, then RIGHT (not node-first).",
     "followups": "• How would you handle this efficiently if the BST is modified frequently (insertions/deletions) with many kth-\nsmallest queries?\n• Can you augment each node with a subtree-size count to answer this in O(h) without any traversal?",
-    "solutionPy": "def kth_smallest(root, k):\n    stack = []\n    node = root\n    count = 0\n    while stack or node:\n        while node:\n            stack.append(node)\n            node = node.left\n        node = stack.pop()\n        count += 1\n        if count == k:\n            return node.val\n        node = node.right\n    return -1",
     "takeaway": "In-order traversal of a BST yields values in sorted order — use it directly instead of sorting a collected list.",
-    "starter": "// Kth Smallest Element in a BST  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction kthSmallestElementInABst(root, k) {\n  // your code here\n}\n"
+    "starter": "// Kth Smallest Element in a BST  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction kthSmallestElementInABst(root, k) {\n  // your code here\n}\n",
+    "solution": "function kthSmallestElementInABst(root,k){const st=[];let n=root;while(st.length||n){while(n){st.push(n);n=n.left;}n=st.pop();if(--k===0)return n.val;n=n.right;}return -1;}"
    }
   ]
  },
@@ -1172,9 +1170,9 @@ window.LEVELS = [
     "space": "O(k) for the heap.",
     "mistakes": "Using a max-heap of the WHOLE array (works but wastes memory and doesn't get the O(log k) benefit); confusing 'kth largest' with 'k largest elements' (different return types).",
     "followups": "• Can you solve this in O(n) average time using Quickselect?\n• How would you maintain the kth largest element in a data stream that keeps growing?",
-    "solutionPy": "import heapq\ndef find_kth_largest(nums, k):\n    heap = []\n    for num in nums:\n        heapq.heappush(heap, num)\n        if len(heap) > k:\n            heapq.heappop(heap)\n    return heap[0]",
     "takeaway": "A fixed-size k min-heap is the standard way to track 'the top k so far' in O(log k) per update.",
-    "starter": "// Kth Largest Element in an Array  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction kthLargestElementInAnArray(nums, k) {\n  // your code here\n}\n"
+    "starter": "// Kth Largest Element in an Array  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction kthLargestElementInAnArray(nums, k) {\n  // your code here\n}\n",
+    "solution": "function kthLargestElementInAnArray(nums,k){return [...nums].sort((a,b)=>b-a)[k-1];}"
    },
    {
     "id": "q48",
@@ -1195,9 +1193,9 @@ window.LEVELS = [
     "space": "O(k) for the heap.",
     "mistakes": "Computing actual Euclidean distance with sqrt (unnecessary — squared distance preserves ordering and avoids floating point); using a min-heap without negating distances (evicts the wrong element).",
     "followups": "• How would you solve this with Quickselect for O(n) average time?\n• What if points arrived as a continuous stream and you needed the k closest at any moment?",
-    "solutionPy": "import heapq\ndef k_closest(points, k):\n    heap = []\n    for x, y in points:\n        dist = x * x + y * y\n        heapq.heappush(heap, (-dist, x, y))\n        if len(heap) > k:\n            heapq.heappop(heap)\n    return [[x, y] for _, x, y in heap]",
     "takeaway": "When you need the k SMALLEST by some key, use a max-heap of size k (or negate the key with Python's min-heap) and evict the largest.",
-    "starter": "// K Closest Points to Origin  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction kClosestPointsToOrigin(points, k) {\n  // your code here\n}\n"
+    "starter": "// K Closest Points to Origin  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction kClosestPointsToOrigin(points, k) {\n  // your code here\n}\n",
+    "solution": "function kClosestPointsToOrigin(points,k){return [...points].sort((a,b)=>(a[0]*a[0]+a[1]*a[1])-(b[0]*b[0]+b[1]*b[1])).slice(0,k);}"
    },
    {
     "id": "q49",
@@ -1218,9 +1216,9 @@ window.LEVELS = [
     "space": "O(k) for the heap.",
     "mistakes": "Merging lists pairwise sequentially (correct but O(k·n), slower than the heap approach for large k); forgetting Python's heapq needs a tiebreaker when node values are equal (compare a counter or list-index alongside the value since ListNode isn't directly comparable).",
     "followups": "• Can you solve this with divide-and-conquer pairwise merging instead — what's its complexity?\n• How would this scale if k could be extremely large (e.g. 10^6 lists)?",
-    "solutionPy": "import heapq\ndef merge_k_lists(lists):\n    heap = []\n    for i, node in enumerate(lists):\n        if node:\n            heapq.heappush(heap, (node.val, i, node))\n    dummy = ListNode()\n    tail = dummy\n    while heap:\n        val, i, node = heapq.heappop(heap)\n        tail.next = node\n        tail = tail.next\n        if node.next:\n            heapq.heappush(heap, (node.next.val, i, node.next))\n    return dummy.next",
     "takeaway": "A heap of 'current heads' generalizes two-way merging to k-way merging in O(n log k).",
-    "starter": "// Merge K Sorted Lists  (Hard)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction mergeKSortedLists(lists) {\n  // your code here\n}\n"
+    "starter": "// Merge K Sorted Lists  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction mergeKSortedLists(lists) {\n  // your code here\n}\n",
+    "solution": "function mergeKSortedLists(lists){const arr=[];for(const l of lists){let n=l;while(n){arr.push(n.val);n=n.next;}}arr.sort((a,b)=>a-b);const dummy=new ListNode(0);let t=dummy;for(const v of arr){t.next=new ListNode(v);t=t.next;}return dummy.next;}"
    },
    {
     "id": "q50",
@@ -1241,9 +1239,9 @@ window.LEVELS = [
     "space": "O(n) to store all elements across both heaps.",
     "mistakes": "Letting the two heaps drift out of balance (must rebalance after every insertion); using a single sorted structure with O(n) insertion when O(log n) is expected.",
     "followups": "• How would you handle this if numbers can be removed from the stream as well?\n• What if the data stream is known to follow a specific distribution — can you exploit that?",
-    "solutionPy": "import heapq\nclass MedianFinder:\n    def __init__(self):\n        self.small = []  # max-heap (negated)\n        self.large = []  # min-heap\n    def add_num(self, num):\n        heapq.heappush(self.small, -num)\n        heapq.heappush(self.large, -heapq.heappop(self.small))\n        if len(self.large) > len(self.small):\n            heapq.heappush(self.small, -heapq.heappop(self.large))\n    def find_median(self):\n        if len(self.small) > len(self.large):\n            return -self.small[0]\n        return (-self.small[0] + self.large[0]) / 2.0",
     "takeaway": "Splitting a stream into a max-heap (lower half) and min-heap (upper half) answers running-median queries in O(log n).",
-    "starter": "// Find Median from Data Stream  (Hard)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction findMedianFromDataStream() {\n  // your code here\n}\n"
+    "starter": "// Find Median from Data Stream  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nclass MedianFinder {\n  constructor() {\n    // your code here\n  }\n  addNum(num) {}\n  findMedian() {}\n}\n",
+    "solution": "class MedianFinder{constructor(){this.a=[];}addNum(n){let lo=0,hi=this.a.length;while(lo<hi){const m=(lo+hi)>>1;if(this.a[m]<n)lo=m+1;else hi=m;}this.a.splice(lo,0,n);}findMedian(){const n=this.a.length,mid=n>>1;return n%2?this.a[mid]:(this.a[mid-1]+this.a[mid])/2;}}"
    }
   ]
  },
@@ -1274,9 +1272,9 @@ window.LEVELS = [
     "space": "O(n · 2^n) — 2^n subsets, each up to O(n) to copy. O(n) recursion depth, O(n·2^n) for the output.",
     "mistakes": "Forgetting to record the subset at EVERY node of the recursion (not just at leaves); appending a reference to the mutable path list instead of a copy (all recorded subsets end up identical/empty).",
     "followups": "• How would this change if nums contained duplicates (Subsets II)?\n• Can you generate subsets iteratively using bitmasks instead of recursion?",
-    "solutionPy": "def subsets(nums):\n    result = []\n    path = []\n    def backtrack(start):\n        result.append(path[:])\n        for i in range(start, len(nums)):\n            path.append(nums[i])\n            backtrack(i + 1)\n            path.pop()\n    backtrack(0)\n    return result",
     "takeaway": "Backtracking's core loop is: choose, recurse, undo (pop) — record a valid state at every step, not just at the end.",
-    "starter": "// Subsets  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction subsets(nums) {\n  // your code here\n}\n"
+    "starter": "// Subsets  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction subsets(nums) {\n  // your code here\n}\n",
+    "solution": "function subsets(nums){const res=[[]];for(const n of nums){const len=res.length;for(let i=0;i<len;i++)res.push([...res[i],n]);}return res;}"
    },
    {
     "id": "q52",
@@ -1297,9 +1295,9 @@ window.LEVELS = [
     "space": "O(n) recursion depth plus O(n) for the used-set.",
     "mistakes": "Forgetting to 'unchoose' (remove from used-set and pop from path) before trying the next branch — corrupts subsequent branches; not copying the path when recording the final result.",
     "followups": "• How would you handle duplicate elements in nums (Permutations II)?\n• Can you generate the next lexicographic permutation without generating all of them (Next Permutation)?",
-    "solutionPy": "def permute(nums):\n    result = []\n    path = []\n    used = [False] * len(nums)\n    def backtrack():\n        if len(path) == len(nums):\n            result.append(path[:])\n            return\n        for i, num in enumerate(nums):\n            if used[i]:\n                continue\n            used[i] = True\n            path.append(num)\n            backtrack()\n            path.pop()\n            used[i] = False\n    backtrack()\n    return result",
     "takeaway": "Permutation backtracking needs an explicit 'used' tracker, since order matters and every element must appear exactly once per path.",
-    "starter": "// Permutations  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction permutations(nums) {\n  // your code here\n}\n"
+    "starter": "// Permutations  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction permutations(nums) {\n  // your code here\n}\n",
+    "solution": "function permutations(nums){const res=[];(function bt(cur,rem){if(!rem.length){res.push(cur);return;}for(let i=0;i<rem.length;i++)bt([...cur,rem[i]],rem.slice(0,i).concat(rem.slice(i+1)));})([],nums);return res;}"
    },
    {
     "id": "q53",
@@ -1320,9 +1318,9 @@ window.LEVELS = [
     "space": "O(target/min(candidates)) recursion depth.",
     "mistakes": "Passing i+1 instead of i when recursing (would forbid reusing the same number, giving the wrong answer for THIS variant); not pruning early (remaining < 0 check), leading to wasted exploration.",
     "followups": "• How would this change if each number could only be used once (Combination Sum II, with duplicates in the\ninput)?\n• How would you count the number of combinations instead of listing them (often solvable with DP instead)?",
-    "solutionPy": "def combination_sum(candidates, target):\n    result = []\n    path = []\n    def backtrack(start, remaining):\n        if remaining == 0:\n            result.append(path[:])\n            return\n        if remaining < 0:\n            return\n        for i in range(start, len(candidates)):\n            path.append(candidates[i])\n            backtrack(i, remaining - candidates[i])\n            path.pop()\n    backtrack(0, target)\n    return result",
     "takeaway": "Prune backtracking branches the instant they can't succeed (remaining < 0) — don't wait to discover failure at the leaf.",
-    "starter": "// Combination Sum  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction combinationSum(candidates, target) {\n  // your code here\n}\n"
+    "starter": "// Combination Sum  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction combinationSum(candidates, target) {\n  // your code here\n}\n",
+    "solution": "function combinationSum(candidates,target){const res=[];(function bt(start,cur,rem){if(rem===0){res.push([...cur]);return;}if(rem<0)return;for(let i=start;i<candidates.length;i++){cur.push(candidates[i]);bt(i,cur,rem-candidates[i]);cur.pop();}})(0,[],target);return res;}"
    },
    {
     "id": "q54",
@@ -1343,9 +1341,9 @@ window.LEVELS = [
     "space": "O(L) recursion depth for the current path.",
     "mistakes": "Forgetting to unmark (restore) a cell after backtracking out of a failed path (breaks other candidate paths); not checking grid boundaries before indexing.",
     "followups": "• How would you search for MULTIPLE words efficiently in the same grid (Word Search II, using a Trie)?\n• How would you handle diagonal adjacency instead of just horizontal/vertical?",
-    "solutionPy": "def exist(board, word):\n    rows, cols = len(board), len(board[0])\n    def dfs(r, c, i):\n        if i == len(word):\n            return True\n        if r < 0 or r >= rows or c < 0 or c >= cols or board[r][c] != word[i]:\n            return False\n        temp = board[r][c]\n        board[r][c] = '#'\n        found = (dfs(r + 1, c, i + 1) or dfs(r - 1, c, i + 1) or\n                 dfs(r, c + 1, i + 1) or dfs(r, c - 1, i + 1))\n        board[r][c] = temp\n        return found\n    for r in range(rows):\n        for c in range(cols):\n            if dfs(r, c, 0):\n                return True\n    return False",
     "takeaway": "Grid backtracking marks a cell visited for the current path only, and always restores it before returning — mark, recurse, unmark.",
-    "starter": "// Word Search  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction wordSearch(board, word) {\n  // your code here\n}\n"
+    "starter": "// Word Search  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction wordSearch(board, word) {\n  // your code here\n}\n",
+    "solution": "function wordSearch(board,word){const R=board.length,C=board[0].length;function dfs(r,c,i){if(i===word.length)return true;if(r<0||c<0||r>=R||c>=C||board[r][c]!==word[i])return false;const tmp=board[r][c];board[r][c]='#';const f=dfs(r+1,c,i+1)||dfs(r-1,c,i+1)||dfs(r,c+1,i+1)||dfs(r,c-1,i+1);board[r][c]=tmp;return f;}for(let r=0;r<R;r++)for(let c=0;c<C;c++)if(dfs(r,c,0))return true;return false;}"
    },
    {
     "id": "q55",
@@ -1366,9 +1364,9 @@ window.LEVELS = [
     "space": "O(n) for the column/diagonal tracking sets plus O(n) recursion depth.",
     "mistakes": "Checking conflicts by scanning the whole board each time (O(n) per check instead of O(1) with sets — makes the solution far too slow for larger n); forgetting one of the two diagonal directions.",
     "followups": "• Can you solve N-Queens II (count solutions only) more efficiently by skipping board reconstruction?\n• How would this generalize to placing multiple different piece types with different attack patterns?",
-    "solutionPy": "def solve_n_queens(n):\n    result = []\n    cols, diag1, diag2 = set(), set(), set()\n    board = [['.'] * n for _ in range(n)]\n    def backtrack(row):\n        if row == n:\n            result.append([''.join(r) for r in board])\n            return\n        for col in range(n):\n            if col in cols or (row - col) in diag1 or (row + col) in diag2:\n                continue\n            cols.add(col); diag1.add(row - col); diag2.add(row + col)\n            board[row][col] = 'Q'\n            backtrack(row + 1)\n            board[row][col] = '.'\n            cols.remove(col); diag1.remove(row - col); diag2.remove(row + col)\n    backtrack(0)\n    return result",
     "takeaway": "Track constraints (columns, diagonals) with O(1)-checkable sets instead of rescanning the board — the difference between fast and impossibly slow backtracking.",
-    "starter": "// N-Queens  (Hard)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction nQueens(n) {\n  // your code here\n}\n"
+    "starter": "// N-Queens  (Hard)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction nQueens(n) {\n  // your code here\n}\n",
+    "solution": "function nQueens(n){let count=0;const cols=new Set(),d1=new Set(),d2=new Set();(function bt(r){if(r===n){count++;return;}for(let c=0;c<n;c++){if(cols.has(c)||d1.has(r-c)||d2.has(r+c))continue;cols.add(c);d1.add(r-c);d2.add(r+c);bt(r+1);cols.delete(c);d1.delete(r-c);d2.delete(r+c);}})(0);return count;}"
    }
   ]
  },
@@ -1399,9 +1397,9 @@ window.LEVELS = [
     "space": "O(m·n) worst case for the recursion/BFS queue.",
     "mistakes": "Not marking cells visited (infinite loop or overcounting); forgetting to check grid boundaries before recursing into neighbors.",
     "followups": "• How would you count islands if diagonal connections also counted?\n• How would you solve this with Union-Find instead of DFS/BFS?",
-    "solutionPy": "def num_islands(grid):\n    if not grid:\n        return 0\n    rows, cols = len(grid), len(grid[0])\n    def dfs(r, c):\n        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':\n            return\n        grid[r][c] = '0'\n        dfs(r + 1, c); dfs(r - 1, c); dfs(r, c + 1); dfs(r, c - 1)\n    count = 0\n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == '1':\n                count += 1\n                dfs(r, c)\n    return count",
     "takeaway": "Counting connected components on a grid: scan for unvisited starts, flood-fill each one, count the starts.",
-    "starter": "// Number of Islands  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction numberOfIslands(grid) {\n  // your code here\n}\n"
+    "starter": "// Number of Islands  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction numberOfIslands(grid) {\n  // your code here\n}\n",
+    "solution": "function numberOfIslands(grid){if(!grid.length)return 0;const R=grid.length,C=grid[0].length;let count=0;function dfs(r,c){if(r<0||c<0||r>=R||c>=C||grid[r][c]!=='1')return;grid[r][c]='0';dfs(r+1,c);dfs(r-1,c);dfs(r,c+1);dfs(r,c-1);}for(let r=0;r<R;r++)for(let c=0;c<C;c++)if(grid[r][c]==='1'){count++;dfs(r,c);}return count;}"
    },
    {
     "id": "q57",
@@ -1422,9 +1420,9 @@ window.LEVELS = [
     "space": "O(V) for the map and recursion stack.",
     "mistakes": "Forgetting to check the map BEFORE recursing (causes infinite recursion on any cycle); not copying the neighbor list correctly (reusing original node references instead of cloned ones).",
     "followups": "• How would you clone a graph with weighted edges?\n• Could you do this iteratively with BFS instead of DFS — what changes?",
-    "solutionPy": "class Node:\n    def __init__(self, val=0, neighbors=None):\n        self.val = val\n        self.neighbors = neighbors or []\ndef clone_graph(node):\n    if not node:\n        return None\n    visited = {}\n    def dfs(n):\n        if n in visited:\n            return visited[n]\n        copy = Node(n.val)\n        visited[n] = copy\n        for neighbor in n.neighbors:\n            copy.neighbors.append(dfs(neighbor))\n        return copy\n    return dfs(node)",
     "takeaway": "A visited map during graph traversal both prevents infinite cycles and lets you correctly wire cloned references.",
-    "starter": "// Clone Graph  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction cloneGraph(adjList) {\n  // your code here\n}\n"
+    "starter": "// Clone Graph  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\n// Graph node shape: { val: number, neighbors: Node[] }\nfunction cloneGraph(node) {\n  // your code here\n}\n",
+    "solution": "function cloneGraph(node){if(!node)return null;const map=new Map();function dfs(n){if(map.has(n))return map.get(n);const copy=new Node(n.val);map.set(n,copy);for(const nb of n.neighbors)copy.neighbors.push(dfs(nb));return copy;}return dfs(node);}"
    },
    {
     "id": "q58",
@@ -1445,9 +1443,9 @@ window.LEVELS = [
     "space": "O(V + E) for the adjacency list and in-degree array.",
     "mistakes": "Using DFS with a simple visited set (doesn't distinguish 'currently in recursion stack' from 'fully processed', which is needed to detect a cycle correctly — needs a 3-color/in-progress marker if going the DFS route); miscounting in-degrees from the (a, b) pair direction.",
     "followups": "• How would you also return a VALID course order, not just true/false (Course Schedule II)?\n• How would you detect a cycle using DFS with node coloring instead of Kahn's algorithm?",
-    "solutionPy": "from collections import deque, defaultdict\ndef can_finish(num_courses, prerequisites):\n    graph = defaultdict(list)\n    in_degree = [0] * num_courses\n    for course, prereq in prerequisites:\n        graph[prereq].append(course)\n        in_degree[course] += 1\n    queue = deque([c for c in range(num_courses) if in_degree[c] == 0])\n    processed = 0\n    while queue:\n        node = queue.popleft()\n        processed += 1\n        for neighbor in graph[node]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                queue.append(neighbor)\n    return processed == num_courses",
     "takeaway": "Kahn's algorithm detects a cycle by checking whether every node eventually reaches in-degree 0 and gets processed.",
-    "starter": "// Course Schedule  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction courseSchedule(numCourses, prerequisites) {\n  // your code here\n}\n"
+    "starter": "// Course Schedule  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction courseSchedule(numCourses, prerequisites) {\n  // your code here\n}\n",
+    "solution": "function courseSchedule(numCourses,prerequisites){const adj=Array.from({length:numCourses},()=>[]),ind=new Array(numCourses).fill(0);for(const [a,b] of prerequisites){adj[b].push(a);ind[a]++;}const q=[];for(let i=0;i<numCourses;i++)if(ind[i]===0)q.push(i);let seen=0;while(q.length){const c=q.shift();seen++;for(const nx of adj[c])if(--ind[nx]===0)q.push(nx);}return seen===numCourses;}"
    },
    {
     "id": "q59",
@@ -1468,9 +1466,9 @@ window.LEVELS = [
     "space": "O(V + E).",
     "mistakes": "Forgetting to check that ALL nodes were processed before returning the order (a partial order from a graph with a cycle is invalid and must return empty); building the order from a DFS post-order without reversing it (DFS-based topological sort requires reversing the post-order stack).",
     "followups": "• How would you return ALL valid topological orderings, not just one?\n• How would you detect which specific courses are involved in a cycle, to report a clearer error?",
-    "solutionPy": "from collections import deque, defaultdict\ndef find_order(num_courses, prerequisites):\n    graph = defaultdict(list)\n    in_degree = [0] * num_courses\n    for course, prereq in prerequisites:\n        graph[prereq].append(course)\n        in_degree[course] += 1\n    queue = deque([c for c in range(num_courses) if in_degree[c] == 0])\n    order = []\n    while queue:\n        node = queue.popleft()\n        order.append(node)\n        for neighbor in graph[node]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                queue.append(neighbor)\n    return order if len(order) == num_courses else []",
     "takeaway": "Kahn's algorithm's processing order IS a valid topological sort — cycle detection and ordering are the same computation.",
-    "starter": "// Course Schedule II  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction courseScheduleIi(numCourses, prerequisites) {\n  // your code here\n}\n"
+    "starter": "// Course Schedule II  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction findOrder(numCourses, prerequisites) {\n  // your code here\n}\n",
+    "solution": "function findOrder(numCourses,prerequisites){const adj=Array.from({length:numCourses},()=>[]),ind=new Array(numCourses).fill(0);for(const [a,b] of prerequisites){adj[b].push(a);ind[a]++;}const q=[];for(let i=0;i<numCourses;i++)if(ind[i]===0)q.push(i);const res=[];while(q.length){const c=q.shift();res.push(c);for(const nx of adj[c])if(--ind[nx]===0)q.push(nx);}return res.length===numCourses?res:[];}"
    },
    {
     "id": "q60",
@@ -1491,9 +1489,9 @@ window.LEVELS = [
     "space": "O(m·n) for the two visited sets.",
     "mistakes": "Running a separate traversal per cell instead of multi-source from the borders (the O((mn)²) brute-force mistake); getting the flow-reversal comparison backward (should move to neighbors with height ≥ current, since real water flows downhill).",
     "followups": "• How would you solve this if there were more than two 'oceans' (arbitrary boundary sets)?\n• Could you solve it with Union-Find instead of DFS/BFS?",
-    "solutionPy": "def pacific_atlantic(heights):\n    if not heights:\n        return []\n    rows, cols = len(heights), len(heights[0])\n    pacific, atlantic = set(), set()\n    def dfs(r, c, visited, prev_height):\n        if (r, c) in visited or r < 0 or r >= rows or c < 0 or c >= cols or\nheights[r][c] < prev_height:\n            return\n        visited.add((r, c))\n        for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):\n            dfs(r + dr, c + dc, visited, heights[r][c])\n    for c in range(cols):\n        dfs(0, c, pacific, heights[0][c])\n        dfs(rows - 1, c, atlantic, heights[rows - 1][c])\n    for r in range(rows):\n        dfs(r, 0, pacific, heights[r][0])\n        dfs(r, cols - 1, atlantic, heights[r][cols - 1])\n    return [list(cell) for cell in pacific & atlantic]",
     "takeaway": "When checking reachability FROM many targets, it's often cheaper to flow backward from those targets instead of forward from every source.",
-    "starter": "// Pacific Atlantic Water Flow  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction pacificAtlanticWaterFlow(heights) {\n  // your code here\n}\n"
+    "starter": "// Pacific Atlantic Water Flow  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction pacificAtlanticWaterFlow(heights) {\n  // your code here\n}\n",
+    "solution": "function pacificAtlanticWaterFlow(heights){if(!heights.length)return [];const R=heights.length,C=heights[0].length,pac=Array.from({length:R},()=>new Array(C).fill(false)),atl=Array.from({length:R},()=>new Array(C).fill(false));function dfs(r,c,vis,prev){if(r<0||c<0||r>=R||c>=C||vis[r][c]||heights[r][c]<prev)return;vis[r][c]=true;dfs(r+1,c,vis,heights[r][c]);dfs(r-1,c,vis,heights[r][c]);dfs(r,c+1,vis,heights[r][c]);dfs(r,c-1,vis,heights[r][c]);}for(let r=0;r<R;r++){dfs(r,0,pac,-Infinity);dfs(r,C-1,atl,-Infinity);}for(let c=0;c<C;c++){dfs(0,c,pac,-Infinity);dfs(R-1,c,atl,-Infinity);}const res=[];for(let r=0;r<R;r++)for(let c=0;c<C;c++)if(pac[r][c]&&atl[r][c])res.push([r,c]);return res;}"
    },
    {
     "id": "q61",
@@ -1514,9 +1512,9 @@ window.LEVELS = [
     "space": "O(n) for the union-find parent array.",
     "mistakes": "Forgetting the edge-count check upfront (a graph can have n-1 edges but still be disconnected with a separate cycle elsewhere — both conditions are necessary); not using path compression/union by rank, degrading Union-Find's efficiency.",
     "followups": "• How would you find the number of connected components in a general graph (not necessarily a tree\ncheck)?\n• How would you detect a cycle in a DIRECTED graph instead — does Union-Find still work directly?",
-    "solutionPy": "def valid_tree(n, edges):\n    if len(edges) != n - 1:\n        return False\n    parent = list(range(n))\n    def find(x):\n        while parent[x] != x:\n            parent[x] = parent[parent[x]]\n            x = parent[x]\n        return x\n    for a, b in edges:\n        ra, rb = find(a), find(b)\n        if ra == rb:\n            return False\n        parent[ra] = rb\n    return True",
     "takeaway": "A valid tree needs exactly n-1 edges AND no cycles — Union-Find checks both in near-linear time.",
-    "starter": "// Graph Valid Tree  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction graphValidTree(n, edges) {\n  // your code here\n}\n"
+    "starter": "// Graph Valid Tree  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction graphValidTree(n, edges) {\n  // your code here\n}\n",
+    "solution": "function graphValidTree(n,edges){if(edges.length!==n-1)return false;const par=Array.from({length:n},(_,i)=>i);function find(x){while(par[x]!==x){par[x]=par[par[x]];x=par[x];}return x;}for(const [a,b] of edges){const ra=find(a),rb=find(b);if(ra===rb)return false;par[ra]=rb;}return true;}"
    },
    {
     "id": "q62",
@@ -1537,9 +1535,9 @@ window.LEVELS = [
     "space": "O(V + E) for the graph and distance tracking.",
     "mistakes": "Using Dijkstra on a graph with NEGATIVE edge weights (invalid — Dijkstra assumes non-negative weights; Bellman-Ford is needed instead); forgetting to check that every node was actually reached before returning the max distance.",
     "followups": "• How would this change if some edge weights could be negative?\n\n• How would you find the actual shortest PATH, not just the time, from k to a specific node?",
-    "solutionPy": "import heapq\nfrom collections import defaultdict\ndef network_delay_time(times, n, k):\n    graph = defaultdict(list)\n    for u, v, w in times:\n        graph[u].append((v, w))\n    dist = {}\n    heap = [(0, k)]\n    while heap:\n        d, node = heapq.heappop(heap)\n        if node in dist:\n            continue\n        dist[node] = d\n        for neighbor, weight in graph[node]:\n            if neighbor not in dist:\n                heapq.heappush(heap, (d + weight, neighbor))\n    return max(dist.values()) if len(dist) == n else -1",
     "takeaway": "Dijkstra's greedily finalizes the shortest distance to the closest unvisited node first — correct only when all edge weights are non-negative.",
-    "starter": "// Network Delay Time  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction networkDelayTime(times, n, k) {\n  // your code here\n}\n"
+    "starter": "// Network Delay Time  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction networkDelayTime(times, n, k) {\n  // your code here\n}\n",
+    "solution": "function networkDelayTime(times,n,k){const adj=Array.from({length:n+1},()=>[]);for(const [u,v,w] of times)adj[u].push([v,w]);const dist=new Array(n+1).fill(Infinity);dist[k]=0;const pq=[[0,k]];while(pq.length){pq.sort((a,b)=>a[0]-b[0]);const [d,u]=pq.shift();if(d>dist[u])continue;for(const [v,w] of adj[u])if(d+w<dist[v]){dist[v]=d+w;pq.push([dist[v],v]);}}let max=0;for(let i=1;i<=n;i++){if(dist[i]===Infinity)return -1;max=Math.max(max,dist[i]);}return max;}"
    }
   ]
  },
@@ -1570,9 +1568,9 @@ window.LEVELS = [
     "space": "O(1) using two rolling variables instead of a full array.",
     "mistakes": "Using naive recursion without memoization (times out for n as small as ~40); off-by-one on the base cases (dp[1] and dp[2]).",
     "followups": "• What if you could climb 1, 2, or 3 steps at a time — how does the recurrence change?\n• Can you solve this with matrix exponentiation for O(log n) time?",
-    "solutionPy": "def climb_stairs(n):\n    if n <= 2:\n        return n\n    prev2, prev1 = 1, 2\n    for _ in range(3, n + 1):\n        prev2, prev1 = prev1, prev1 + prev2\n    return prev1",
     "takeaway": "Recognizing 'the answer depends on the previous 1-2 states' is the entry point into 1D DP — replace recursion with a rolling computation.",
-    "starter": "// Climbing Stairs  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction climbingStairs(n) {\n  // your code here\n}\n"
+    "starter": "// Climbing Stairs  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction climbingStairs(n) {\n  // your code here\n}\n",
+    "solution": "function climbingStairs(n){let a=1,b=1;for(let i=0;i<n;i++){const t=a+b;a=b;b=t;}return a;}"
    },
    {
     "id": "q64",
@@ -1593,9 +1591,9 @@ window.LEVELS = [
     "space": "O(1) with rolling variables (O(n) with a full DP array).",
     "mistakes": "Forgetting that dp[i-2]+nums[i] competes with dp[i-1], not simply alternating houses greedily (greedy alternating fails on inputs like [2,1,1,9]); off-by-one in base cases for small n (0 or 1 house).",
     "followups": "• How does this change if the houses are arranged in a CIRCLE (House Robber II)?\n• How would you also return WHICH houses were robbed, not just the max amount?",
-    "solutionPy": "def rob(nums):\n    prev2, prev1 = 0, 0\n    for num in nums:\n        prev2, prev1 = prev1, max(prev1, prev2 + num)\n    return prev1",
     "takeaway": "'Take or skip, with a gap constraint' problems reduce to dp[i] = max(skip, take + dp[i-2]).",
-    "starter": "// House Robber  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction houseRobber(nums) {\n  // your code here\n}\n"
+    "starter": "// House Robber  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction houseRobber(nums) {\n  // your code here\n}\n",
+    "solution": "function houseRobber(nums){let prev=0,cur=0;for(const n of nums){const t=Math.max(cur,prev+n);prev=cur;cur=t;}return cur;}"
    },
    {
     "id": "q65",
@@ -1616,9 +1614,9 @@ window.LEVELS = [
     "space": "O(n) for the DP array or the tails array.",
     "mistakes": "Believing the 'tails' array IS a valid actual subsequence (it's not — it's only correct for tracking the LENGTH, not reconstructing the sequence directly without extra bookkeeping); confusing strictly increasing with non- decreasing.",
     "followups": "• How would you reconstruct the actual longest increasing subsequence, not just its length?\n• How would you find the longest COMMON increasing subsequence between two arrays?",
-    "solutionPy": "import bisect\ndef length_of_lis(nums):\n    tails = []\n    for num in nums:\n        pos = bisect.bisect_left(tails, num)\n        if pos == len(tails):\n            tails.append(num)\n        else:\n            tails[pos] = num\n    return len(tails)",
     "takeaway": "When O(n²) DP is too slow, look for a greedy invariant (smallest tail per length) that binary search can maintain in O(log n).",
-    "starter": "// Longest Increasing Subsequence  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction longestIncreasingSubsequence(nums) {\n  // your code here\n}\n"
+    "starter": "// Longest Increasing Subsequence  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction longestIncreasingSubsequence(nums) {\n  // your code here\n}\n",
+    "solution": "function longestIncreasingSubsequence(nums){const tails=[];for(const n of nums){let lo=0,hi=tails.length;while(lo<hi){const m=(lo+hi)>>1;if(tails[m]<n)lo=m+1;else hi=m;}tails[lo]=n;}return tails.length;}"
    },
    {
     "id": "q66",
@@ -1639,9 +1637,9 @@ window.LEVELS = [
     "space": "O(amount) for the DP array.",
     "mistakes": "Using a greedy 'always pick the largest coin' approach (fails for non-canonical coin systems, e.g. coins= [1,3,4], amount=6 — greedy gives 4+1+1=3 coins but optimal is 3+3=2); forgetting to initialize unreachable amounts to infinity (not 0).",
     "followups": "• How would you count the NUMBER OF WAYS to make the amount, instead of the minimum coins (Coin\nChange II)?\n• How would you also return which coins were used, not just the count?",
-    "solutionPy": "def coin_change(coins, amount):\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for a in range(1, amount + 1):\n        for coin in coins:\n            if coin <= a:\n                dp[a] = min(dp[a], dp[a - coin] + 1)\n    return dp[amount] if dp[amount] != float('inf') else -1",
     "takeaway": "Unbounded knapsack DP tries every item as 'the last one used' at each target value, reusing the same DP table for all quantities.",
-    "starter": "// Coin Change  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction coinChange(coins, amount) {\n  // your code here\n}\n"
+    "starter": "// Coin Change  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction coinChange(coins, amount) {\n  // your code here\n}\n",
+    "solution": "function coinChange(coins,amount){const dp=new Array(amount+1).fill(Infinity);dp[0]=0;for(let a=1;a<=amount;a++)for(const c of coins)if(c<=a)dp[a]=Math.min(dp[a],dp[a-c]+1);return dp[amount]===Infinity?-1:dp[amount];}"
    },
    {
     "id": "q67",
@@ -1662,9 +1660,9 @@ window.LEVELS = [
     "space": "O(n) using a single rolling row instead of the full O(m·n) table.",
     "mistakes": "Forgetting to initialize the first row/column to 1 (not 0); recomputing with plain recursion, causing exponential blowup without memoization.",
     "followups": "• How would you solve this if some cells were BLOCKED obstacles (Unique Paths II)?\n• Can you derive a closed-form combinatorial formula instead of DP (hint: it's 'm+n-2 choose m-1')?",
-    "solutionPy": "def unique_paths(m, n):\n    dp = [1] * n\n    for _ in range(1, m):\n        for c in range(1, n):\n            dp[c] += dp[c - 1]\n    return dp[-1]",
     "takeaway": "Grid path-counting DP sums contributions from 'above' and 'left' — a direct 2D extension of 1D DP.",
-    "starter": "// Unique Paths  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction uniquePaths(m, n) {\n  // your code here\n}\n"
+    "starter": "// Unique Paths  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction uniquePaths(m, n) {\n  // your code here\n}\n",
+    "solution": "function uniquePaths(m,n){const row=new Array(n).fill(1);for(let i=1;i<m;i++)for(let j=1;j<n;j++)row[j]+=row[j-1];return row[n-1];}"
    },
    {
     "id": "q68",
@@ -1685,9 +1683,9 @@ window.LEVELS = [
     "space": "O(m·n), reducible to O(min(m,n)) with a rolling 2-row table.",
     "mistakes": "Confusing subsequence (can skip characters, order preserved) with substring (must be contiguous) — a very common misunderstanding; off-by-one indexing between the DP table (1-indexed conceptually) and the strings (0-indexed).",
     "followups": "• How would you reconstruct the actual LCS string, not just its length?\n• How does this relate to Edit Distance (Levenshtein), and can you adapt the DP recurrence?",
-    "solutionPy": "def longest_common_subsequence(text1, text2):\n    m, n = len(text1), len(text2)\n    dp = [[0] * (n + 1) for _ in range(m + 1)]\n    for i in range(1, m + 1):\n        for j in range(1, n + 1):\n            if text1[i - 1] == text2[j - 1]:\n                dp[i][j] = 1 + dp[i - 1][j - 1]\n            else:\n                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])\n    return dp[m][n]",
     "takeaway": "2D string-alignment DP compares two sequences character by character, branching on match vs. no-match at every cell.",
-    "starter": "// Longest Common Subsequence  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction longestCommonSubsequence(text1, text2) {\n  // your code here\n}\n"
+    "starter": "// Longest Common Subsequence  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction longestCommonSubsequence(text1, text2) {\n  // your code here\n}\n",
+    "solution": "function longestCommonSubsequence(text1,text2){const m=text1.length,n=text2.length,dp=Array.from({length:m+1},()=>new Array(n+1).fill(0));for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)dp[i][j]=text1[i-1]===text2[j-1]?dp[i-1][j-1]+1:Math.max(dp[i-1][j],dp[i][j-1]);return dp[m][n];}"
    },
    {
     "id": "q69",
@@ -1708,9 +1706,9 @@ window.LEVELS = [
     "space": "O(n) for the DP array plus O(sum of word lengths) for the word set.",
     "mistakes": "Forgetting dp[0] = True as the base case (empty prefix is trivially breakable); recomputing substring membership without a set (checking against a list is O(k) per check instead of O(1)).",
     "followups": "• How would you return ALL possible valid segmentations, not just true/false (Word Break II)?\n• How would a Trie speed up substring matching for a very large dictionary?",
-    "solutionPy": "def word_break(s, word_dict):\n    words = set(word_dict)\n    n = len(s)\n    dp = [False] * (n + 1)\n    dp[0] = True\n    for i in range(1, n + 1):\n        for j in range(i):\n            if dp[j] and s[j:i] in words:\n                dp[i] = True\n                break\n    return dp[n]",
     "takeaway": "Segmentation DP marks which PREFIXES are achievable, extending from each achievable prefix by testing valid next chunks.",
-    "starter": "// Word Break  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction wordBreak(s, wordDict) {\n  // your code here\n}\n"
+    "starter": "// Word Break  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction wordBreak(s, wordDict) {\n  // your code here\n}\n",
+    "solution": "function wordBreak(s,wordDict){const set=new Set(wordDict),dp=new Array(s.length+1).fill(false);dp[0]=true;for(let i=1;i<=s.length;i++)for(let j=0;j<i;j++)if(dp[j]&&set.has(s.slice(j,i))){dp[i]=true;break;}return dp[s.length];}"
    }
   ]
  },
@@ -1741,9 +1739,9 @@ window.LEVELS = [
     "space": "O(n) — single pass. O(1).",
     "mistakes": "Using DP (O(n²)) when the greedy O(n) approach is expected and simpler; forgetting to check reachability of the CURRENT index before updating farthest (an unreachable gap must fail immediately).",
     "followups": "• How would you find the MINIMUM number of jumps to reach the end (Jump Game II)?\n• What if you needed to reach a specific index, not just the last one?",
-    "solutionPy": "def can_jump(nums):\n    farthest = 0\n    for i, num in enumerate(nums):\n        if i > farthest:\n            return False\n        farthest = max(farthest, i + num)\n    return True",
     "takeaway": "When only the BEST reach matters (not the path), track a single running frontier greedily instead of exploring every option.",
-    "starter": "// Jump Game  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction jumpGame(nums) {\n  // your code here\n}\n"
+    "starter": "// Jump Game  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction jumpGame(nums) {\n  // your code here\n}\n",
+    "solution": "function jumpGame(nums){let reach=0;for(let i=0;i<nums.length;i++){if(i>reach)return false;reach=Math.max(reach,i+nums[i]);}return true;}"
    },
    {
     "id": "q71",
@@ -1764,9 +1762,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Using the O(n²) brute-force simulation when O(n) greedy is expected; forgetting to check total gas ≥ total cost overall (a candidate start could be found even when no solution exists, without this check).",
     "followups": "• Can you prove why resetting the candidate start after a negative tank is always safe?\n• How would this change if you could complete the circuit going in either direction?",
-    "solutionPy": "def can_complete_circuit(gas, cost):\n    total, tank, start = 0, 0, 0\n    for i in range(len(gas)):\n        diff = gas[i] - cost[i]\n        total += diff\n        tank += diff\n        if tank < 0:\n            start = i + 1\n            tank = 0\n    return start if total >= 0 else -1",
     "takeaway": "When a running total goes negative, everything since the last reset point is provably a bad start — skip past all of it at once.",
-    "starter": "// Gas Station  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction gasStation(gas, cost) {\n  // your code here\n}\n"
+    "starter": "// Gas Station  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction gasStation(gas, cost) {\n  // your code here\n}\n",
+    "solution": "function gasStation(gas,cost){let total=0,tank=0,start=0;for(let i=0;i<gas.length;i++){const d=gas[i]-cost[i];total+=d;tank+=d;if(tank<0){start=i+1;tank=0;}}return total>=0?start:-1;}"
    },
    {
     "id": "q72",
@@ -1787,9 +1785,9 @@ window.LEVELS = [
     "space": "O(1) extra beyond sorting.",
     "mistakes": "Sorting by START time instead of END time (the greedy proof only holds for sorting by end time); off-by-one on the overlap condition (should be strictly less-than for the start vs lastEnd comparison).",
     "followups": "• How would you solve 'Merge Intervals' with the same sort-by-start-time family of techniques?\n• How would you find the MAXIMUM number of non-overlapping intervals directly (equivalent, but framed\npositively)?",
-    "solutionPy": "def erase_overlap_intervals(intervals):\n    intervals.sort(key=lambda x: x[1])\n    count = 0\n    last_end = float('-inf')\n    for start, end in intervals:\n        if start >= last_end:\n            last_end = end\n        else:\n            count += 1\n    return count",
     "takeaway": "Interval scheduling for maximum non-overlap always sorts by END time — keep the interval that frees up room soonest.",
-    "starter": "// Non-overlapping Intervals  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction nonOverlappingIntervals(intervals) {\n  // your code here\n}\n"
+    "starter": "// Non-overlapping Intervals  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction nonOverlappingIntervals(intervals) {\n  // your code here\n}\n",
+    "solution": "function nonOverlappingIntervals(intervals){if(!intervals.length)return 0;intervals=[...intervals].sort((a,b)=>a[1]-b[1]);let end=intervals[0][1],count=0;for(let i=1;i<intervals.length;i++){if(intervals[i][0]<end)count++;else end=intervals[i][1];}return count;}"
    },
    {
     "id": "q73",
@@ -1810,9 +1808,9 @@ window.LEVELS = [
     "space": "O(n) for the output (O(log n) to O(n) for the sort itself, depending on implementation).",
     "mistakes": "Sorting by end time instead of start time (breaks the linear-merge assumption); comparing with strict < instead of ≤ for the overlap check (misses intervals that exactly touch, like [1,3] and [3,5], if the problem considers touching as overlapping).",
     "followups": "• How would you INSERT a new interval into an already-sorted, already-merged list efficiently (Insert\nInterval)?\n• How would you find the minimum number of meeting rooms needed for a set of intervals (a related but\ndistinct problem)?",
-    "solutionPy": "def merge_intervals(intervals):\n    intervals.sort(key=lambda x: x[0])\n    merged = [intervals[0]]\n    for start, end in intervals[1:]:\n        if start <= merged[-1][1]:\n            merged[-1][1] = max(merged[-1][1], end)\n        else:\n            merged.append([start, end])\n    return merged",
     "takeaway": "Sorting by START time turns interval merging into a single linear scan — overlaps can only occur with the immediately preceding interval.",
-    "starter": "// Merge Intervals  (Medium)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction mergeIntervals(intervals) {\n  // your code here\n}\n"
+    "starter": "// Merge Intervals  (Medium)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction mergeIntervals(intervals) {\n  // your code here\n}\n",
+    "solution": "function mergeIntervals(intervals){intervals=[...intervals].sort((a,b)=>a[0]-b[0]);const res=[];for(const iv of intervals){if(!res.length||res[res.length-1][1]<iv[0])res.push([...iv]);else res[res.length-1][1]=Math.max(res[res.length-1][1],iv[1]);}return res;}"
    }
   ]
  },
@@ -1843,9 +1841,9 @@ window.LEVELS = [
     "space": "O(1) — no hash map needed, unlike the brute force.",
     "mistakes": "Using a hash map/set when O(1) space is explicitly required; forgetting XOR is commutative (so the order elements appear in the array doesn't matter for the cancellation).",
     "followups": "• How would you solve this if every element appeared THREE times except one (Single Number II)?\n• How would you find TWO single numbers if exactly two elements are unpaired (Single Number III)?",
-    "solutionPy": "def single_number(nums):\n    result = 0\n    for num in nums:\n        result ^= num\n    return result",
     "takeaway": "XOR cancels identical pairs to zero — whenever 'everything appears twice except one', XOR the whole array.",
-    "starter": "// Single Number  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction singleNumber(nums) {\n  // your code here\n}\n"
+    "starter": "// Single Number  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction singleNumber(nums) {\n  // your code here\n}\n",
+    "solution": "function singleNumber(nums){let r=0;for(const n of nums)r^=n;return r;}"
    },
    {
     "id": "q75",
@@ -1866,9 +1864,9 @@ window.LEVELS = [
     "space": "O(1).",
     "mistakes": "Checking all 32 bit positions unconditionally when a tighter loop (bounded by set-bit count) is expected as a follow-up; not handling the 'unsigned' nature correctly in languages with signed integer quirks (less of an issue in Python).",
     "followups": "• How would you precompute the Hamming weight for every number from 0 to n efficiently (Counting Bits)?\n• Can you do this with a built-in population-count instruction/function, and when would you prefer the manual\nversion?",
-    "solutionPy": "def hamming_weight(n):\n    count = 0\n    while n:\n        n &= (n - 1)\n        count += 1\n    return count",
     "takeaway": "n & (n-1) clears the lowest set bit — a fast, elegant way to count or manipulate set bits without checking every position. SECTION 7 Final Revision Cheat Sheet CAN YOU SOLVE THESE WITHOUT HELP? Close the book. Give yourself 25 minutes each for: Q7 (Subarray Sum Equals K), Q11 (Container With Most Water), Q16 (Minimum Window Substring), Q21 (Koko Eating Bananas), Q34 (Reorder List), Q39 (Largest Rectangle in Histogram), Q50 (Find Median from Data Stream), Q55 (N- Queens), Q60 (Pacific Atlantic Water Flow), Q68 (Longest Common Subsequence). If you can solve 8 of 10 cleanly — without peeking — you are interview-ready.\n\nTop 15 Questions to Revise Before an Interview Q1 · Two Sum Q40 · Invert Binary Tree Q7 · Subarray Sum Equals K Q44 · Validate Binary Search Tree Q10 · 3Sum Q47 · Kth Largest Element in an Array Q14 · Longest Substring Without Repeating Characters Q51 · Subsets Q19 · Search in Rotated Sorted Array Q56 · Number of Islands Q29 · Reverse Linked List Q58 · Course Schedule Q33 · Remove Nth Node From End of List Q64 · House Robber Q73 · Merge Intervals Top DSA Patterns to Memorize Two Pointers · Sliding Window · Prefix Sum · Fast & Slow Pointers · Binary Search on Answer · Monotonic Stack · BFS · DFS · Topological Sort · Heap / Priority Queue · Backtracking · Greedy · 1D DP · 2D DP Last-Minute Complexity Cheat Sheet Hash map ops: O(1) avg · Sorting: O(n log n) · Binary search: O(log n) · Heap push/pop: O(log n) · Tree traversal: O(n) · Graph traversal: O(V+E) · DP table fill: O(states × transitions)\n\nSECTION 8 Interview-Day Checklist Before You Start Coding ☐ Repeat the problem back in your own words ☐ Confirm input size, constraints, and edge cases ☐ State the brute-force approach and its complexity out loud ☐ Name the pattern you recognize before coding ☐ Confirm the optimal approach with the interviewer before writing code While Coding ☐ Think out loud, don't code in silence ☐ Use meaningful variable names, not single letters ☐ Handle empty input / null / single-element edge cases ☐ Dry-run your own code on the example before saying \"done\" ☐ State final time and space complexity unprompted Common Red Flags to Avoid ☐ Jumping to code before agreeing on approach ☐ Ignoring the interviewer's hints ☐ Silence for more than 30 seconds ☐ Leaving obvious bugs unaddressed after a hint Night Before ☐ Skim the Pattern Cheat Sheet, not new problems ☐ Re-read your Top 15 revision list ☐ Sleep — a rested brain outperforms one more practice problem\n\nSECTION 9 Progress Tracker Check off each question as you complete it without help. ☐ Q1 · Two Sum ☐ Q2 · Contains Duplicate ☐ Q3 · Valid Anagram ☐ Q4 · Group Anagrams ☐ Q5 · Top K Frequent Elements☐ Q6 · Product of Array Except Self ☐ Q7 · Subarray Sum Equals K ☐ Q8 · Valid Palindrome ☐ Q9 · Two Sum II — Sorted Array ☐ Q10 · 3Sum ☐ Q11 · Container With Most Water ☐ Q12 · Trapping Rain Water ☐ Q13 · Best Time to Buy and Sell Stock ☐ Q14 · Longest Substring Without Repeating Characters ☐ Q15 · Longest Repeating Character Replacement ☐ Q16 · Minimum Window Substring☐ Q17 · Sliding Window Maximum☐ Q18 · Binary Search ☐ Q19 · Search in Rotated Sorted Array ☐ Q20 · Find Minimum in Rotated Sorted Array ☐ Q21 · Koko Eating Bananas ☐ Q22 · Find First and Last Position of Element in Sorted Array ☐ Q23 · Median of Two Sorted Arrays ☐ Q24 · Longest Common Prefix ☐ Q25 · Longest Palindromic Substring ☐ Q26 · Palindromic Substrings ☐ Q27 · String to Integer (atoi) ☐ Q28 · Encode and Decode Strings☐ Q29 · Reverse Linked List ☐ Q30 · Linked List Cycle ☐ Q31 · Middle of the Linked List☐ Q32 · Merge Two Sorted Lists ☐ Q33 · Remove Nth Node From End of List ☐ Q34 · Reorder List ☐ Q35 · Valid Parentheses ☐ Q36 · Min Stack ☐ Q37 · Evaluate Reverse Polish Notation ☐ Q38 · Daily Temperatures ☐ Q39 · Largest Rectangle in Histogram ☐ Q40 · Invert Binary Tree ☐ Q41 · Maximum Depth of Binary Tree ☐ Q42 · Diameter of Binary Tree ☐ Q43 · Binary Tree Level Order Traversal ☐ Q44 · Validate Binary Search Tree ☐ Q45 · Lowest Common Ancestor of a BST ☐ Q46 · Kth Smallest Element in a BST ☐ Q47 · Kth Largest Element in an Array ☐ Q48 · K Closest Points to Origin ☐ Q49 · Merge K Sorted Lists ☐ Q50 · Find Median from Data Stream ☐ Q51 · Subsets ☐ Q52 · Permutations ☐ Q53 · Combination Sum ☐ Q54 · Word Search ☐ Q55 · N-Queens ☐ Q56 · Number of Islands ☐ Q57 · Clone Graph ☐ Q58 · Course Schedule ☐ Q59 · Course Schedule II ☐ Q60 · Pacific Atlantic Water Flow ☐ Q61 · Graph Valid Tree ☐ Q62 · Network Delay Time ☐ Q63 · Climbing Stairs ☐ Q64 · House Robber ☐ Q65 · Longest Increasing Subsequence ☐ Q66 · Coin Change ☐ Q67 · Unique Paths ☐ Q68 · Longest Common Subsequence ☐ Q69 · Word Break\n\n☐ Q70 · Jump Game ☐ Q71 · Gas Station ☐ Q72 · Non-overlapping Intervals ☐ Q73 · Merge Intervals ☐ Q74 · Single Number ☐ Q75 · Number of 1 Bits Completed all 75? You now recognize every major interview pattern on sight. Return to the Final Revision Cheat Sheet and re-solve the Top 15 cold, without notes, one more time before your interview.",
-    "starter": "// Number of 1 Bits  (Easy)\n// Write your JavaScript solution, Run it, then compare with the reference.\n\nfunction numberOf1Bits(n) {\n  // your code here\n}\n"
+    "starter": "// Number of 1 Bits  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction numberOf1Bits(n) {\n  // your code here\n}\n",
+    "solution": "function numberOf1Bits(n){let c=0;while(n){n&=n-1;c++;}return c;}"
    }
   ]
  }
