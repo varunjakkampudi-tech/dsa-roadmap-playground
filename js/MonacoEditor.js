@@ -178,6 +178,48 @@ DSA.MonacoEditor = class MonacoEditor {
   }
 
   format() {
+    const code = this.getValue();
+    if (!code.trim()) return;
+    // Prettier (loaded from CDN) actually re-wraps single-line code; Monaco's
+    // built-in formatter only fixes spacing and keeps everything on one line.
+    if (window.prettier && window.prettierPlugins) {
+      try {
+        Promise.resolve(
+          window.prettier.format(code, {
+            parser: "babel",
+            plugins: Object.values(window.prettierPlugins),
+            semi: true,
+            singleQuote: false,
+            tabWidth: 4,
+            printWidth: 80,
+          })
+        )
+          .then((out) => { if (typeof out === "string") this._applyFormatted(out); })
+          .catch(() => this._monacoFormat());
+        return;
+      } catch (_) { /* fall through */ }
+    }
+    this._monacoFormat();
+  }
+
+  _applyFormatted(text) {
+    text = text.replace(/\n+$/, "");
+    if (this.isFallback) {
+      this._ta.value = text;
+      if (this.onChange) this.onChange(text);
+      return;
+    }
+    const ed = this.editor;
+    if (!ed) return;
+    const model = ed.getModel();
+    if (!model) return;
+    // executeEdits (not setValue) so Ctrl+Z can undo the format
+    ed.pushUndoStop();
+    ed.executeEdits("format", [{ range: model.getFullModelRange(), text }]);
+    ed.pushUndoStop();
+  }
+
+  _monacoFormat() {
     if (this.editor) {
       const a = this.editor.getAction("editor.action.formatDocument");
       if (a) a.run();

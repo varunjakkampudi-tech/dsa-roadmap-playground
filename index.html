@@ -239,19 +239,22 @@
     </div>
     <script>(function(){var box=document.getElementById("themeToggle");function apply(t){document.documentElement.setAttribute("data-theme",t);try{localStorage.setItem("dsa_theme",t);}catch(e){}box.querySelectorAll(".tt-btn").forEach(function(b){b.classList.toggle("on",b.dataset.set===t);});window.dispatchEvent(new CustomEvent("themechange",{detail:t}));}box.addEventListener("click",function(e){var b=e.target.closest(".tt-btn");if(b)apply(b.dataset.set);});apply(document.documentElement.getAttribute("data-theme")||"light");})();</script>
 
-    <script src="data.js?v=4"></script>
-    <script src="js/util.js?v=4"></script>
-    <script src="js/tests.js?v=4"></script>
-    <script src="js/confetti.js?v=4"></script>
-    <script src="js/AuthService.js?v=4"></script>
-    <script src="js/StorageService.js?v=4"></script>
-    <script src="js/RankService.js?v=4"></script>
-    <script src="js/AchievementService.js?v=4"></script>
-    <script src="js/ReportService.js?v=4"></script>
-    <script src="js/CodeRunner.js?v=4"></script>
-    <script src="js/views.js?v=4"></script>
+    <script src="data.js?v=5"></script>
+    <script src="js/util.js?v=5"></script>
+    <script src="js/tests.js?v=5"></script>
+    <script src="js/confetti.js?v=5"></script>
+    <script src="js/AuthService.js?v=5"></script>
+    <script src="js/StorageService.js?v=5"></script>
+    <script src="js/RankService.js?v=5"></script>
+    <script src="js/AchievementService.js?v=5"></script>
+    <script src="js/ReportService.js?v=5"></script>
+    <script src="js/CodeRunner.js?v=5"></script>
+    <script src="js/views.js?v=5"></script>
+    <script src="https://unpkg.com/prettier@3.3.3/standalone.js"></script>
+    <script src="https://unpkg.com/prettier@3.3.3/plugins/babel.js"></script>
+    <script src="https://unpkg.com/prettier@3.3.3/plugins/estree.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
-    <script src="js/MonacoEditor.js?v=4"></script>
-    <script src="js/AppController.js?v=4"></script>
+    <script src="js/MonacoEditor.js?v=5"></script>
+    <script src="js/AppController.js?v=5"></script>
 </body>
 </html>
