@@ -1,13 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DSA Patterns Playground Â· 100 Interview Questions</title>
+    <title>DSA Patterns Playground · 127 Interview Questions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=10" />
+    <link rel="stylesheet" href="styles.css?v=11" />
     <script>(function(){try{var t=localStorage.getItem("dsa_theme")||"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body>
@@ -16,16 +16,16 @@
         <form class="login-card" id="loginForm" autocomplete="off">
             <div class="login-logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
             <h1>DSA Patterns Playground</h1>
-            <p class="login-sub">100 pattern-based interview questions Â· learn by doing</p>
+            <p class="login-sub">127 pattern-based interview questions · learn by doing</p>
             <label class="login-field">
                 <span>Your name</span>
                 <input type="text" id="loginUser" placeholder="pick any name" autocomplete="username" />
             </label>
             <label class="login-field">
                 <span>Password</span>
-                <input type="password" id="loginPass" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password" />
+                <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" />
             </label>
-            <div class="login-error hidden" id="loginError">Wrong password â€” use the shared password below</div>
+            <div class="login-error hidden" id="loginError">Wrong password — use the shared password below</div>
             <button type="submit" class="btn btn-primary login-btn">Enter Playground</button>
             <p class="login-hint">Password <code>dsa2026</code></p>
         </form>
@@ -36,7 +36,7 @@
             <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></span>
             <div>
                 <h1>DSA Patterns Playground</h1>
-                <p class="subtitle">100 Questions Â· 16 Patterns Â· Learn by Doing ðŸš€</p>
+                <p class="subtitle">127 Questions · 20 Patterns · Learn by Doing 🚀</p>
             </div>
         </div>
         <div class="header-right">
@@ -51,7 +51,7 @@
             <div class="overall-progress">
                 <div class="progress-label">
                     <span>Overall Progress</span>
-                    <span id="overallText">0 / 100</span>
+                    <span id="overallText">0 / 127</span>
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="overallFill"></div>
@@ -59,8 +59,8 @@
             </div>
             <button id="summaryBtn" class="btn btn-ghost" title="Download a Markdown progress report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg><span class="btn-label">Summary</span></button>
             <div class="user-menu" id="userChip" title="Signed in">
-                <span class="user-avatar" id="userAvatar">â€“</span>
-                <span id="userName">â€”</span>
+                <span class="user-avatar" id="userAvatar">–</span>
+                <span id="userName">—</span>
                 <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <!-- <button id="logoutBtn" class="btn btn-ghost" title="Sign out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg><span class="btn-label">Logout</span></button> -->
@@ -83,7 +83,7 @@
                         <button id="resetCodeBtn" class="btn btn-ghost" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg><span class="btn-label">Reset Code</span></button>
                         <button id="completeBtn" class="btn btn-outline" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg><span class="btn-label">Mark Complete</span></button>
                         <button id="checkBtn" class="btn btn-check" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.8 10A10 10 0 1 1 17 3.34"/><path d="m9 11 3 3L22 4"/></svg><span class="btn-label">Check</span></button>
-                        <span class="kbd-hint" title="Run shortcut"><kbd>Ctrl</kbd><kbd>â†µ</kbd></span>
+                        <span class="kbd-hint" title="Run shortcut"><kbd>Ctrl</kbd><kbd>↵</kbd></span>
                         <button id="runBtn" class="btn btn-primary" disabled><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg><span class="btn-label">Run</span></button>
                     </div>
                 </div>
@@ -117,27 +117,27 @@
                             <line x1="58" y1="60" x2="62" y2="40" stroke="var(--il-accent)" stroke-width="2.6" stroke-linecap="round"/>
                         </svg>
                     </div>
-                    <h2><span class="spark">âœ¨</span> Pick a pattern &amp; question</h2>
-                    <p>Open a pattern category on the left (Arrays &amp; Hashing â†’ Bit Manipulation), pick a question, and read its full walkthrough here. Practice in JavaScript in the center, then click Check to run it against the test cases.</p>
+                    <h2><span class="spark">✨</span> Pick a pattern &amp; question</h2>
+                    <p>Open a pattern category on the left (Arrays &amp; Hashing → Bit Manipulation), pick a question, and read its full walkthrough here. Practice in JavaScript in the center, then click Check to run it against the test cases.</p>
                     <div class="tips-card">
-                        <div class="tips-title">ðŸ’¡ How to use this</div>
+                        <div class="tips-title">💡 How to use this</div>
                         <ul>
                             <li>Read <b>Why this matters</b> &amp; the <b>pattern</b> first</li>
                             <li>Attempt before revealing the solution</li>
                             <li>Dry-run the example on paper</li>
-                            <li>Match new problems to one of the 16 patterns</li>
+                            <li>Match new problems to one of the 20 patterns</li>
                         </ul>
                     </div>
                     <blockquote class="quote-card">
                         Master the pattern,<br />and unseen problems feel familiar.
-                        <cite>â€“ 100 DSA Questions ðŸš€</cite>
+                        <cite>– 127 DSA Questions 🚀</cite>
                     </blockquote>
                 </div>
 
                 <article class="problem-detail hidden" id="problemDetail">
                     <div class="problem-head">
                         <span class="badge" id="problemBadge">Arrays &amp; Hashing</span>
-                        <span class="qnum" id="problemQnum">Q1 / 100</span>
+                        <span class="qnum" id="problemQnum">Q1 / 127</span>
                     </div>
                     <div class="pill-row">
                         <span class="difficulty" id="problemDifficulty">Easy</span>
@@ -146,7 +146,7 @@
                     <h2 id="problemTitle">Title</h2>
 
                     <div class="why-card" id="problemWhyWrap">
-                        <span class="why-ic">ðŸ”“</span>
+                        <span class="why-ic">🔓</span>
                         <div><span class="why-key">Why this matters</span><p id="problemWhy"></p></div>
                     </div>
 
@@ -169,56 +169,56 @@
                     </div>
 
                     <div class="detail-block hidden" id="constraintsWrap">
-                        <h3 class="detail-h">ðŸ“ Constraints</h3>
+                        <h3 class="detail-h">📏 Constraints</h3>
                         <p class="detail-text" id="problemConstraints"></p>
                     </div>
 
                     <div class="approach-grid">
                         <div class="approach-card brute hidden" id="bruteWrap">
-                            <h3 class="detail-h">ðŸ¢ Brute Force</h3>
+                            <h3 class="detail-h">🐢 Brute Force</h3>
                             <p class="detail-text" id="problemBrute"></p>
                         </div>
                         <div class="approach-card optimal hidden" id="optimalWrap">
-                            <h3 class="detail-h">âš¡ Optimal</h3>
+                            <h3 class="detail-h">⚡ Optimal</h3>
                             <p class="detail-text" id="problemOptimal"></p>
                         </div>
                     </div>
 
                     <div class="detail-block hidden" id="intuitionWrap">
-                        <h3 class="detail-h">ðŸ’­ Step-by-Step Intuition</h3>
+                        <h3 class="detail-h">💭 Step-by-Step Intuition</h3>
                         <p class="detail-text" id="problemIntuition"></p>
                     </div>
 
                     <div class="detail-block dry hidden" id="dryRunWrap">
-                        <h3 class="detail-h">ðŸ§ª Dry Run</h3>
+                        <h3 class="detail-h">🧪 Dry Run</h3>
                         <p class="detail-text mono" id="problemDryRun"></p>
                     </div>
 
                     <div class="complexity-row" id="complexityWrap">
-                        <div class="cx-chip time"><span class="cx-key">â± Time</span><span class="cx-val" id="problemTime"></span></div>
-                        <div class="cx-chip space"><span class="cx-key">ðŸ’¾ Space</span><span class="cx-val" id="problemSpace"></span></div>
+                        <div class="cx-chip time"><span class="cx-key">⏱ Time</span><span class="cx-val" id="problemTime"></span></div>
+                        <div class="cx-chip space"><span class="cx-key">💾 Space</span><span class="cx-val" id="problemSpace"></span></div>
                     </div>
 
                     <div class="detail-block warn hidden" id="mistakesWrap">
-                        <h3 class="detail-h">âš ï¸ Common Mistakes</h3>
+                        <h3 class="detail-h">⚠️ Common Mistakes</h3>
                         <p class="detail-text" id="problemMistakes"></p>
                     </div>
 
                     <div class="detail-block hidden" id="followupsWrap">
-                        <h3 class="detail-h">ðŸŽ¤ Interview Follow-ups</h3>
+                        <h3 class="detail-h">🎤 Interview Follow-ups</h3>
                         <div class="detail-text" id="problemFollowups"></div>
                     </div>
 
                     <div class="solution-card hidden" id="solutionWrap">
                         <div class="solution-head">
-                            <h3 class="detail-h">ï¿½ Reference Solution <span class="sol-lang">JavaScript</span></h3>
+                            <h3 class="detail-h">📖 Reference Solution <span class="sol-lang">JavaScript</span></h3>
                             <button class="btn btn-primary sol-reveal" id="solutionToggle" type="button">Reveal Answer</button>
                         </div>
                         <pre class="solution-code hidden" id="problemSolution"><code></code></pre>
                     </div>
 
                     <div class="takeaway-card hidden" id="takeawayWrap">
-                        <span class="takeaway-ic">ðŸ”‘</span>
+                        <span class="takeaway-ic">🔑</span>
                         <div><span class="takeaway-key">Key Takeaway</span><p id="problemTakeaway"></p></div>
                     </div>
                 </article>
@@ -228,7 +228,7 @@
     </main>
 
     <footer class="app-footer">
-        Consistency + Patience + Practice = Top 1% Developer ðŸš€
+        Consistency + Patience + Practice = Top 1% Developer 🚀
     </footer>
 
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
@@ -239,23 +239,23 @@
     </div>
     <script>(function(){var box=document.getElementById("themeToggle");function apply(t){document.documentElement.setAttribute("data-theme",t);try{localStorage.setItem("dsa_theme",t);}catch(e){}box.querySelectorAll(".tt-btn").forEach(function(b){b.classList.toggle("on",b.dataset.set===t);});window.dispatchEvent(new CustomEvent("themechange",{detail:t}));}box.addEventListener("click",function(e){var b=e.target.closest(".tt-btn");if(b)apply(b.dataset.set);});apply(document.documentElement.getAttribute("data-theme")||"light");})();</script>
 
-    <script src="data.js?v=10"></script>
-    <script src="js/util.js?v=10"></script>
-    <script src="js/tests.js?v=10"></script>
-    <script src="js/confetti.js?v=10"></script>
-    <script src="js/AuthService.js?v=10"></script>
-    <script src="js/StorageService.js?v=10"></script>
-    <script src="js/RankService.js?v=10"></script>
-    <script src="js/AchievementService.js?v=10"></script>
-    <script src="js/ReportService.js?v=10"></script>
-    <script src="js/CodeRunner.js?v=10"></script>
-    <script src="js/views.js?v=10"></script>
+    <script src="data.js?v=11"></script>
+    <script src="js/util.js?v=11"></script>
+    <script src="js/tests.js?v=11"></script>
+    <script src="js/confetti.js?v=11"></script>
+    <script src="js/AuthService.js?v=11"></script>
+    <script src="js/StorageService.js?v=11"></script>
+    <script src="js/RankService.js?v=11"></script>
+    <script src="js/AchievementService.js?v=11"></script>
+    <script src="js/ReportService.js?v=11"></script>
+    <script src="js/CodeRunner.js?v=11"></script>
+    <script src="js/views.js?v=11"></script>
     <script src="https://unpkg.com/prettier@3.3.3/standalone.js"></script>
     <script src="https://unpkg.com/prettier@3.3.3/plugins/babel.js"></script>
     <script src="https://unpkg.com/prettier@3.3.3/plugins/estree.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
-    <script src="js/MonacoEditor.js?v=10"></script>
-    <script src="js/AppController.js?v=10"></script>
+    <script src="js/MonacoEditor.js?v=11"></script>
+    <script src="js/AppController.js?v=11"></script>
     <script>
       // Keep all "N questions / M patterns" copy in sync with the actual data.
       (function () {
@@ -263,20 +263,21 @@
         var q = levels.reduce(function (n, l) { return n + l.problems.length; }, 0);
         var p = levels.length;
         if (!q) return;
-        document.title = "DSA Patterns Playground Â· " + q + " Interview Questions";
+        document.title = "DSA Patterns Playground · " + q + " Interview Questions";
         var sub = document.querySelector(".login-sub");
-        if (sub) sub.textContent = q + " pattern-based interview questions Â· learn by doing";
+        if (sub) sub.textContent = q + " pattern-based interview questions · learn by doing";
         var hsub = document.querySelector(".subtitle");
-        if (hsub) hsub.textContent = q + " Questions Â· " + p + " Patterns Â· Learn by Doing ðŸš€";
+        if (hsub) hsub.textContent = q + " Questions · " + p + " Patterns · Learn by Doing 🚀";
         var ov = document.getElementById("overallText");
         if (ov) ov.textContent = "0 / " + q;
         document.querySelectorAll("#emptyState li").forEach(function (li) {
           li.innerHTML = li.innerHTML.replace(/one of the \d+ patterns/, "one of the " + p + " patterns");
         });
         var cite = document.querySelector(".quote-card cite");
-        if (cite) cite.textContent = "â€“ " + q + " DSA Questions ðŸš€";
+        if (cite) cite.textContent = "– " + q + " DSA Questions 🚀";
       })();
     </script>
 </body>
 </html>
+
 
