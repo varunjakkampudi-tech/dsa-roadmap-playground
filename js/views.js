@@ -132,7 +132,8 @@ window.DSA = window.DSA || {};
       // header: category badge + question number
       r.badge.textContent = (level.icon ? level.icon + " " : "") + level.name;
       r.badge.style.background = rank.color;
-      this._set("problemQnum", "Q" + (problem.num || "") + " / 75");
+      const total = (window.LEVELS || []).reduce((n, l) => n + l.problems.length, 0);
+      this._set("problemQnum", "Q" + (problem.num || "") + " / " + total);
 
       // difficulty pill (color by difficulty) + pattern pill
       const diff = problem.difficulty || level.difficulty || "Easy";

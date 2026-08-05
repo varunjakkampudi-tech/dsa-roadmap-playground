@@ -1,6 +1,5 @@
 /**
- * DSA dataset — 75 curated interview problems across 14 pattern categories.
- * Source: 'The Ultimate Pattern-Based Coding Interview Guide' (75 DSA Questions).
+ * DSA dataset — curated interview problems across 14 pattern categories.
  * Each problem carries the full walkthrough plus a JavaScript reference solution.
  * Exposed as a global so the app works over file:// too.
  */
@@ -152,8 +151,54 @@ window.LEVELS = [
     "solution": "function productOfArrayExceptSelf(nums){const n=nums.length,res=new Array(n).fill(1);let pre=1;for(let i=0;i<n;i++){res[i]=pre;pre*=nums[i];}let post=1;for(let i=n-1;i>=0;i--){res[i]*=post;post*=nums[i];}return res;}"
    },
    {
-    "id": "q7",
+    "id": "prefixProduct",
     "num": 7,
+    "title": "Prefix Product Array",
+    "difficulty": "Easy",
+    "pattern": "Prefix Product (running product)",
+    "prompt": "Given an integer array nums, return an array output where output[i] is the product of all elements from index 0 up to and including i (the running prefix product).",
+    "input": "nums = [1,2,3,4]",
+    "output": "[1,2,6,24]",
+    "constraints": "1 ≤ nums.length ≤ 10^5 · products fit the test range",
+    "why": "The first half of the 'product except self' trick — a running product answers 'product of everything up to here' in O(1) per step.",
+    "brute": "For each i, multiply nums[0..i] with a fresh inner loop → O(n²) time.",
+    "optimal": "Carry one running product p; at each index multiply p by nums[i] and record it. A single left-to-right pass, O(n).",
+    "intuition": "Each prefix product is simply the previous prefix product times the current number, so you never recompute from scratch.",
+    "dryRun": "nums=[1,2,3,4]. p=1 ×1=1 → [1]; ×2=2 → [1,2]; ×3=6 → [1,2,6]; ×4=24 → [1,2,6,24].",
+    "time": "O(n) — one pass.",
+    "space": "O(n) for the output (O(1) extra).",
+    "mistakes": "Starting p at 0 (everything becomes 0); rebuilding the product with a nested loop; treating index i as exclusive instead of inclusive.",
+    "followups": "• How would you build the suffix product instead?\n• How do prefix and suffix products combine to solve 'product of array except self' without division?",
+    "solution": "function prefixProduct(nums){const res=[];let p=1;for(let i=0;i<nums.length;i++){p*=nums[i];res.push(p);}return res;}",
+    "takeaway": "A running (prefix) product turns repeated 'product up to i' questions into a single linear pass.",
+    "starter": "// Prefix Product Array  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction prefixProduct(nums) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "suffixProduct",
+    "num": 8,
+    "title": "Suffix Product Array",
+    "difficulty": "Easy",
+    "pattern": "Suffix Product (running product from the right)",
+    "prompt": "Given an integer array nums, return an array output where output[i] is the product of all elements from index i to the end (the running suffix product).",
+    "input": "nums = [1,2,3,4]",
+    "output": "[24,24,12,4]",
+    "constraints": "1 ≤ nums.length ≤ 10^5 · products fit the test range",
+    "why": "The mirror of the prefix product — scanning from the right gives 'product of everything from here to the end', the second half of 'product except self'.",
+    "brute": "For each i, multiply nums[i..n-1] with an inner loop → O(n²) time.",
+    "optimal": "Carry one running product p from right to left; at each index multiply p by nums[i] and record it. O(n).",
+    "intuition": "Iterate backwards so each suffix product just extends the one to its right by a single multiply.",
+    "dryRun": "nums=[1,2,3,4]. from right: p=1 ×4=4 → i3=4; ×3=12 → i2=12; ×2=24 → i1=24; ×1=24 → i0=24 ⇒ [24,24,12,4].",
+    "time": "O(n) — one pass.",
+    "space": "O(n) for the output (O(1) extra).",
+    "mistakes": "Iterating left-to-right by mistake; starting p at 0; writing results into the wrong index.",
+    "followups": "• Combine prefix[i-1] × suffix[i+1] — which classic problem does that solve?\n• Can you do it with O(1) extra space besides the output array?",
+    "solution": "function suffixProduct(nums){const n=nums.length,res=new Array(n);let p=1;for(let i=n-1;i>=0;i--){p*=nums[i];res[i]=p;}return res;}",
+    "takeaway": "Scanning from the right builds suffix products in one pass — pair it with prefix products to avoid division in 'product of array except self'.",
+    "starter": "// Suffix Product Array  (Easy)\n// Write your JavaScript solution, Run it, then Check it against the tests.\n\nfunction suffixProduct(nums) {\n  // your code here\n}\n"
+   },
+   {
+    "id": "q7",
+    "num": 9,
     "title": "Subarray Sum Equals K",
     "difficulty": "Medium",
     "pattern": "Prefix Sum + Hashing",
@@ -186,7 +231,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q8",
-    "num": 8,
+    "num": 10,
     "title": "Valid Palindrome",
     "difficulty": "Easy",
     "pattern": "Two Pointers (converging)",
@@ -209,7 +254,7 @@ window.LEVELS = [
    },
    {
     "id": "q9",
-    "num": 9,
+    "num": 11,
     "title": "Two Sum II — Sorted Array",
     "difficulty": "Medium",
     "pattern": "Two Pointers (converging)",
@@ -232,7 +277,7 @@ window.LEVELS = [
    },
    {
     "id": "q10",
-    "num": 10,
+    "num": 12,
     "title": "3Sum",
     "difficulty": "Medium",
     "pattern": "Two Pointers (fix + converge)",
@@ -255,7 +300,7 @@ window.LEVELS = [
    },
    {
     "id": "q11",
-    "num": 11,
+    "num": 13,
     "title": "Container With Most Water",
     "difficulty": "Medium",
     "pattern": "Two Pointers (greedy converge)",
@@ -278,7 +323,7 @@ window.LEVELS = [
    },
    {
     "id": "q12",
-    "num": 12,
+    "num": 14,
     "title": "Trapping Rain Water",
     "difficulty": "Hard",
     "pattern": "Two Pointers (running max)",
@@ -311,7 +356,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q13",
-    "num": 13,
+    "num": 15,
     "title": "Best Time to Buy and Sell Stock",
     "difficulty": "Easy",
     "pattern": "Sliding Window (single pass min-track)",
@@ -334,7 +379,7 @@ window.LEVELS = [
    },
    {
     "id": "q14",
-    "num": 14,
+    "num": 16,
     "title": "Longest Substring Without Repeating Characters",
     "difficulty": "Medium",
     "pattern": "Sliding Window (variable size)",
@@ -357,7 +402,7 @@ window.LEVELS = [
    },
    {
     "id": "q15",
-    "num": 15,
+    "num": 17,
     "title": "Longest Repeating Character Replacement",
     "difficulty": "Medium",
     "pattern": "Sliding Window (count-based)",
@@ -380,7 +425,7 @@ window.LEVELS = [
    },
    {
     "id": "q16",
-    "num": 16,
+    "num": 18,
     "title": "Minimum Window Substring",
     "difficulty": "Hard",
     "pattern": "Sliding Window (need/have counters)",
@@ -403,7 +448,7 @@ window.LEVELS = [
    },
    {
     "id": "q17",
-    "num": 17,
+    "num": 19,
     "title": "Sliding Window Maximum",
     "difficulty": "Hard",
     "pattern": "Monotonic Deque",
@@ -436,7 +481,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q18",
-    "num": 18,
+    "num": 20,
     "title": "Binary Search",
     "difficulty": "Easy",
     "pattern": "Binary Search (classic)",
@@ -459,7 +504,7 @@ window.LEVELS = [
    },
    {
     "id": "q19",
-    "num": 19,
+    "num": 21,
     "title": "Search in Rotated Sorted Array",
     "difficulty": "Medium",
     "pattern": "Binary Search (rotated)",
@@ -482,7 +527,7 @@ window.LEVELS = [
    },
    {
     "id": "q20",
-    "num": 20,
+    "num": 22,
     "title": "Find Minimum in Rotated Sorted Array",
     "difficulty": "Medium",
     "pattern": "Binary Search (rotated)",
@@ -505,7 +550,7 @@ window.LEVELS = [
    },
    {
     "id": "q21",
-    "num": 21,
+    "num": 23,
     "title": "Koko Eating Bananas",
     "difficulty": "Medium",
     "pattern": "Binary Search on Answer",
@@ -528,7 +573,7 @@ window.LEVELS = [
    },
    {
     "id": "q22",
-    "num": 22,
+    "num": 24,
     "title": "Find First and Last Positionof Element in Sorted Array",
     "difficulty": "Medium",
     "pattern": "Binary Search (leftmost/rightmost bound)",
@@ -551,7 +596,7 @@ window.LEVELS = [
    },
    {
     "id": "q23",
-    "num": 23,
+    "num": 25,
     "title": "Median of Two Sorted Arrays",
     "difficulty": "Hard",
     "pattern": "Binary Search (partition)",
@@ -584,7 +629,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q24",
-    "num": 24,
+    "num": 26,
     "title": "Longest Common Prefix",
     "difficulty": "Easy",
     "pattern": "String Scanning",
@@ -607,7 +652,7 @@ window.LEVELS = [
    },
    {
     "id": "q25",
-    "num": 25,
+    "num": 27,
     "title": "Longest Palindromic Substring",
     "difficulty": "Medium",
     "pattern": "Expand Around Center",
@@ -630,7 +675,7 @@ window.LEVELS = [
    },
    {
     "id": "q26",
-    "num": 26,
+    "num": 28,
     "title": "Palindromic Substrings",
     "difficulty": "Medium",
     "pattern": "Expand Around Center",
@@ -653,7 +698,7 @@ window.LEVELS = [
    },
    {
     "id": "q27",
-    "num": 27,
+    "num": 29,
     "title": "String to Integer (atoi)",
     "difficulty": "Medium",
     "pattern": "Careful Parsing / Edge-Case Enumeration",
@@ -676,7 +721,7 @@ window.LEVELS = [
    },
    {
     "id": "q28",
-    "num": 28,
+    "num": 30,
     "title": "Encode and Decode Strings",
     "difficulty": "Medium",
     "pattern": "Delimiter Design",
@@ -709,7 +754,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q29",
-    "num": 29,
+    "num": 31,
     "title": "Reverse Linked List",
     "difficulty": "Easy",
     "pattern": "Iterative Pointer Reversal",
@@ -732,7 +777,7 @@ window.LEVELS = [
    },
    {
     "id": "q30",
-    "num": 30,
+    "num": 32,
     "title": "Linked List Cycle",
     "difficulty": "Easy",
     "pattern": "Fast & Slow Pointers",
@@ -755,7 +800,7 @@ window.LEVELS = [
    },
    {
     "id": "q31",
-    "num": 31,
+    "num": 33,
     "title": "Middle of the Linked List",
     "difficulty": "Easy",
     "pattern": "Fast & Slow Pointers",
@@ -778,7 +823,7 @@ window.LEVELS = [
    },
    {
     "id": "q32",
-    "num": 32,
+    "num": 34,
     "title": "Merge Two Sorted Lists",
     "difficulty": "Easy",
     "pattern": "Two-Pointer List Merge",
@@ -801,7 +846,7 @@ window.LEVELS = [
    },
    {
     "id": "q33",
-    "num": 33,
+    "num": 35,
     "title": "Remove Nth Node From End of List",
     "difficulty": "Medium",
     "pattern": "Two Pointers (fixed gap)",
@@ -824,7 +869,7 @@ window.LEVELS = [
    },
    {
     "id": "q34",
-    "num": 34,
+    "num": 36,
     "title": "Reorder List",
     "difficulty": "Medium",
     "pattern": "Fast/Slow + Reverse + Merge",
@@ -857,7 +902,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q35",
-    "num": 35,
+    "num": 37,
     "title": "Valid Parentheses",
     "difficulty": "Easy",
     "pattern": "Stack (matching pairs)",
@@ -880,7 +925,7 @@ window.LEVELS = [
    },
    {
     "id": "q36",
-    "num": 36,
+    "num": 38,
     "title": "Min Stack",
     "difficulty": "Medium",
     "pattern": "Stack (auxiliary tracking)",
@@ -903,7 +948,7 @@ window.LEVELS = [
    },
    {
     "id": "q37",
-    "num": 37,
+    "num": 39,
     "title": "Evaluate Reverse Polish Notation",
     "difficulty": "Medium",
     "pattern": "Stack (expression evaluation)",
@@ -926,7 +971,7 @@ window.LEVELS = [
    },
    {
     "id": "q38",
-    "num": 38,
+    "num": 40,
     "title": "Daily Temperatures",
     "difficulty": "Medium",
     "pattern": "Monotonic Stack",
@@ -949,7 +994,7 @@ window.LEVELS = [
    },
    {
     "id": "q39",
-    "num": 39,
+    "num": 41,
     "title": "Largest Rectangle in Histogram",
     "difficulty": "Hard",
     "pattern": "Monotonic Stack",
@@ -982,7 +1027,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q40",
-    "num": 40,
+    "num": 42,
     "title": "Invert Binary Tree",
     "difficulty": "Easy",
     "pattern": "DFS (recursive)",
@@ -1005,7 +1050,7 @@ window.LEVELS = [
    },
    {
     "id": "q41",
-    "num": 41,
+    "num": 43,
     "title": "Maximum Depth of Binary Tree",
     "difficulty": "Easy",
     "pattern": "DFS (recursive)",
@@ -1028,7 +1073,7 @@ window.LEVELS = [
    },
    {
     "id": "q42",
-    "num": 42,
+    "num": 44,
     "title": "Diameter of Binary Tree",
     "difficulty": "Medium",
     "pattern": "DFS (post-order accumulate global)",
@@ -1051,7 +1096,7 @@ window.LEVELS = [
    },
    {
     "id": "q43",
-    "num": 43,
+    "num": 45,
     "title": "Binary Tree Level Order Traversal",
     "difficulty": "Medium",
     "pattern": "BFS",
@@ -1074,7 +1119,7 @@ window.LEVELS = [
    },
    {
     "id": "q44",
-    "num": 44,
+    "num": 46,
     "title": "Validate Binary Search Tree",
     "difficulty": "Medium",
     "pattern": "DFS (range bounds)",
@@ -1097,7 +1142,7 @@ window.LEVELS = [
    },
    {
     "id": "q45",
-    "num": 45,
+    "num": 47,
     "title": "Lowest Common Ancestor of a BST",
     "difficulty": "Medium",
     "pattern": "BST Property Traversal",
@@ -1120,7 +1165,7 @@ window.LEVELS = [
    },
    {
     "id": "q46",
-    "num": 46,
+    "num": 48,
     "title": "Kth Smallest Element in a BST",
     "difficulty": "Medium",
     "pattern": "In-order Traversal",
@@ -1153,7 +1198,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q47",
-    "num": 47,
+    "num": 49,
     "title": "Kth Largest Element in an Array",
     "difficulty": "Medium",
     "pattern": "Heap (fixed-size min-heap)",
@@ -1176,7 +1221,7 @@ window.LEVELS = [
    },
    {
     "id": "q48",
-    "num": 48,
+    "num": 50,
     "title": "K Closest Points to Origin",
     "difficulty": "Medium",
     "pattern": "Heap (fixed-size max-heap by distance)",
@@ -1199,7 +1244,7 @@ window.LEVELS = [
    },
    {
     "id": "q49",
-    "num": 49,
+    "num": 51,
     "title": "Merge K Sorted Lists",
     "difficulty": "Hard",
     "pattern": "Heap (k-way merge)",
@@ -1222,7 +1267,7 @@ window.LEVELS = [
    },
    {
     "id": "q50",
-    "num": 50,
+    "num": 52,
     "title": "Find Median from Data Stream",
     "difficulty": "Hard",
     "pattern": "Two Heaps",
@@ -1255,7 +1300,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q51",
-    "num": 51,
+    "num": 53,
     "title": "Subsets",
     "difficulty": "Medium",
     "pattern": "Backtracking (include/exclude)",
@@ -1278,7 +1323,7 @@ window.LEVELS = [
    },
    {
     "id": "q52",
-    "num": 52,
+    "num": 54,
     "title": "Permutations",
     "difficulty": "Medium",
     "pattern": "Backtracking (choose/unchoose with used-set)",
@@ -1301,7 +1346,7 @@ window.LEVELS = [
    },
    {
     "id": "q53",
-    "num": 53,
+    "num": 55,
     "title": "Combination Sum",
     "difficulty": "Medium",
     "pattern": "Backtracking (unbounded choice + pruning)",
@@ -1324,7 +1369,7 @@ window.LEVELS = [
    },
    {
     "id": "q54",
-    "num": 54,
+    "num": 56,
     "title": "Word Search",
     "difficulty": "Medium",
     "pattern": "Backtracking / DFS on Grid",
@@ -1347,7 +1392,7 @@ window.LEVELS = [
    },
    {
     "id": "q55",
-    "num": 55,
+    "num": 57,
     "title": "N-Queens",
     "difficulty": "Hard",
     "pattern": "Backtracking (constraint propagation)",
@@ -1380,7 +1425,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q56",
-    "num": 56,
+    "num": 58,
     "title": "Number of Islands",
     "difficulty": "Medium",
     "pattern": "DFS/BFS on Grid",
@@ -1403,7 +1448,7 @@ window.LEVELS = [
    },
    {
     "id": "q57",
-    "num": 57,
+    "num": 59,
     "title": "Clone Graph",
     "difficulty": "Medium",
     "pattern": "DFS/BFS + Hash Map (visited copies)",
@@ -1426,7 +1471,7 @@ window.LEVELS = [
    },
    {
     "id": "q58",
-    "num": 58,
+    "num": 60,
     "title": "Course Schedule",
     "difficulty": "Medium",
     "pattern": "Topological Sort (cycle detection)",
@@ -1449,7 +1494,7 @@ window.LEVELS = [
    },
    {
     "id": "q59",
-    "num": 59,
+    "num": 61,
     "title": "Course Schedule II",
     "difficulty": "Medium",
     "pattern": "Topological Sort (ordering)",
@@ -1472,7 +1517,7 @@ window.LEVELS = [
    },
    {
     "id": "q60",
-    "num": 60,
+    "num": 62,
     "title": "Pacific Atlantic Water Flow",
     "difficulty": "Medium",
     "pattern": "Multi-source DFS/BFS",
@@ -1495,7 +1540,7 @@ window.LEVELS = [
    },
    {
     "id": "q61",
-    "num": 61,
+    "num": 63,
     "title": "Graph Valid Tree",
     "difficulty": "Medium",
     "pattern": "Union-Find / DFS Cycle Check",
@@ -1518,7 +1563,7 @@ window.LEVELS = [
    },
    {
     "id": "q62",
-    "num": 62,
+    "num": 64,
     "title": "Network Delay Time",
     "difficulty": "Medium",
     "pattern": "Dijkstra's Algorithm",
@@ -1551,7 +1596,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q63",
-    "num": 63,
+    "num": 65,
     "title": "Climbing Stairs",
     "difficulty": "Easy",
     "pattern": "1D DP (Fibonacci-shaped)",
@@ -1574,7 +1619,7 @@ window.LEVELS = [
    },
    {
     "id": "q64",
-    "num": 64,
+    "num": 66,
     "title": "House Robber",
     "difficulty": "Medium",
     "pattern": "1D DP (take/skip decision)",
@@ -1597,7 +1642,7 @@ window.LEVELS = [
    },
    {
     "id": "q65",
-    "num": 65,
+    "num": 67,
     "title": "Longest Increasing Subsequence",
     "difficulty": "Medium",
     "pattern": "1D DP (with O(n log n) optimization)",
@@ -1620,7 +1665,7 @@ window.LEVELS = [
    },
    {
     "id": "q66",
-    "num": 66,
+    "num": 68,
     "title": "Coin Change",
     "difficulty": "Medium",
     "pattern": "1D DP (unbounded knapsack)",
@@ -1643,7 +1688,7 @@ window.LEVELS = [
    },
    {
     "id": "q67",
-    "num": 67,
+    "num": 69,
     "title": "Unique Paths",
     "difficulty": "Medium",
     "pattern": "2D DP (grid path counting)",
@@ -1666,7 +1711,7 @@ window.LEVELS = [
    },
    {
     "id": "q68",
-    "num": 68,
+    "num": 70,
     "title": "Longest Common Subsequence",
     "difficulty": "Medium",
     "pattern": "2D DP (string alignment)",
@@ -1689,7 +1734,7 @@ window.LEVELS = [
    },
    {
     "id": "q69",
-    "num": 69,
+    "num": 71,
     "title": "Word Break",
     "difficulty": "Medium",
     "pattern": "1D DP + Hashing (segmentation)",
@@ -1722,7 +1767,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q70",
-    "num": 70,
+    "num": 72,
     "title": "Jump Game",
     "difficulty": "Medium",
     "pattern": "Greedy (reachability frontier)",
@@ -1745,7 +1790,7 @@ window.LEVELS = [
    },
    {
     "id": "q71",
-    "num": 71,
+    "num": 73,
     "title": "Gas Station",
     "difficulty": "Medium",
     "pattern": "Greedy (running total reset)",
@@ -1768,7 +1813,7 @@ window.LEVELS = [
    },
    {
     "id": "q72",
-    "num": 72,
+    "num": 74,
     "title": "Non-overlapping Intervals",
     "difficulty": "Medium",
     "pattern": "Greedy (interval scheduling by end time)",
@@ -1791,7 +1836,7 @@ window.LEVELS = [
    },
    {
     "id": "q73",
-    "num": 73,
+    "num": 75,
     "title": "Merge Intervals",
     "difficulty": "Medium",
     "pattern": "Greedy + Sorting (interval merge)",
@@ -1824,7 +1869,7 @@ window.LEVELS = [
   "problems": [
    {
     "id": "q74",
-    "num": 74,
+    "num": 76,
     "title": "Single Number",
     "difficulty": "Easy",
     "pattern": "Bit Manipulation (XOR)",
@@ -1847,7 +1892,7 @@ window.LEVELS = [
    },
    {
     "id": "q75",
-    "num": 75,
+    "num": 77,
     "title": "Number of 1 Bits",
     "difficulty": "Easy",
     "pattern": "Bit Manipulation (bit clearing trick)",
