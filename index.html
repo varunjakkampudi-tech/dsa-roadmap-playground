@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=3" />
     <script>(function(){try{var t=localStorage.getItem("dsa_theme")||"light";document.documentElement.setAttribute("data-theme",t);}catch(e){}})();</script>
 </head>
 <body>
@@ -27,7 +27,7 @@
             </label>
             <div class="login-error hidden" id="loginError">Wrong password — use the shared password below</div>
             <button type="submit" class="btn btn-primary login-btn">Enter Playground</button>
-            <p class="login-hint"><b>Available logins</b><br /><code>teja</code> / <code>dsa2026</code><br />any name / <code>dsa2026</code></p>
+            <p class="login-hint">Password <code>dsa2026</code></p>
         </form>
     </div>
 
@@ -239,19 +239,19 @@
     </div>
     <script>(function(){var box=document.getElementById("themeToggle");function apply(t){document.documentElement.setAttribute("data-theme",t);try{localStorage.setItem("dsa_theme",t);}catch(e){}box.querySelectorAll(".tt-btn").forEach(function(b){b.classList.toggle("on",b.dataset.set===t);});window.dispatchEvent(new CustomEvent("themechange",{detail:t}));}box.addEventListener("click",function(e){var b=e.target.closest(".tt-btn");if(b)apply(b.dataset.set);});apply(document.documentElement.getAttribute("data-theme")||"light");})();</script>
 
-    <script src="data.js"></script>
-    <script src="js/util.js"></script>
-    <script src="js/tests.js"></script>
-    <script src="js/confetti.js"></script>
-    <script src="js/AuthService.js"></script>
-    <script src="js/StorageService.js"></script>
-    <script src="js/RankService.js"></script>
-    <script src="js/AchievementService.js"></script>
-    <script src="js/ReportService.js"></script>
-    <script src="js/CodeRunner.js"></script>
-    <script src="js/views.js"></script>
+    <script src="data.js?v=3"></script>
+    <script src="js/util.js?v=3"></script>
+    <script src="js/tests.js?v=3"></script>
+    <script src="js/confetti.js?v=3"></script>
+    <script src="js/AuthService.js?v=3"></script>
+    <script src="js/StorageService.js?v=3"></script>
+    <script src="js/RankService.js?v=3"></script>
+    <script src="js/AchievementService.js?v=3"></script>
+    <script src="js/ReportService.js?v=3"></script>
+    <script src="js/CodeRunner.js?v=3"></script>
+    <script src="js/views.js?v=3"></script>
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs/loader.js"></script>
-    <script src="js/MonacoEditor.js"></script>
-    <script src="js/AppController.js"></script>
+    <script src="js/MonacoEditor.js?v=3"></script>
+    <script src="js/AppController.js?v=3"></script>
 </body>
 </html>
